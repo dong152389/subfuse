@@ -117,8 +117,8 @@ describe("selfhost release asset argument regressions", () => {
       expect(releaseAssets.buildManifest(root, args)).toMatchObject({
         buildSha: "abcdef1234567890",
         buildVersion: "2.7.0+sha.abcdef123456",
-        image: "ghcr.io/subboost/subboost:v2.7.0",
-        imageTag: "ghcr.io/subboost/subboost:v2.7.0",
+        image: "ghcr.io/dong152389/subboost:v2.7.0",
+        imageTag: "ghcr.io/dong152389/subboost:v2.7.0",
         version: "2.7.0",
       });
     });

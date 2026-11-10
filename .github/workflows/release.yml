@@ -23,6 +23,7 @@ jobs:
     outputs:
       build_version: ${{ steps.meta.outputs.build_version }}
       image_name: ${{ steps.meta.outputs.image_name }}
+      release_tag: ${{ steps.meta.outputs.release_tag }}
       release_version: ${{ steps.meta.outputs.release_version }}
       short_sha: ${{ steps.meta.outputs.short_sha }}
     steps:
@@ -39,15 +40,20 @@ jobs:
           set -euo pipefail
           release_version="$(node -p "require('./package.json').version")"
           expected_tag="v${release_version}"
-          if [ "${GITHUB_REF_NAME}" != "${expected_tag}" ]; then
-            echo "Tag ${GITHUB_REF_NAME} does not match package.json version ${release_version}" >&2
-            exit 1
+          if [ "${GITHUB_EVENT_NAME}" = "push" ] || [ "${GITHUB_REF_TYPE:-}" = "tag" ]; then
+            if [ "${GITHUB_REF_NAME}" != "${expected_tag}" ]; then
+              echo "Tag ${GITHUB_REF_NAME} does not match package.json version ${release_version}" >&2
+              exit 1
+            fi
           fi
+          release_tag="${expected_tag}"
           short_sha="${GITHUB_SHA::12}"
+          image_name="${IMAGE_NAME,,}"
+          echo "release_tag=${release_tag}" >> "$GITHUB_OUTPUT"
           echo "release_version=${release_version}" >> "$GITHUB_OUTPUT"
           echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
           echo "build_version=${release_version}+sha.${short_sha}" >> "$GITHUB_OUTPUT"
-          echo "image_name=${IMAGE_NAME}" >> "$GITHUB_OUTPUT"
+          echo "image_name=${image_name}" >> "$GITHUB_OUTPUT"
 
   checks:
     runs-on: ubuntu-latest
@@ -155,6 +161,7 @@ jobs:
         shell: bash
         env:
           IMAGE_NAME: ${{ needs.meta.outputs.image_name }}
+          RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
           RELEASE_VERSION: ${{ needs.meta.outputs.release_version }}
           SHORT_SHA: ${{ needs.meta.outputs.short_sha }}
         run: |
@@ -172,7 +179,7 @@ jobs:
 
           docker buildx imagetools create \
             --metadata-file "${RUNNER_TEMP}/image-metadata.json" \
-            --tag "${IMAGE_NAME}:${GITHUB_REF_NAME}" \
+            --tag "${IMAGE_NAME}:${RELEASE_TAG}" \
             --tag "${IMAGE_NAME}:${RELEASE_VERSION}" \
             --tag "${IMAGE_NAME}:sha-${SHORT_SHA}" \
             --tag "${IMAGE_NAME}:latest" \
@@ -180,7 +187,7 @@ jobs:
 
           digest="$(node -e 'const metadata = require(process.argv[1]); const digest = metadata["containerimage.digest"] || metadata["containerimage.descriptor"]?.digest; if (!digest) { console.error(JSON.stringify(metadata, null, 2)); process.exit(1); } process.stdout.write(digest);' "${RUNNER_TEMP}/image-metadata.json")"
           if [ -z "$digest" ] || [ "$digest" = "null" ]; then
-            echo "Failed to resolve multi-platform image digest for ${IMAGE_NAME}:${GITHUB_REF_NAME}" >&2
+            echo "Failed to resolve multi-platform image digest for ${IMAGE_NAME}:${RELEASE_TAG}" >&2
             exit 1
           fi
           echo "digest=${digest}" >> "$GITHUB_OUTPUT"
@@ -190,25 +197,46 @@ jobs:
         env:
           IMAGE_DIGEST: ${{ steps.image_manifest.outputs.digest }}
           IMAGE_NAME: ${{ needs.meta.outputs.image_name }}
+          RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
         run: |
           set -euo pipefail
+          release_base_url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}"
           node scripts/selfhost-release-assets.cjs \
             --output dist/release-assets \
-            --tag "${GITHUB_REF_NAME}" \
+            --tag "${RELEASE_TAG}" \
             --build-sha "${GITHUB_SHA}" \
             --image "${IMAGE_NAME}@${IMAGE_DIGEST}" \
-            --image-tag "${IMAGE_NAME}:${GITHUB_REF_NAME}" \
-            --base-url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+            --image-tag "${IMAGE_NAME}:${RELEASE_TAG}" \
+            --base-url "${release_base_url}" \
+            --installer-update-release-url "https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/release.json"
 
       - name: Create draft GitHub Release
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            --title "SubBoost ${GITHUB_REF_NAME}" \
-            --notes-file docs/release-notes.md \
-            --draft \
-            dist/release-assets/release.json \
-            dist/release-assets/install.sh \
-            dist/release-assets/docker-compose.image.yml \
-            dist/release-assets/subboost-manager
+          set -euo pipefail
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release edit "${RELEASE_TAG}" \
+              --title "SubBoost ${RELEASE_TAG}" \
+              --notes-file docs/release-notes.md \
+              --target "${GITHUB_SHA}" \
+              --draft
+            gh release upload "${RELEASE_TAG}" \
+              dist/release-assets/release.json \
+              dist/release-assets/install.sh \
+              dist/release-assets/docker-compose.image.yml \
+              dist/release-assets/subboost-manager \
+              --clobber
+          else
+            gh release create "${RELEASE_TAG}" \
+              --target "${GITHUB_SHA}" \
+              --title "SubBoost ${RELEASE_TAG}" \
+              --notes-file docs/release-notes.md \
+              --draft \
+              dist/release-assets/release.json \
+              dist/release-assets/install.sh \
+              dist/release-assets/docker-compose.image.yml \
+              dist/release-assets/subboost-manager
+          fi

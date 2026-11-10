@@ -5,7 +5,8 @@ import { compareStableVersions, parseStableVersion } from "@local/lib/release-ve
 export const revalidate = 3600;
 
 const RELEASE_CACHE_SECONDS = 3600;
-const GITHUB_LATEST_RELEASE_URL = "https://api.github.com/repos/SubBoost/subboost/releases/latest";
+const GITHUB_REPOSITORY = "dong152389/subboost";
+const GITHUB_LATEST_RELEASE_URL = `https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest`;
 
 const CACHE_HEADERS = {
   "Cache-Control": `public, max-age=${RELEASE_CACHE_SECONDS}, stale-while-revalidate=${RELEASE_CACHE_SECONDS}`,
@@ -70,7 +71,7 @@ export async function GET() {
 
     const releaseUrl =
       readObjectString(releaseData, "html_url") ??
-      `https://github.com/SubBoost/subboost/releases/tag/${latestTag}`;
+      `https://github.com/${GITHUB_REPOSITORY}/releases/tag/${latestTag}`;
 
     return response({
       currentVersion,

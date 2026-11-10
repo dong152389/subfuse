@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const DEFAULT_IMAGE_REPOSITORY = "ghcr.io/subboost/subboost";
+const DEFAULT_IMAGE_REPOSITORY = "ghcr.io/dong152389/subboost";
 const DEFAULT_OUTPUT = path.join("dist", "release-assets");
 const MANAGER_ASSET_NAME = "subboost-manager";
 const INSTALLER_DEFAULTS = [
@@ -12,35 +12,35 @@ const INSTALLER_DEFAULTS = [
     env: "SUBBOOST_INSTALLER_RELEASE_URL",
     key: "installerReleaseUrl",
     name: "DEFAULT_RELEASE_URL",
-    value: "https://github.com/SubBoost/subboost/releases/latest/download/release.json",
+    value: "https://github.com/dong152389/subboost/releases/latest/download/release.json",
   },
   {
     arg: "--installer-update-release-url",
     env: "SUBBOOST_INSTALLER_UPDATE_RELEASE_URL",
     key: "installerUpdateReleaseUrl",
     name: "DEFAULT_UPDATE_RELEASE_URL",
-    value: "https://github.com/SubBoost/subboost/releases/latest/download/release.json",
+    value: "https://github.com/dong152389/subboost/releases/latest/download/release.json",
   },
   {
     arg: "--installer-compose-url",
     env: "SUBBOOST_INSTALLER_COMPOSE_URL",
     key: "installerComposeUrl",
     name: "DEFAULT_COMPOSE_URL",
-    value: "https://github.com/SubBoost/subboost/releases/latest/download/docker-compose.image.yml",
+    value: "https://github.com/dong152389/subboost/releases/latest/download/docker-compose.image.yml",
   },
   {
     arg: "--installer-manager-url",
     env: "SUBBOOST_INSTALLER_MANAGER_URL",
     key: "installerManagerUrl",
     name: "DEFAULT_MANAGER_URL",
-    value: "https://github.com/SubBoost/subboost/releases/latest/download/subboost-manager",
+    value: "https://github.com/dong152389/subboost/releases/latest/download/subboost-manager",
   },
   {
     arg: "--installer-image",
     env: "SUBBOOST_INSTALLER_IMAGE",
     key: "installerImage",
     name: "DEFAULT_IMAGE",
-    value: "ghcr.io/subboost/subboost:latest",
+    value: "ghcr.io/dong152389/subboost:latest",
   },
 ];
 

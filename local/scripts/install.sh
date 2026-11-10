@@ -3,11 +3,11 @@ set -Eeuo pipefail
 
 DEFAULT_HOME="/opt/subboost"
 DEFAULT_BIN="/usr/local/bin/subboost"
-DEFAULT_RELEASE_URL="https://github.com/SubBoost/subboost/releases/latest/download/release.json"
-DEFAULT_UPDATE_RELEASE_URL="https://github.com/SubBoost/subboost/releases/latest/download/release.json"
-DEFAULT_COMPOSE_URL="https://github.com/SubBoost/subboost/releases/latest/download/docker-compose.image.yml"
-DEFAULT_MANAGER_URL="https://github.com/SubBoost/subboost/releases/latest/download/subboost-manager"
-DEFAULT_IMAGE="ghcr.io/subboost/subboost:latest"
+DEFAULT_RELEASE_URL="https://github.com/dong152389/subboost/releases/latest/download/release.json"
+DEFAULT_UPDATE_RELEASE_URL="https://github.com/dong152389/subboost/releases/latest/download/release.json"
+DEFAULT_COMPOSE_URL="https://github.com/dong152389/subboost/releases/latest/download/docker-compose.image.yml"
+DEFAULT_MANAGER_URL="https://github.com/dong152389/subboost/releases/latest/download/subboost-manager"
+DEFAULT_IMAGE="ghcr.io/dong152389/subboost:latest"
 
 SUBBOOST_HOME="${SUBBOOST_HOME:-$DEFAULT_HOME}"
 SUBBOOST_BIN="${SUBBOOST_BIN:-$DEFAULT_BIN}"
