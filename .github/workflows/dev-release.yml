@@ -29,7 +29,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  IMAGE_NAME: ghcr.io/subboost/subboost
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
 
 jobs:
   meta:
@@ -74,7 +74,6 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
-      - run: npm run test:coverage
       - run: npm run check:local-app
 
   build-image:

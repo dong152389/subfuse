@@ -60,5 +60,5 @@ export function LocalHeader() {
     };
   }, []);
 
-  return <Header mode="local" extraBrandBadge={newReleaseBadge} />;
+  return <Header mode="local" showModeBadge={false} extraBrandBadge={newReleaseBadge} />;
 }

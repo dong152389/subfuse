@@ -79,6 +79,18 @@ vi.mock("@subboost/ui/store/user-store", () => ({
   useUserStore: () => harness.userState,
 }));
 
+vi.mock("@local/components/user-email-bind-card", () => ({
+  UserEmailBindCard: () => React.createElement("div", null, "UserEmailBindCard"),
+}));
+
+vi.mock("@local/components/smtp-settings-card", () => ({
+  SmtpSettingsCard: () => React.createElement("div", null, "SmtpSettingsCard"),
+}));
+
+vi.mock("@local/components/github-oauth-settings-card", () => ({
+  GitHubOAuthSettingsCard: () => React.createElement("div", null, "GitHubOAuthSettingsCard"),
+}));
+
 import SettingsPage from "../../../local/app/dashboard/settings/page";
 
 function response(body: unknown, ok = true) {

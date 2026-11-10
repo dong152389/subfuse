@@ -10,7 +10,12 @@ datasource db {
 model LocalAdmin {
   id           String    @id @default(cuid())
   username     String    @unique
-  passwordHash String
+  passwordHash String?
+  email        String?   @unique
+  emailVerifiedAt DateTime?
+  githubId     String?   @unique
+  githubUsername String?
+  avatarUrl    String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   lastLoginAt  DateTime?
@@ -18,6 +23,26 @@ model LocalAdmin {
 
   subscriptions Subscription[]
   templates      LocalTemplate[]
+}
+
+model VerificationCode {
+  id        String    @id @default(cuid())
+  target    String
+  code      String
+  purpose   String
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+
+  @@index([target, purpose])
+  @@index([expiresAt])
+}
+
+model SystemSetting {
+  key       String   @id
+  value     String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model LocalTemplate {

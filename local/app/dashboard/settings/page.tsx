@@ -7,6 +7,9 @@ import { Button } from "@subboost/ui/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
 import { SwitchField } from "@subboost/ui/components/ui/switch-field";
 import { useUserStore } from "@subboost/ui/store/user-store";
+import { UserEmailBindCard } from "@local/components/user-email-bind-card";
+import { SmtpSettingsCard } from "@local/components/smtp-settings-card";
+import { GitHubOAuthSettingsCard } from "@local/components/github-oauth-settings-card";
 
 export default function SettingsPage() {
   const { user, fetchUser, logout } = useUserStore();
@@ -89,7 +92,7 @@ export default function SettingsPage() {
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold mb-1">账户设置</h1>
-          <p className="text-fg-50">本地管理员、订阅源安全和运行端点</p>
+          <p className="text-fg-50">账户信息、邮箱绑定、邮件发信及 GitHub 授权管理</p>
         </div>
       </div>
 
@@ -99,7 +102,7 @@ export default function SettingsPage() {
             <div className="rounded-lg bg-indigo-500/20 p-2 text-indigo-300">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <CardTitle className="text-base">本地管理员</CardTitle>
+            <CardTitle className="text-base">{user?.isAdmin ? "管理员账户" : "账户信息"}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -116,6 +119,16 @@ export default function SettingsPage() {
             </Button>
           </CardContent>
         </Card>
+
+        {/* User Email Bind Card */}
+        {user && (
+          <UserEmailBindCard
+            currentEmail={(user as any).email}
+            onEmailUpdated={() => {
+              void fetchUser();
+            }}
+          />
+        )}
 
         <Card>
           <CardHeader className="flex flex-row items-center gap-3 space-y-0">
@@ -154,6 +167,14 @@ export default function SettingsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Admin only: SMTP & GitHub OAuth settings */}
+        {user?.isAdmin && (
+          <>
+            <SmtpSettingsCard />
+            <GitHubOAuthSettingsCard />
+          </>
+        )}
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   const admin = username
     ? await prisma.localAdmin.findUnique({ where: { username }, select: { id: true, username: true, passwordHash: true } })
     : null;
-  const valid = admin ? await bcrypt.compare(password, admin.passwordHash) : false;
+  const valid = admin && admin.passwordHash ? await bcrypt.compare(password, admin.passwordHash) : false;
   if (!admin || !valid) {
     return apiError("Invalid username or password.", "UNAUTHORIZED", 401);
   }

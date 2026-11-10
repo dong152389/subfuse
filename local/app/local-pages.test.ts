@@ -18,8 +18,14 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("lucide-react", () => ({
+  CheckCircle2: () => React.createElement("span", null, "CheckCircle2"),
+  Github: () => React.createElement("span", null, "Github"),
+  KeyRound: () => React.createElement("span", null, "KeyRound"),
+  Loader2: () => React.createElement("span", null, "Loader2"),
   LogOut: () => React.createElement("span", null, "LogOut"),
+  Mail: () => React.createElement("span", null, "Mail"),
   Network: () => React.createElement("span", null, "Network"),
+  Send: () => React.createElement("span", null, "Send"),
   ServerCog: () => React.createElement("span", null, "ServerCog"),
   ShieldCheck: () => React.createElement("span", null, "ShieldCheck"),
 }));

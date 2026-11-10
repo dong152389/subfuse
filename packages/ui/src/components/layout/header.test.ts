@@ -155,6 +155,14 @@ describe("Header", () => {
     expect(mocks.links.some((link) => link.href === adminPath)).toBe(false);
   });
 
+  it("hides the mode badge when showModeBadge is false", () => {
+    const html = renderHeader({ mode: "local", showModeBadge: false });
+
+    expect(html).not.toContain("self-host");
+    expect(html).not.toContain("自部署入口");
+    expect(html).toContain("SubBoost");
+  });
+
   it("renders a linked new release badge outside the home link", () => {
     const releaseUrl = "https://github.com/SubBoost/subboost/releases/tag/v9.8.7";
     const html = renderHeader({

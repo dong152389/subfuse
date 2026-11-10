@@ -140,7 +140,15 @@ describe("local lib helpers", () => {
     await expect(getCurrentAdmin()).resolves.toEqual({ id: "admin-1", username: "root" });
     expect(mocks.prisma.localAdmin.findUnique).toHaveBeenCalledWith({
       where: { id: "admin-1" },
-      select: { id: true, username: true },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        emailVerifiedAt: true,
+        githubId: true,
+        githubUsername: true,
+        avatarUrl: true,
+      },
     });
 
     mocks.prisma.localAdmin.count.mockResolvedValueOnce(0).mockResolvedValueOnce(1);

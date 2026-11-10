@@ -43,3 +43,20 @@ export function getStringField(body: unknown, key: string): string {
   const value = (body as Record<string, unknown>)[key];
   return typeof value === "string" ? value.trim() : "";
 }
+
+export function getBooleanField(body: unknown, key: string): boolean {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return false;
+  const value = (body as Record<string, unknown>)[key];
+  return typeof value === "boolean" ? value : false;
+}
+
+export function getNumberField(body: unknown, key: string): number | null {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  const value = (body as Record<string, unknown>)[key];
+  if (typeof value === "number" && !Number.isNaN(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value.trim());
+    return !Number.isNaN(parsed) ? parsed : null;
+  }
+  return null;
+}

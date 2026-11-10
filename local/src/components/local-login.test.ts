@@ -217,7 +217,7 @@ describe("local login component", () => {
 
     expect(setters[1]).toHaveBeenCalledWith("root");
     expect(setters[2]).toHaveBeenCalledWith("next");
-    expect((setters[7] as any).lastValue).toBe(true);
+    expect((setters[16] as any).lastValue).toBe(true);
     expect(setters[4]).toHaveBeenCalledWith(true);
     expect(globalThis.fetch).toHaveBeenCalledWith(
       "/api/auth/login",
@@ -239,8 +239,8 @@ describe("local login component", () => {
       2: "long-secret",
       3: "long-secret",
       6: "setup-secret",
-      7: true,
-      8: true,
+      16: true,
+      17: true,
     });
 
     expect(mocks.inputs.find((input) => input.placeholder === "密码").type).toBe("text");
@@ -298,5 +298,49 @@ describe("local login component", () => {
     expect(win.history.replaceState).toHaveBeenCalledWith(null, "", "/login");
     expect(win.location.href).toBe("/dashboard");
     expect(missingWindow.history.replaceState).not.toHaveBeenCalled();
+  });
+
+  it("switches to registration mode and registers a new user", async () => {
+    const win = installWindow();
+    (globalThis as any).fetch = vi.fn(async () => response({ success: true, user: { id: "user-2", username: "newuser" } }));
+    const { html, setters } = renderLogin({
+      0: { setupRequired: false, authenticated: false },
+      1: "newuser",
+      2: "password123",
+      3: "password123",
+      7: true,
+    });
+
+    expect(html).toContain("注册账号以使用订阅管理功能");
+    expect(html).toContain("注册并登录");
+    expect(html).toContain("已有账号？");
+
+    await mocks.forms[0].onSubmit({ preventDefault: vi.fn() });
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      "/api/auth/register",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ username: "newuser", password: "password123", passwordConfirm: "password123" }),
+      }),
+    );
+    expect(win.location.href).toBe("/dashboard");
+  });
+
+  it("validates registration mismatch passwords before sending request", async () => {
+    installWindow();
+    (globalThis as any).fetch = vi.fn();
+    const { setters } = renderLogin({
+      0: { setupRequired: false, authenticated: false },
+      1: "newuser",
+      2: "password123",
+      3: "mismatchpass",
+      7: true,
+    });
+
+    await mocks.forms[0].onSubmit({ preventDefault: vi.fn() });
+
+    expect(setters[5]).toHaveBeenCalledWith("两次输入的密码不一致，请重新确认");
+    expect(globalThis.fetch).not.toHaveBeenCalled();
   });
 });

@@ -105,11 +105,13 @@ function BrandBadge({ badge, tone = "default" }: { badge: HeaderBrandBadge; tone
 
 export function Header({
   mode = "default",
+  showModeBadge = true,
   extraBrandBadge = null,
   privilegedMenuItem,
   themeToggle = true,
 }: {
   mode?: HeaderMode;
+  showModeBadge?: boolean;
   extraBrandBadge?: HeaderBrandBadge | null;
   privilegedMenuItem?: AccountMenuItem;
   /** Shells without the theme init script (always-dark surfaces) hide the toggle. */
@@ -128,6 +130,7 @@ export function Header({
     label: mode === "local" ? "self-host" : "online",
     title: mode === "local" ? "自部署入口" : "在线入口",
   };
+  const hasBadges = Boolean(extraBrandBadge || showModeBadge);
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-header border-b border-ink/5">
@@ -147,10 +150,12 @@ export function Header({
                 SubBoost
               </span>
             </Link>
-            <span className="hidden flex-col items-start justify-center gap-1 leading-none sm:flex">
-              {extraBrandBadge && <BrandBadge badge={extraBrandBadge} tone="new" />}
-              <BrandBadge badge={modeBadge} />
-            </span>
+            {hasBadges && (
+              <span className="hidden flex-col items-start justify-center gap-1 leading-none sm:flex">
+                {extraBrandBadge && <BrandBadge badge={extraBrandBadge} tone="new" />}
+                {showModeBadge && <BrandBadge badge={modeBadge} />}
+              </span>
+            )}
           </div>
 
           {/* Desktop Navigation */}

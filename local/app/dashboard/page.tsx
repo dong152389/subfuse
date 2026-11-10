@@ -22,7 +22,7 @@ const localDashboardAdapter: DashboardSurfaceAdapter = {
   newSubscriptionHref: "/?newSubscription=1",
   templatesHref: "/templates",
   settingsHref: "/dashboard/settings",
-  settingsDescription: "查看本地管理员和运行状态",
+  settingsDescription: "查看账户信息和运行状态",
   autoUpdateIntervalPolicy: LOCAL_AUTO_UPDATE_POLICY,
   fetchSubscriptions: async () => {
     const response = await fetch("/api/subscriptions");
