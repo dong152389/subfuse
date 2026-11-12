@@ -35,7 +35,7 @@ describe("editing rule-set string references", () => {
 
   it("cleans string-reference rules when their custom group is deleted", () => {
     const { actions, getState } = harness({ customProxyGroups: [media],
-      customRules: [{ id: "plain", type: "DOMAIN", value: "local.subboost.test", target: "custom:media" }],
+      customRules: [{ id: "plain", type: "DOMAIN", value: "local.subfuse.test", target: "custom:media" }],
       customRuleSets: [{ ...ruleSet, target: "custom:media" }],
       builtinRuleEdits: { "module:cn:cn-ip": { target: "custom:media" } },
     });

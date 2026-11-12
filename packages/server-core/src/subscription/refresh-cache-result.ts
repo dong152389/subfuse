@@ -1,13 +1,13 @@
-import { generateClashYaml } from "@subboost/core/generator";
+import { generateClashYaml } from "@subfuse/core/generator";
 import {
   buildGenerateOptionsFromConfig,
   getEffectiveTestOptions,
-} from "@subboost/core/subscription/config-utils";
-import { buildProxyProvidersFromConfig } from "@subboost/core/subscription/proxy-providers";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import { reconcileNodeNameReferences } from "@subboost/core/subscription/node-name-references";
-import type { ParsedNode } from "@subboost/core/types/node";
-import type { SubscriptionResponseInfo } from "@subboost/core/subscription/subscription-response-info";
+} from "@subfuse/core/subscription/config-utils";
+import { buildProxyProvidersFromConfig } from "@subfuse/core/subscription/proxy-providers";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import { reconcileNodeNameReferences } from "@subfuse/core/subscription/node-name-references";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import type { SubscriptionResponseInfo } from "@subfuse/core/subscription/subscription-response-info";
 import type { RefreshNodeSnapshotResult } from "./refresh-node-snapshot";
 
 export type RefreshCacheFailureReason =

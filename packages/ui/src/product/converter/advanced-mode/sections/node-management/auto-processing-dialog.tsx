@@ -7,10 +7,10 @@ import {
   resolveNodeNameFilter,
   type NodeNameFilterConfig,
   type NodeNameFilterValidationError,
-} from "@subboost/core/subscription/node-name-filter";
-import { getNodeOriginName } from "@subboost/core/subscription/node-source-state";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { Button } from "@subboost/ui/components/ui/button";
+} from "@subfuse/core/subscription/node-name-filter";
+import { getNodeOriginName } from "@subfuse/core/subscription/node-source-state";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { Button } from "@subfuse/ui/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,11 +18,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@subboost/ui/components/ui/dialog";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { Textarea } from "@subboost/ui/components/ui/textarea";
+} from "@subfuse/ui/components/ui/dialog";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { Textarea } from "@subfuse/ui/components/ui/textarea";
 
 type NodeManagementAutoProcessingDialogProps = {
   open: boolean;

@@ -76,19 +76,19 @@ vi.mock("lucide-react", () => ({
   Search: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => {
     mocks.captures.badges.push(props);
     return React.createElement("span", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return React.createElement("input", {
@@ -98,7 +98,7 @@ vi.mock("@subboost/ui/components/ui/input", () => ({
     });
   },
 }));
-vi.mock("@subboost/ui/components/ui/select", () => ({
+vi.mock("@subfuse/ui/components/ui/select", () => ({
   Select: (props: any) => {
     mocks.captures.selects.push(props);
     return React.createElement("select", null, props.children);
@@ -108,33 +108,33 @@ vi.mock("@subboost/ui/components/ui/select", () => ({
   SelectTrigger: (props: any) => React.createElement(React.Fragment, null, props.children),
   SelectValue: (props: any) => React.createElement("span", null, props.placeholder),
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "Auto", rules: [{ id: "netflix" }] },
     { id: "fallback", name: "Fallback", rules: [] },
     { id: "bare", name: "Bare" },
   ],
 }));
-vi.mock("@subboost/core/generator/module-rules", () => ({
+vi.mock("@subfuse/core/generator/module-rules", () => ({
   getModuleRuleOrderKey: (moduleId: string, ruleId: string) => `module:${moduleId}:${ruleId}`,
   getEffectiveModuleRules: vi.fn((module: { id: string }) => mocks.effectiveRulesByModule[module.id] || []),
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { name: string }, override?: string) => override || module.name,
 }));
-vi.mock("@subboost/core/rules/metadata", () => ({
+vi.mock("@subfuse/core/rules/metadata", () => ({
   RULE_CATEGORIES: {
     streaming: { name: "流媒体" },
     telegram: { name: "通讯" },
   },
 }));
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return { useConfigStore };
 });
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 vi.mock("./proxy-groups-added-rule-sets", () => ({
@@ -153,7 +153,7 @@ vi.mock("./proxy-groups-rules-search", () => ({
 }));
 
 import { ProxyGroupsRulesLibrary } from "./proxy-groups-rules-library";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
 
 const netflixRule = {
   id: "netflix",

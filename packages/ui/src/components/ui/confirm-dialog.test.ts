@@ -12,14 +12,14 @@ vi.mock("lucide-react", () => ({
   XCircle: () => React.createElement("span", null, "XCircle"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.captures.dialog = props;
     return React.createElement("div", { "data-open": String(props.open) }, props.children);

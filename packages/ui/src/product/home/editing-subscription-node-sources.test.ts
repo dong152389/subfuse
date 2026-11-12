@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
-import type { SubscriptionSource } from "@subboost/ui/store/config-store";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import type { SubscriptionSource } from "@subfuse/ui/store/config-store";
 import {
   ensureNodeOriginName,
   ensureNodesHaveValidSourceIds,
@@ -12,7 +12,7 @@ const mocks = vi.hoisted(() => ({
   parseSubscription: vi.fn(),
 }));
 
-vi.mock("@subboost/core/parser", () => ({
+vi.mock("@subfuse/core/parser", () => ({
   parseSubscription: mocks.parseSubscription,
 }));
 
@@ -118,7 +118,7 @@ describe("editing subscription node source helpers", () => {
 
   it("keeps peers-only nodes from different endpoints attached to their own source", () => {
     const make = (port: number) => node("Same", { type: "wireguard", server: undefined, port: undefined,
-      peers: [{ server: "local.subboost.test", port, "public-key": "A".repeat(43) + "=" }] });
+      peers: [{ server: "local.subfuse.test", port, "public-key": "A".repeat(43) + "=" }] });
     mocks.parseSubscription.mockReturnValueOnce({ nodes: [make(443)], errors: [] });
     mocks.parseSubscription.mockReturnValueOnce({ nodes: [make(8443)], errors: [] });
     const result = ensureNodesHaveValidSourceIds([make(443), make(8443)], [

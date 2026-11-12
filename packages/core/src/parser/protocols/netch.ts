@@ -1,5 +1,5 @@
 import { decodeBase64 } from "../base64";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import { parseJsonObject } from "../json-utils";
 
 function pickString(value: unknown): string {

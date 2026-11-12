@@ -212,7 +212,7 @@ jobs:
             --installer-release-url "${dev_base_url}/release.json" \
             --installer-update-release-url "${dev_base_url}/release.json" \
             --installer-compose-url "${dev_base_url}/docker-compose.image.yml" \
-            --installer-manager-url "${dev_base_url}/subboost-manager" \
+            --installer-manager-url "${dev_base_url}/subfuse-manager" \
             --installer-image "${IMAGE_NAME}:dev"
 
       - name: Move dev tag
@@ -245,7 +245,7 @@ jobs:
 
           if gh release view dev >/dev/null 2>&1; then
             gh release edit dev \
-              --title "SubBoost dev" \
+              --title "SubFuse dev" \
               --notes-file "$notes_file" \
               --prerelease \
               --draft=false
@@ -253,11 +253,11 @@ jobs:
               dist/release-assets/release.json \
               dist/release-assets/install.sh \
               dist/release-assets/docker-compose.image.yml \
-              dist/release-assets/subboost-manager \
+              dist/release-assets/subfuse-manager \
               --clobber
           else
             gh release create dev \
-              --title "SubBoost dev" \
+              --title "SubFuse dev" \
               --notes-file "$notes_file" \
               --prerelease \
               --latest=false \
@@ -265,7 +265,7 @@ jobs:
               dist/release-assets/release.json \
               dist/release-assets/install.sh \
               dist/release-assets/docker-compose.image.yml \
-              dist/release-assets/subboost-manager
+              dist/release-assets/subfuse-manager
           fi
 
           release_id="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/dev" --jq ".id")"

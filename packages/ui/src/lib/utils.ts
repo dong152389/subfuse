@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { safeParseJsonObject } from "@subboost/core/json";
+import { safeParseJsonObject } from "@subfuse/core/json";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

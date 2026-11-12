@@ -1,15 +1,15 @@
-import { parseSubscription } from "@subboost/core/parser";
-import { stripImportedNodeControlFields } from "@subboost/core/subscription/imported-node-controls";
+import { parseSubscription } from "@subfuse/core/parser";
+import { stripImportedNodeControlFields } from "@subfuse/core/subscription/imported-node-controls";
 import {
   keepOnlyValidNodeSourceIds,
   normalizeNodeOriginName,
-} from "@subboost/core/subscription/node-source-state";
+} from "@subfuse/core/subscription/node-source-state";
 import {
   detachSourceNodesFromState,
   type DeletedNodeDescriptor,
   mergeParsedSourceNodes,
   prepareSourceParsedNodes,
-} from "@subboost/core/subscription/source-node-refresh";
+} from "@subfuse/core/subscription/source-node-refresh";
 import {
   hasSubscriptionUserInfo,
   mergeSubscriptionUserInfo,
@@ -17,14 +17,14 @@ import {
   parseSubscriptionUserInfo,
   resolveSubscriptionUserInfo,
   type SubscriptionUserInfo,
-} from "@subboost/core/subscription/subscription-userinfo";
+} from "@subfuse/core/subscription/subscription-userinfo";
 import {
   pickSubscriptionResponseInfoFromHeaders,
   type SubscriptionResponseInfo,
-} from "@subboost/core/subscription/subscription-response-info";
-import type { SubscriptionImportErrorCategory } from "@subboost/core/subscription/import-error";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { composeNodeNameRenameMaps } from "@subboost/core/subscription/node-name-references";
+} from "@subfuse/core/subscription/subscription-response-info";
+import type { SubscriptionImportErrorCategory } from "@subfuse/core/subscription/import-error";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { composeNodeNameRenameMaps } from "@subfuse/core/subscription/node-name-references";
 import { normalizeSavedSourcesForPersistence, type SavedSource, type SavedSourceType } from "./saved-sources";
 
 type UrlNodeFetchResult = {

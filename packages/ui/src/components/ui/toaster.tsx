@@ -4,7 +4,7 @@ import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
 import { zeroRightClassName } from "react-remove-scroll-bar";
-import { cn } from "@subboost/ui/lib/utils";
+import { cn } from "@subfuse/ui/lib/utils";
 
 const ToastProvider = ToastPrimitives.Provider;
 

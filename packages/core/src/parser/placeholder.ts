@@ -1,4 +1,4 @@
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 export const CLIENT_UPDATE_PLACEHOLDER_ERROR = "检测到客户端更新提示占位节点，已自动忽略";
 

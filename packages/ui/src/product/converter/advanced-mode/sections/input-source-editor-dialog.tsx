@@ -1,1 +1,1 @@
-export { SourceEditorDialog as InputSourceEditorDialog } from "@subboost/ui/product/converter/source-editor-dialog";
+export { SourceEditorDialog as InputSourceEditorDialog } from "@subfuse/ui/product/converter/source-editor-dialog";

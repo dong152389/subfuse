@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { Loader2, Mail, KeyRound, ArrowLeft } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
-import { PasswordField } from "@subboost/ui/components/ui/password-field";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { PasswordField } from "@subfuse/ui/components/ui/password-field";
 import { isValidEmail, USER_PASSWORD_MIN_LENGTH } from "@local/lib/admin-credentials";
 
 type EmailAuthMode = "code_login" | "reset_password";

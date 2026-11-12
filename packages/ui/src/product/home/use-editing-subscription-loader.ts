@@ -1,28 +1,28 @@
 "use client";
 
 import * as React from "react";
-import type { SubscriptionSource } from "@subboost/ui/store/config-store";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { SubscriptionSource } from "@subfuse/ui/store/config-store";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import type { EditingSubscriptionLoaderOptions } from "./editing-subscription-types";
-import { normalizePersistedRuleOrder } from "@subboost/core/generator/rules";
-import { ensureCustomRulesHaveIds } from "@subboost/core/rules/custom-rule-utils";
-import { normalizeRuleModelFromConfig } from "@subboost/core/rules/rule-model";
-import { resolveProxyGroupAdvancedModeEnabled } from "@subboost/core/proxy-group-advanced-mode";
-import { normalizeProxyGroupAdvancedConfig } from "@subboost/core/proxy-group-advanced";
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
+import { normalizePersistedRuleOrder } from "@subfuse/core/generator/rules";
+import { ensureCustomRulesHaveIds } from "@subfuse/core/rules/custom-rule-utils";
+import { normalizeRuleModelFromConfig } from "@subfuse/core/rules/rule-model";
+import { resolveProxyGroupAdvancedModeEnabled } from "@subfuse/core/proxy-group-advanced-mode";
+import { normalizeProxyGroupAdvancedConfig } from "@subfuse/core/proxy-group-advanced";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
 import {
   hasSubscriptionUserInfo,
   normalizeSubscriptionUserInfo,
   type SubscriptionUserInfo,
-} from "@subboost/core/subscription/subscription-userinfo";
+} from "@subfuse/core/subscription/subscription-userinfo";
 import {
   normalizeNodeNameFilterConfig,
   type NodeNameFilterConfig,
-} from "@subboost/core/subscription/node-name-filter";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { initialState } from "@subboost/ui/store/config-store/definitions";
-import { captureAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
-import { toast } from "@subboost/ui/components/ui/toaster";
+} from "@subfuse/core/subscription/node-name-filter";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { initialState } from "@subfuse/ui/store/config-store/definitions";
+import { captureAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
+import { toast } from "@subfuse/ui/components/ui/toaster";
 import {
   ensureNodeOriginName,
   ensureNodesHaveValidSourceIds,

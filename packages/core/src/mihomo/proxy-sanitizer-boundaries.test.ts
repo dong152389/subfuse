@@ -201,8 +201,8 @@ describe("Mihomo proxy sanitizer boundaries", () => {
         },
       },
     });
-    expect(invalidDownloadReality).toHaveProperty("_subboost-invalid-mihomo-node", true);
-    expect(invalidMainReality).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    expect(invalidDownloadReality).toHaveProperty("_subfuse-invalid-mihomo-node", true);
+    expect(invalidMainReality).toHaveProperty("_subfuse-invalid-mihomo-node", true);
     expect(prefixedCertificate).toHaveProperty("fingerprint", "c".repeat(64));
   });
 
@@ -485,7 +485,7 @@ describe("Mihomo proxy sanitizer boundaries", () => {
         },
       },
     });
-    expect(invalidDownloadReality).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    expect(invalidDownloadReality).toHaveProperty("_subfuse-invalid-mihomo-node", true);
     expect(explicitTlsReality).toMatchObject({
       tls: true,
       "client-fingerprint": "edge",

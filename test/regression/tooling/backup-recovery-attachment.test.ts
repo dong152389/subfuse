@@ -23,16 +23,16 @@ function scenario(mode: string) {
 set -Eeuo pipefail
 home="$(mktemp -d)"
 trap 'rm -rf "$home"' EXIT
-export SUBBOOST_BIN="$home/subboost"
-${mode === "locked" ? 'mkdir "$SUBBOOST_BIN.repair.lock"' : ""}
-cat > "$SUBBOOST_BIN" <<'OLD'
+export SUBFUSE_BIN="$home/subfuse"
+${mode === "locked" ? 'mkdir "$SUBFUSE_BIN.repair.lock"' : ""}
+cat > "$SUBFUSE_BIN" <<'OLD'
 ${mode === "fixed" ? fixed : mode === "unknown" ? "custom manager\n" : old}OLD
 cat > "$home/fixed" <<'FIXED'
 ${candidate}FIXED
 cat > "$home/repair.sh" <<'REPAIR'
 ${source}
 REPAIR
-original="$(sha256sum "$SUBBOOST_BIN" | cut -d ' ' -f 1)"
+original="$(sha256sum "$SUBFUSE_BIN" | cut -d ' ' -f 1)"
 id() { printf '%s\\n' '${mode === "nonroot" ? "1000" : "0"}'; }
 curl() {
   ${mode === "download" ? "return 22" : ""}
@@ -53,27 +53,27 @@ cp() {
   fi
   command cp "$@"
   if [[ "$output" = *.backup-*.partial.* ]] && [ '${mode}' = 'concurrent' ]; then
-    printf custom > "$SUBBOOST_BIN"
+    printf custom > "$SUBFUSE_BIN"
   fi
 }
 export -f id curl install cp
 export home
 if bash "$home/repair.sh"; then status=0; else status=$?; fi
 printf 'status=%s\\n' "$status"
-after="$(sha256sum "$SUBBOOST_BIN" | cut -d ' ' -f 1)"
+after="$(sha256sum "$SUBFUSE_BIN" | cut -d ' ' -f 1)"
 if [ "$after" = "$original" ]; then echo original_preserved; fi
 if [ "$after" = '${hash(candidate)}' ]; then echo fixed_installed; fi
 shopt -s nullglob
-backups=("$SUBBOOST_BIN".backup-*)
+backups=("$SUBFUSE_BIN".backup-*)
 printf 'backups=%s\\n' "\${#backups[@]}"
 if [ "\${#backups[@]}" = 1 ]; then
   [ "$(sha256sum "\${backups[0]}" | cut -d ' ' -f 1)" = "$original" ]
   echo backup_verified
 fi
-staged=("$SUBBOOST_BIN".repair.*)
+staged=("$SUBFUSE_BIN".repair.*)
 printf 'staged=%s\\n' "\${#staged[@]}"
-if [ -d "$SUBBOOST_BIN.repair.lock" ]; then echo lock_remains; fi
-if [ '${mode}' = concurrent ]; then [ "$(cat "$SUBBOOST_BIN")" = custom ]; echo concurrent_write_preserved; fi
+if [ -d "$SUBFUSE_BIN.repair.lock" ]; then echo lock_remains; fi
+if [ '${mode}' = concurrent ]; then [ "$(cat "$SUBFUSE_BIN")" = custom ]; echo concurrent_write_preserved; fi
 `,
   });
 }

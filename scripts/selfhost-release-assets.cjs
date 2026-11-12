@@ -3,44 +3,44 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const DEFAULT_IMAGE_REPOSITORY = "ghcr.io/dong152389/subboost";
+const DEFAULT_IMAGE_REPOSITORY = "ghcr.io/dong152389/subfuse";
 const DEFAULT_OUTPUT = path.join("dist", "release-assets");
-const MANAGER_ASSET_NAME = "subboost-manager";
+const MANAGER_ASSET_NAME = "subfuse-manager";
 const INSTALLER_DEFAULTS = [
   {
     arg: "--installer-release-url",
-    env: "SUBBOOST_INSTALLER_RELEASE_URL",
+    env: "SUBFUSE_INSTALLER_RELEASE_URL",
     key: "installerReleaseUrl",
     name: "DEFAULT_RELEASE_URL",
-    value: "https://github.com/dong152389/subboost/releases/latest/download/release.json",
+    value: "https://github.com/dong152389/subfuse/releases/latest/download/release.json",
   },
   {
     arg: "--installer-update-release-url",
-    env: "SUBBOOST_INSTALLER_UPDATE_RELEASE_URL",
+    env: "SUBFUSE_INSTALLER_UPDATE_RELEASE_URL",
     key: "installerUpdateReleaseUrl",
     name: "DEFAULT_UPDATE_RELEASE_URL",
-    value: "https://github.com/dong152389/subboost/releases/latest/download/release.json",
+    value: "https://github.com/dong152389/subfuse/releases/latest/download/release.json",
   },
   {
     arg: "--installer-compose-url",
-    env: "SUBBOOST_INSTALLER_COMPOSE_URL",
+    env: "SUBFUSE_INSTALLER_COMPOSE_URL",
     key: "installerComposeUrl",
     name: "DEFAULT_COMPOSE_URL",
-    value: "https://github.com/dong152389/subboost/releases/latest/download/docker-compose.image.yml",
+    value: "https://github.com/dong152389/subfuse/releases/latest/download/docker-compose.image.yml",
   },
   {
     arg: "--installer-manager-url",
-    env: "SUBBOOST_INSTALLER_MANAGER_URL",
+    env: "SUBFUSE_INSTALLER_MANAGER_URL",
     key: "installerManagerUrl",
     name: "DEFAULT_MANAGER_URL",
-    value: "https://github.com/dong152389/subboost/releases/latest/download/subboost-manager",
+    value: "https://github.com/dong152389/subfuse/releases/latest/download/subfuse-manager",
   },
   {
     arg: "--installer-image",
-    env: "SUBBOOST_INSTALLER_IMAGE",
+    env: "SUBFUSE_INSTALLER_IMAGE",
     key: "installerImage",
     name: "DEFAULT_IMAGE",
-    value: "ghcr.io/dong152389/subboost:latest",
+    value: "ghcr.io/dong152389/subfuse:latest",
   },
 ];
 
@@ -49,19 +49,19 @@ function usage() {
     "Usage:",
     "  node scripts/selfhost-release-assets.cjs [--output <dir>] [--image <image>] [--image-tag <image>] [--base-url <url>] [--tag <vX.Y.Z>] [--build-sha <sha>] [--installer-release-url <url>] [--installer-update-release-url <url>] [--installer-compose-url <url>] [--installer-manager-url <url>] [--installer-image <image>] [--dry-run]",
     "",
-    "Creates release.json, install.sh, docker-compose.image.yml, and subboost-manager for GitHub Release assets.",
+    "Creates release.json, install.sh, docker-compose.image.yml, and subfuse-manager for GitHub Release assets.",
   ].join("\n");
 }
 
 function parseArgs(argv) {
   const args = {
-    baseUrl: process.env.SUBBOOST_RELEASE_ASSET_BASE_URL || process.env.SUBBOOST_ONECLICK_BASE_URL || "",
-    buildSha: process.env.SUBBOOST_BUILD_SHA || "",
+    baseUrl: process.env.SUBFUSE_RELEASE_ASSET_BASE_URL || process.env.SUBFUSE_ONECLICK_BASE_URL || "",
+    buildSha: process.env.SUBFUSE_BUILD_SHA || "",
     dryRun: false,
-    image: process.env.SUBBOOST_IMAGE || "",
-    imageRepository: process.env.SUBBOOST_IMAGE_REPOSITORY || DEFAULT_IMAGE_REPOSITORY,
-    imageTag: process.env.SUBBOOST_RELEASE_IMAGE_TAG || "",
-    output: process.env.SUBBOOST_RELEASE_ASSET_OUTPUT || process.env.SUBBOOST_ONECLICK_OUTPUT || DEFAULT_OUTPUT,
+    image: process.env.SUBFUSE_IMAGE || "",
+    imageRepository: process.env.SUBFUSE_IMAGE_REPOSITORY || DEFAULT_IMAGE_REPOSITORY,
+    imageTag: process.env.SUBFUSE_RELEASE_IMAGE_TAG || "",
+    output: process.env.SUBFUSE_RELEASE_ASSET_OUTPUT || process.env.SUBFUSE_ONECLICK_OUTPUT || DEFAULT_OUTPUT,
     releaseTag: process.env.GITHUB_REF_NAME || "",
   };
   for (const item of INSTALLER_DEFAULTS) {
@@ -228,12 +228,12 @@ function writeReleaseCompose(publicRoot, to, image) {
   fs.mkdirSync(path.dirname(to), { recursive: true });
   const source = path.join(publicRoot, "local/docker-compose.image.yml");
   const content = fs.readFileSync(source, "utf8").replace(/\r\n/g, "\n");
-  const marker = "image: ${SUBBOOST_IMAGE:?set SUBBOOST_IMAGE}";
+  const marker = "image: ${SUBFUSE_IMAGE:?set SUBFUSE_IMAGE}";
   const count = content.split(marker).length - 1;
   if (count !== 1) {
-    throw new Error(`Expected exactly one SubBoost image marker in docker-compose.image.yml, found ${count}.`);
+    throw new Error(`Expected exactly one SubFuse image marker in docker-compose.image.yml, found ${count}.`);
   }
-  const resolvedImage = `image: ${"${SUBBOOST_CANDIDATE_IMAGE:-"}${image}}`;
+  const resolvedImage = `image: ${"${SUBFUSE_CANDIDATE_IMAGE:-"}${image}}`;
   fs.writeFileSync(to, content.replace(marker, resolvedImage), "utf8");
 }
 
@@ -246,7 +246,7 @@ function createBundle(publicRoot, args) {
   fs.mkdirSync(output, { recursive: true });
   writeReleaseCompose(publicRoot, path.join(output, "docker-compose.image.yml"), manifest.image);
   copyInstallScript(publicRoot, path.join(output, "install.sh"), args);
-  copyFile(publicRoot, "local/scripts/subboost.sh", path.join(output, MANAGER_ASSET_NAME), { normalizeLineEndings: true });
+  copyFile(publicRoot, "local/scripts/subfuse.sh", path.join(output, MANAGER_ASSET_NAME), { normalizeLineEndings: true });
   fs.chmodSync(path.join(output, "install.sh"), 0o755);
   fs.chmodSync(path.join(output, MANAGER_ASSET_NAME), 0o755);
   fs.writeFileSync(path.join(output, "release.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");

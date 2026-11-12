@@ -21,8 +21,8 @@ export interface DialerProxyGroup {
   targetNodes: string[]; // 使用此中转的落地节点名称列表
 }
 
-export type SubBoostTemplateConfig = {
-  schema?: "subboost-template-config/v1";
+export type SubFuseTemplateConfig = {
+  schema?: "subfuse-template-config/v1";
   template: TemplateType;
   enabledProxyGroups: string[];
   hiddenProxyGroups?: string[];

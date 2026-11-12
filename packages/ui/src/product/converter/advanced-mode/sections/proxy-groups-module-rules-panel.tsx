@@ -2,24 +2,24 @@
 
 import * as React from "react";
 import { HelpCircle, Plus, RotateCcw, Trash2 } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { HelpPopover } from "@subboost/ui/components/ui/popover";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { PROXY_GROUP_MODULES, type ProxyGroupModule, type ProxyGroupRule } from "@subboost/core/generator/proxy-groups";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { HelpPopover } from "@subfuse/ui/components/ui/popover";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { PROXY_GROUP_MODULES, type ProxyGroupModule, type ProxyGroupRule } from "@subfuse/core/generator/proxy-groups";
 import {
   type EffectiveModuleRule,
   getEffectiveModuleRuleItems,
   getExcludedModuleRuleIds,
   isModuleRuleMovedFrom,
   type HiddenPresetRuleIds,
-} from "@subboost/core/generator/module-rules";
-import { EXPERIMENTAL_CN_RULE } from "@subboost/core/generator/rules";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { cn } from "@subboost/ui/lib/utils";
-import { useProductApiAdapter } from "@subboost/ui/product/api-adapter";
-import type { CustomProxyGroup, RuleSetDraft } from "@subboost/ui/store/config-store";
+} from "@subfuse/core/generator/module-rules";
+import { EXPERIMENTAL_CN_RULE } from "@subfuse/core/generator/rules";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { cn } from "@subfuse/ui/lib/utils";
+import { useProductApiAdapter } from "@subfuse/ui/product/api-adapter";
+import type { CustomProxyGroup, RuleSetDraft } from "@subfuse/ui/store/config-store";
 import type {
   CustomRuleListItem,
   ProxyGroupRuleTargetOption,

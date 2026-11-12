@@ -143,18 +143,18 @@ vi.mock("@radix-ui/react-popover", () => ({
   Arrow: () => React.createElement("span", null, "arrow"),
 }));
 
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.uiButtons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.dialogs.push(props);
     return React.createElement("div", { "data-open": props.open }, props.children);
@@ -164,14 +164,14 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogTitle: (props: any) => React.createElement("h2", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.switches.push(props);
     return React.createElement("button", {
@@ -182,20 +182,20 @@ vi.mock("@subboost/ui/components/ui/switch", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     mocks.textareas.push(props);
     return React.createElement("textarea", props);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
 
-vi.mock("@subboost/ui/product/converter/subscription-import-error", () => ({
+vi.mock("@subfuse/ui/product/converter/subscription-import-error", () => ({
   SubscriptionImportErrorBadge: ({ errorMessage }: { errorMessage?: string }) =>
     React.createElement("span", null, `import-error:${errorMessage ?? ""}`),
 }));
-vi.mock("@subboost/ui/product/converter/source-controls", () => ({
+vi.mock("@subfuse/ui/product/converter/source-controls", () => ({
   AddSourceMenu: (props: any) => {
     mocks.addSourceMenus.push(props);
     return null;
@@ -209,14 +209,14 @@ vi.mock("@subboost/ui/product/converter/source-controls", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => ({
     sourceAdded: mocks.sourceAdded,
     sourceImported: mocks.sourceImported,
   }),
 }));
 
-vi.mock("@subboost/ui/product/subscription/subscription-userinfo-display", () => ({
+vi.mock("@subfuse/ui/product/subscription/subscription-userinfo-display", () => ({
   getSubscriptionUserInfoDisplay: (info: unknown) => {
     if (info === "traffic-only") return { traffic: "1 GB / 10 GB", expire: "" };
     if (info === "expire-only") return { traffic: "", expire: "2026-12-31" };
@@ -224,7 +224,7 @@ vi.mock("@subboost/ui/product/subscription/subscription-userinfo-display", () =>
   },
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.storeState;
   useConfigStore.getState = () => mocks.storeState;
   return {
@@ -233,7 +233,7 @@ vi.mock("@subboost/ui/store/config-store", () => {
   };
 });
 
-vi.mock("@subboost/ui/store/user-store", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({
   useUserStore: () => ({ user: mocks.user }),
 }));
 

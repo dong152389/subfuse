@@ -1,4 +1,4 @@
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded } from "./url-decode";
 
 function parseBoolish(value: string | null): boolean | undefined {

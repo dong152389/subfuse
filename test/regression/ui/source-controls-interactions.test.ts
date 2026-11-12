@@ -19,11 +19,11 @@ vi.mock("lucide-react", () => ({
   Plus: () => null,
 }));
 
-vi.mock("@subboost/ui/lib/utils", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({
   cn: (...parts: unknown[]) => parts.filter(Boolean).join(" "),
 }));
 
-vi.mock("@subboost/ui/product/converter/source-type-info", () => ({
+vi.mock("@subfuse/ui/product/converter/source-type-info", () => ({
   sourceTypeInfo: {
     url: { label: "URL", description: "URL source", icon: () => null },
     yaml: { label: "YAML", description: "YAML source", icon: () => null },
@@ -31,18 +31,18 @@ vi.mock("@subboost/ui/product/converter/source-type-info", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/product/subscription/subscription-userinfo-display", () => ({
+vi.mock("@subfuse/ui/product/subscription/subscription-userinfo-display", () => ({
   getSubscriptionUserInfoDisplay: mocks.getSubscriptionUserInfoDisplay,
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: Record<string, unknown>) => {
     mocks.captures.buttons.push(props);
     return null;
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/choice-group", () => ({
+vi.mock("@subfuse/ui/components/ui/choice-group", () => ({
   ChoiceGroup: (props: Record<string, unknown>) => {
     mocks.captures.groups.push(props);
     return props.children;
@@ -53,7 +53,7 @@ vi.mock("@subboost/ui/components/ui/choice-group", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: Record<string, unknown>) => {
     mocks.captures.dropdowns.push(props);
     return props.children;
@@ -66,7 +66,7 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/popover", () => ({
+vi.mock("@subfuse/ui/components/ui/popover", () => ({
   Popover: (props: Record<string, unknown>) => props.children,
   PopoverTrigger: (props: Record<string, unknown>) => props.children,
   PopoverContent: (props: Record<string, unknown>) => props.children,
@@ -77,7 +77,7 @@ import {
   AddSourceMenu,
   SourceStatusPopover,
   SourceTypeChoices,
-} from "@subboost/ui/product/converter/source-controls";
+} from "@subfuse/ui/product/converter/source-controls";
 
 function render(element: React.ReactElement) {
   return renderToStaticMarkup(element);

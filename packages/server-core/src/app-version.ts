@@ -79,7 +79,7 @@ function readPackageVersion(cwd: string, readFile: (filePath: string) => string)
       const parsed = parseJsonObject(readFile(filePath));
       const version = normalizeReleaseVersion(parsed?.version);
       if (!version) continue;
-      if (parsed?.name === "subboost") return version;
+      if (parsed?.name === "subfuse") return version;
       fallback ??= version;
     } catch {
       continue;

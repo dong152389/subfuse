@@ -1,11 +1,11 @@
 import type { ConfigState, SourceType, SubscriptionSource } from "./definitions";
 import { initialState } from "./definitions";
-import { safeParseJsonObject } from "@subboost/core/json";
-import { normalizeNodeNameFilterConfig } from "@subboost/core/subscription/node-name-filter";
-import { resolveProxyGroupAdvancedModeEnabled } from "@subboost/core/proxy-group-advanced-mode";
-import { normalizeRuleModelFromConfig } from "@subboost/core/rules/rule-model";
+import { safeParseJsonObject } from "@subfuse/core/json";
+import { normalizeNodeNameFilterConfig } from "@subfuse/core/subscription/node-name-filter";
+import { resolveProxyGroupAdvancedModeEnabled } from "@subfuse/core/proxy-group-advanced-mode";
+import { normalizeRuleModelFromConfig } from "@subfuse/core/rules/rule-model";
 
-export const AUTH_CONFIG_HANDOFF_STORAGE_NAME = "subboost-auth-config-handoff";
+export const AUTH_CONFIG_HANDOFF_STORAGE_NAME = "subfuse-auth-config-handoff";
 
 const AUTH_CONFIG_HANDOFF_VERSION = 1;
 const AUTH_CONFIG_HANDOFF_TTL_MS = 10 * 60 * 1000;

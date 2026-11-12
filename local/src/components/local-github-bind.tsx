@@ -3,9 +3,9 @@
 import * as React from "react";
 import Image from "next/image";
 import { Loader2, Mail, KeyRound, User, ArrowLeft } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
 import { isValidEmail } from "@local/lib/admin-credentials";
 
 async function readJson<T>(response: Response): Promise<T> {
@@ -127,7 +127,7 @@ export function LocalGitHubBind({
       </div>
 
       <div className="rounded-xl bg-indigo-500/10 border border-indigo-500/20 p-3.5 text-xs text-fg-70 leading-relaxed">
-        首次使用 GitHub 授权登录，请验证并绑定您的邮箱。如果该邮箱已有 SubBoost 账号，将直接与您的 GitHub 关联。
+        首次使用 GitHub 授权登录，请验证并绑定您的邮箱。如果该邮箱已有 SubFuse 账号，将直接与您的 GitHub 关联。
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">

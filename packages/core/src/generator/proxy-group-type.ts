@@ -3,7 +3,7 @@ import {
   type LoadBalanceStrategy,
   type ProxyGroup,
   type ProxyGroupGroupType,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 
 type BuildTypedProxyGroupOptions = {
   name: string;

@@ -4,11 +4,11 @@ const geoHint = "需要客户端已安装对应的地理数据文件。";
 const regexHint = "使用 Mihomo 正则语法，复杂表达式请在目标客户端校验。";
 
 export const CUSTOM_RULE_DEFINITIONS = {
-  DOMAIN: { label: "域名", example: "local.subboost.test" },
-  "DOMAIN-SUFFIX": { label: "域名后缀", example: "subboost.test" },
-  "DOMAIN-KEYWORD": { label: "域名关键词", example: "subboost" },
-  "DOMAIN-WILDCARD": { label: "域名通配符", example: "*.subboost.test" },
-  "DOMAIN-REGEX": { label: "域名正则", example: "^local\\d{1,3}\\.subboost\\.test$", commaPayload: true, hint: regexHint },
+  DOMAIN: { label: "域名", example: "local.subfuse.test" },
+  "DOMAIN-SUFFIX": { label: "域名后缀", example: "subfuse.test" },
+  "DOMAIN-KEYWORD": { label: "域名关键词", example: "subfuse" },
+  "DOMAIN-WILDCARD": { label: "域名通配符", example: "*.subfuse.test" },
+  "DOMAIN-REGEX": { label: "域名正则", example: "^local\\d{1,3}\\.subfuse\\.test$", commaPayload: true, hint: regexHint },
   GEOSITE: { label: "GeoSite", example: "cn", hint: geoHint },
   "IP-CIDR": { label: "IP 段", example: "203.0.113.0/24", noResolve: true, sourceType: "SRC-IP-CIDR" },
   "IP-CIDR6": { label: "IPv6 段", example: "::1/128", noResolve: true, sourceType: "SRC-IP-CIDR", hint: "IP-CIDR 的别名；两者都支持 IPv4 和 IPv6。" },
@@ -36,8 +36,8 @@ export const CUSTOM_RULE_DEFINITIONS = {
   NETWORK: { label: "网络协议", example: "tcp" },
   DSCP: { label: "DSCP 标记", example: "4/8-12", hint: "仅在支持 DSCP 的 tproxy UDP 入站生效，范围为 0–63。" },
   AND: { label: "AND (与)", example: "((PROCESS-NAME,curl),(NETWORK,UDP))", commaPayload: true, hint: "子条件用括号包裹；RULE-SET 子条件需引用已配置的 provider。" },
-  OR: { label: "OR (或)", example: "((DOMAIN,local.subboost.test),(NETWORK,UDP))", commaPayload: true },
-  NOT: { label: "NOT (非)", example: "((DOMAIN,local.subboost.test))", commaPayload: true },
+  OR: { label: "OR (或)", example: "((DOMAIN,local.subfuse.test),(NETWORK,UDP))", commaPayload: true },
+  NOT: { label: "NOT (非)", example: "((DOMAIN,local.subfuse.test))", commaPayload: true },
 } as const;
 
 export type CustomRuleType = keyof typeof CUSTOM_RULE_DEFINITIONS;

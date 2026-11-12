@@ -38,17 +38,17 @@ describe("copyTextToClipboard", () => {
     vi.stubGlobal("navigator", { clipboard: { writeText } });
     vi.stubGlobal("document", undefined);
 
-    await expect(copyTextToClipboard("https://local.subboost.test/sub")).resolves.toBe(true);
-    expect(writeText).toHaveBeenCalledWith("https://local.subboost.test/sub");
+    await expect(copyTextToClipboard("https://local.subfuse.test/sub")).resolves.toBe(true);
+    expect(writeText).toHaveBeenCalledWith("https://local.subfuse.test/sub");
   });
 
   it("uses a hidden textarea on non-secure origins", async () => {
     const dom = stubLegacyClipboard(true);
     vi.stubGlobal("navigator", {});
 
-    await expect(copyTextToClipboard("http://local.subboost.test/sub")).resolves.toBe(true);
+    await expect(copyTextToClipboard("http://local.subfuse.test/sub")).resolves.toBe(true);
     expect(dom.createElement).toHaveBeenCalledWith("textarea");
-    expect(dom.textarea.value).toBe("http://local.subboost.test/sub");
+    expect(dom.textarea.value).toBe("http://local.subfuse.test/sub");
     expect(dom.textarea.setAttribute).toHaveBeenCalledWith("readonly", "");
     expect(dom.appendChild).toHaveBeenCalledWith(dom.textarea);
     expect(dom.textarea.select).toHaveBeenCalled();
@@ -62,7 +62,7 @@ describe("copyTextToClipboard", () => {
     const dom = stubLegacyClipboard(new Error("copy blocked"));
     vi.stubGlobal("navigator", { clipboard: { writeText } });
 
-    await expect(copyTextToClipboard("http://local.subboost.test/sub")).resolves.toBe(false);
+    await expect(copyTextToClipboard("http://local.subfuse.test/sub")).resolves.toBe(false);
     expect(writeText).toHaveBeenCalled();
     expect(dom.execCommand).toHaveBeenCalledWith("copy");
     expect(dom.textarea.remove).toHaveBeenCalled();

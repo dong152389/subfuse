@@ -1,5 +1,5 @@
 /*
- * SubBoost theme tokens: the single source of truth for colors that change between themes.
+ * SubFuse theme tokens: the single source of truth for colors that change between themes.
  *
  * - The dark block reproduces the original dark UI exactly; do not tweak dark values.
  * - The light block holds the light theme. Add a new color here (both blocks) before using it.

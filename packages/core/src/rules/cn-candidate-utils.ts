@@ -1,5 +1,5 @@
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-group-modules";
-import { ALL_RULES } from "@subboost/core/rules-database";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-group-modules";
+import { ALL_RULES } from "@subfuse/core/rules-database";
 
 export type CnRuleVariantKind = "dash-cn" | "at-cn" | "dash-cn-at-cn";
 

@@ -1,5 +1,5 @@
 {
-  "name": "subboost",
+  "name": "subfuse",
   "version": "0.0.1",
   "license": "AGPL-3.0-only",
   "private": true,
@@ -11,8 +11,8 @@
     "local"
   ],
   "scripts": {
-    "dev": "npm --workspace @subboost/local run dev",
-    "build": "npm --workspace @subboost/local run build",
+    "dev": "npm --workspace @subfuse/local run dev",
+    "build": "npm --workspace @subfuse/local run build",
     "test:unit": "vitest run",
     "test:coverage": "vitest run --config vitest.coverage.ts --coverage",
     "test:core": "vitest run --config vitest.core.config.ts",
@@ -38,10 +38,10 @@
     "@radix-ui/react-switch": "^1.4.1",
     "@radix-ui/react-tabs": "^1.2.1",
     "@radix-ui/react-toast": "^1.3.1",
-    "@subboost/config": "file:packages/config",
-    "@subboost/core": "file:packages/core",
-    "@subboost/server-core": "file:packages/server-core",
-    "@subboost/ui": "file:packages/ui",
+    "@subfuse/config": "file:packages/config",
+    "@subfuse/core": "file:packages/core",
+    "@subfuse/server-core": "file:packages/server-core",
+    "@subfuse/ui": "file:packages/ui",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

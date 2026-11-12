@@ -3,9 +3,9 @@
 import {
   TemplateLibrarySurface,
   type TemplateLibraryAdapter,
-} from "@subboost/ui/templates/template-library-surface";
-import { readJsonResponse } from "@subboost/ui/product/client-response";
-import type { TabValue, Template } from "@subboost/ui/templates/types";
+} from "@subfuse/ui/templates/template-library-surface";
+import { readJsonResponse } from "@subfuse/ui/product/client-response";
+import type { TabValue, Template } from "@subfuse/ui/templates/types";
 
 type TemplateListResponse = {
   templates?: Template[];

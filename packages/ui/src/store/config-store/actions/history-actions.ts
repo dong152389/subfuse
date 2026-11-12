@@ -1,7 +1,7 @@
 import type { ConfigActions } from "../definitions";
 import { initialState } from "../definitions";
 import { computeGeneratedYamlResult } from "../generated-yaml";
-import { normalizeNodeNameFilterConfig } from "@subboost/core/subscription/node-name-filter";
+import { normalizeNodeNameFilterConfig } from "@subfuse/core/subscription/node-name-filter";
 import type { GetState, SetState } from "../store-types";
 
 type HistoryActions = Pick<

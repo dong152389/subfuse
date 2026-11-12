@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-SubBoost uses open-source dependencies and external data sources. This file is a
+SubFuse uses open-source dependencies and external data sources. This file is a
 human-readable summary, not a full dependency license inventory.
 
 ## npm Dependencies
@@ -20,7 +20,7 @@ lucide-react icons are provided by the Lucide project.
 
 ## Proxy and Rule Ecosystem
 
-SubBoost generates and parses Clash/Mihomo-compatible configuration data and
+SubFuse generates and parses Clash/Mihomo-compatible configuration data and
 links to external ecosystem resources.
 
 - Mihomo core: https://github.com/MetaCubeX/mihomo

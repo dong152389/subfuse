@@ -3,58 +3,58 @@ import * as React from "../../../node_modules/react";
 // @ts-expect-error public coverage tests render with the public ReactDOM server runtime.
 import { renderToStaticMarkup } from "../../../node_modules/react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { BaseConfigYamlError, generateClashConfig } from "@subboost/core/generator";
+import { BaseConfigYamlError, generateClashConfig } from "@subfuse/core/generator";
 import {
   buildGeneratedRuleEntries,
   generateRules,
   hasFullRuleOrderKeys,
   normalizePersistedRuleOrder,
   resolveAppliedRuleOrder,
-} from "@subboost/core/generator/rules";
+} from "@subfuse/core/generator/rules";
 import {
   detachSourceNodesFromState,
   mergeParsedSourceNodes,
   prepareSourceParsedNodes,
-} from "@subboost/core/subscription/source-node-refresh";
-import { ORIGIN_NAME_KEY, SOURCE_IDS_KEY } from "@subboost/core/subscription/node-source-state";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { YamlHighlight } from "@subboost/ui/product/preview/diff-highlight";
-import { createNodeActions } from "@subboost/ui/store/config-store/actions/node-actions";
-import { createProxyGroupActions } from "@subboost/ui/store/config-store/actions/proxy-group-actions";
-import { initialState } from "@subboost/ui/store/config-store/definitions";
-import { PagePager } from "@subboost/ui/components/ui/page-pager";
-import { ProtocolBadge, getProtocolBadgeClass } from "@subboost/ui/components/ui/protocol-badge";
-import { SmartNodeMatchingHelp } from "@subboost/ui/components/subscription/smart-node-matching-help";
-import { SubscriptionImportErrorBadge } from "@subboost/ui/product/converter/subscription-import-error";
-import { DashboardStatsCards } from "@subboost/ui/dashboard/dashboard-stats-cards";
-import { buildRefreshSubscriptionSuccessToast } from "@subboost/ui/dashboard/dashboard-refresh-toast";
-import { formatDashboardDate, formatIntervalLabel } from "@subboost/ui/dashboard/dashboard-format";
+} from "@subfuse/core/subscription/source-node-refresh";
+import { ORIGIN_NAME_KEY, SOURCE_IDS_KEY } from "@subfuse/core/subscription/node-source-state";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { YamlHighlight } from "@subfuse/ui/product/preview/diff-highlight";
+import { createNodeActions } from "@subfuse/ui/store/config-store/actions/node-actions";
+import { createProxyGroupActions } from "@subfuse/ui/store/config-store/actions/proxy-group-actions";
+import { initialState } from "@subfuse/ui/store/config-store/definitions";
+import { PagePager } from "@subfuse/ui/components/ui/page-pager";
+import { ProtocolBadge, getProtocolBadgeClass } from "@subfuse/ui/components/ui/protocol-badge";
+import { SmartNodeMatchingHelp } from "@subfuse/ui/components/subscription/smart-node-matching-help";
+import { SubscriptionImportErrorBadge } from "@subfuse/ui/product/converter/subscription-import-error";
+import { DashboardStatsCards } from "@subfuse/ui/dashboard/dashboard-stats-cards";
+import { buildRefreshSubscriptionSuccessToast } from "@subfuse/ui/dashboard/dashboard-refresh-toast";
+import { formatDashboardDate, formatIntervalLabel } from "@subfuse/ui/dashboard/dashboard-format";
 import {
   buildProxyGroupName,
   parseProxyGroupNameDraft,
   pickRandomEmoji,
   toProxyGroupNameDraft,
-} from "@subboost/ui/product/converter/advanced-mode/sections/proxy-group-name-editor";
+} from "@subfuse/ui/product/converter/advanced-mode/sections/proxy-group-name-editor";
 import {
   getLoadBalanceStrategyLabel,
   getProxyGroupTypeLabel,
-} from "@subboost/ui/product/converter/advanced-mode/sections/proxy-group-type-menu";
+} from "@subfuse/ui/product/converter/advanced-mode/sections/proxy-group-type-menu";
 import {
   buildManualRuleTargets,
   listCustomRulesForTarget,
-} from "@subboost/ui/product/converter/advanced-mode/sections/proxy-group-rule-targets";
+} from "@subfuse/ui/product/converter/advanced-mode/sections/proxy-group-rule-targets";
 import {
   getRuleDisplayName,
   replaceRuleProviderBase,
-} from "@subboost/ui/product/converter/advanced-mode/sections/proxy-groups-rules-search";
-import { parseCustomRuleBatchImport } from "@subboost/core/rules/custom-rule-batch-import";
+} from "@subfuse/ui/product/converter/advanced-mode/sections/proxy-groups-rules-search";
+import { parseCustomRuleBatchImport } from "@subfuse/core/rules/custom-rule-batch-import";
 import {
   buildCnRuleCandidatesFromSources,
   buildCnRuleVariantIds,
   buildLocalCnRuleCandidates,
   collectCnCandidateParents,
   normalizeRuleListLines,
-} from "@subboost/core/rules/cn-candidate-utils";
+} from "@subfuse/core/rules/cn-candidate-utils";
 
 const UUID = "11111111-1111-4111-8111-111111111111";
 const REALITY_PUBLIC_KEY = "A".repeat(43);

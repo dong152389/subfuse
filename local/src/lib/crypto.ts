@@ -1,4 +1,4 @@
-import { decryptEncryptedFieldV2, encryptEncryptedFieldV2 } from "@subboost/server-core/crypto";
+import { decryptEncryptedFieldV2, encryptEncryptedFieldV2 } from "@subfuse/server-core/crypto";
 import { requireEnv } from "./env";
 
 function getMasterKey(): string {

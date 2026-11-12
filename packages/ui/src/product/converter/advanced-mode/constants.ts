@@ -1,1 +1,1 @@
-export { sourceTypeInfo } from "@subboost/ui/product/converter/source-type-info";
+export { sourceTypeInfo } from "@subfuse/ui/product/converter/source-type-info";

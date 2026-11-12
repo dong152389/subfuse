@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { TEMPLATES } from "@subboost/core/templates";
-import { DEFAULT_SUBBOOST_CONFIG } from "@subboost/core/config/defaults";
-import { DEFAULT_NODE_NAME_FILTER_CONFIG } from "@subboost/core/subscription/node-name-filter";
+import { TEMPLATES } from "@subfuse/core/templates";
+import { DEFAULT_SUBFUSE_CONFIG } from "@subfuse/core/config/defaults";
+import { DEFAULT_NODE_NAME_FILTER_CONFIG } from "@subfuse/core/subscription/node-name-filter";
 
 const mocks = vi.hoisted(() => ({
   importSource: vi.fn(),
   sourceImport: {} as { importSource?: ReturnType<typeof vi.fn> } | null,
 }));
 
-vi.mock("@subboost/ui/product/api-adapter", () => ({
+vi.mock("@subfuse/ui/product/api-adapter", () => ({
   getActiveProductApiAdapter: () => ({
     sourceImport: mocks.sourceImport,
   }),
@@ -39,11 +39,11 @@ describe("config store definitions", () => {
     ]);
     expect(initialState.template).toBe("minimal");
     expect(initialState.enabledProxyGroups).toBe(TEMPLATES.minimal.groups);
-    expect(initialState.mixedPort).toBe(DEFAULT_SUBBOOST_CONFIG.mixedPort);
-    expect(initialState.allowLan).toBe(DEFAULT_SUBBOOST_CONFIG.allowLan);
-    expect(initialState.testUrl).toBe(DEFAULT_SUBBOOST_CONFIG.testUrl);
-    expect(initialState.testInterval).toBe(DEFAULT_SUBBOOST_CONFIG.testInterval);
-    expect(initialState.ruleProviderBaseUrl).toBe(DEFAULT_SUBBOOST_CONFIG.ruleProviderBaseUrl);
+    expect(initialState.mixedPort).toBe(DEFAULT_SUBFUSE_CONFIG.mixedPort);
+    expect(initialState.allowLan).toBe(DEFAULT_SUBFUSE_CONFIG.allowLan);
+    expect(initialState.testUrl).toBe(DEFAULT_SUBFUSE_CONFIG.testUrl);
+    expect(initialState.testInterval).toBe(DEFAULT_SUBFUSE_CONFIG.testInterval);
+    expect(initialState.ruleProviderBaseUrl).toBe(DEFAULT_SUBFUSE_CONFIG.ruleProviderBaseUrl);
     expect(initialState.nodeNameFilter).toEqual(DEFAULT_NODE_NAME_FILTER_CONFIG);
     expect(initialState.nodeNameFilter).not.toBe(DEFAULT_NODE_NAME_FILTER_CONFIG);
     expect(initialState.generatedYaml).toBe("");

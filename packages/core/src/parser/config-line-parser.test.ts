@@ -28,7 +28,7 @@ describe("config line parser", () => {
 
     expect(
       mustParseConfigLine(
-        "VLESS = vless, vless-line.example.com, 443, uuid=11111111-1111-4111-8111-111111111111, pbk=public-key, sid=1234, transport=xhttp, path=/x, host=cdn.example.com, xhttp-headers=User-Agent:SubBoost, no-grpc-header=true, sc-max-each-post-bytes=2048"
+        "VLESS = vless, vless-line.example.com, 443, uuid=11111111-1111-4111-8111-111111111111, pbk=public-key, sid=1234, transport=xhttp, path=/x, host=cdn.example.com, xhttp-headers=User-Agent:SubFuse, no-grpc-header=true, sc-max-each-post-bytes=2048"
       )
     ).toMatchObject({
       name: "VLESS",
@@ -46,7 +46,7 @@ describe("config line parser", () => {
       "xhttp-opts": {
         path: "/x",
         host: "cdn.example.com",
-        headers: { "User-Agent": "SubBoost" },
+        headers: { "User-Agent": "SubFuse" },
         "no-grpc-header": true,
         "sc-max-each-post-bytes": 2048,
       },
@@ -140,7 +140,7 @@ describe("config line parser", () => {
 
     expect(
       mustParseConfigLine(
-        "HTTP = http, http-line.example.com, 8080, username=user, password=pass, headers=User-Agent:SubBoost|X-Test:yes, tls=true"
+        "HTTP = http, http-line.example.com, 8080, username=user, password=pass, headers=User-Agent:SubFuse|X-Test:yes, tls=true"
       )
     ).toMatchObject({
       name: "HTTP",
@@ -150,7 +150,7 @@ describe("config line parser", () => {
       username: "user",
       password: "pass",
       tls: true,
-      headers: { "User-Agent": "SubBoost", "X-Test": "yes" },
+      headers: { "User-Agent": "SubFuse", "X-Test": "yes" },
     });
 
     expect(
@@ -455,7 +455,7 @@ describe("config line parser", () => {
 
     expect(
       mustParseConfigLine(
-        "VLESS XHTTP Rich = vless, vless-xhttp.example.com, 443, uuid=11111111-1111-4111-8111-111111111111, transport=xhttp, path=/x, host=cdn.example.com, mode=packet-up, max-concurrency=4, download-path=/down, download-host=download.example.com, download-headers=User-Agent:SubBoost, x-padding-bytes=100-200"
+        "VLESS XHTTP Rich = vless, vless-xhttp.example.com, 443, uuid=11111111-1111-4111-8111-111111111111, transport=xhttp, path=/x, host=cdn.example.com, mode=packet-up, max-concurrency=4, download-path=/down, download-host=download.example.com, download-headers=User-Agent:SubFuse, x-padding-bytes=100-200"
       )
     ).toMatchObject({
       name: "VLESS XHTTP Rich",
@@ -473,7 +473,7 @@ describe("config line parser", () => {
           path: "/down",
           host: "download.example.com",
           headers: {
-            "User-Agent": "SubBoost",
+            "User-Agent": "SubFuse",
           },
         },
       },

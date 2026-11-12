@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SubscriptionImportError } from "@subboost/core/subscription/import-error";
+import { SubscriptionImportError } from "@subfuse/core/subscription/import-error";
 import { readJsonResponse, readSourceImportResponse } from "./client-response";
 
 describe("client response readers", () => {

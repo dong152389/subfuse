@@ -1,15 +1,15 @@
 "use client";
 
 import { HelpCircle } from "lucide-react";
-import { DEFAULT_NODE_NAME_TEMPLATE } from "@subboost/core/node-name-template";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@subboost/ui/components/ui/dialog";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { HelpPopover } from "@subboost/ui/components/ui/popover";
-import { Input } from "@subboost/ui/components/ui/input";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { Textarea } from "@subboost/ui/components/ui/textarea";
-import type { SubscriptionSource } from "@subboost/ui/store/config-store";
+import { DEFAULT_NODE_NAME_TEMPLATE } from "@subfuse/core/node-name-template";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@subfuse/ui/components/ui/dialog";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { HelpPopover } from "@subfuse/ui/components/ui/popover";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { Textarea } from "@subfuse/ui/components/ui/textarea";
+import type { SubscriptionSource } from "@subfuse/ui/store/config-store";
 import { sourceTypeInfo } from "./source-type-info";
 
 export type SourceEditorDialogProps = {
@@ -86,7 +86,7 @@ export function SourceEditorDialog({
                             <p className="font-medium text-fg">proxy-providers 模式</p>
                           </div>
                           <p className="leading-relaxed text-fg-60">
-                            部分订阅限制 CN IP 导入，url 无法在 SubBoost 内拉取解析。开启后 SubBoost
+                            部分订阅限制 CN IP 导入，url 无法在 SubFuse 内拉取解析。开启后 SubFuse
                             不再拉取/解析该 url，而是在最终配置中写入{" "}
                             <span className="font-mono">proxy-providers</span>，交由客户端自行拉取节点。
                           </p>
@@ -131,7 +131,7 @@ export function SourceEditorDialog({
                   </div>
                   <p className="text-[11px] text-fg-40">
                     有些订阅源不会直接返回 <span className="font-mono">subscription-userinfo</span>，但会提供独立的流量接口。
-                    设置后，SubBoost 会在导入/刷新时额外抓取该接口，用来更新这个源自己的流量与到期快照。
+                    设置后，SubFuse 会在导入/刷新时额外抓取该接口，用来更新这个源自己的流量与到期快照。
                   </p>
                 </div>
               ) : (

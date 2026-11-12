@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { buildGenerateOptionsFromConfig } from "./config-utils";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function node(patch: Partial<ParsedNode> = {}): ParsedNode {
   return {
@@ -18,7 +18,7 @@ function node(patch: Partial<ParsedNode> = {}): ParsedNode {
 describe("subscription config utils legacy and mixed persistence", () => {
   it("uses legacy custom group fallback when rule model normalization returns no groups", async () => {
     vi.resetModules();
-    vi.doMock("@subboost/core/rules/rule-model", () => ({
+    vi.doMock("@subfuse/core/rules/rule-model", () => ({
       normalizeRuleModelFromConfig: () => ({
         customProxyGroups: [],
         customRuleSets: [],
@@ -107,14 +107,14 @@ describe("subscription config utils legacy and mixed persistence", () => {
       expect(sparse.dialerProxyGroups).toBeUndefined();
       expect(sparse.proxyGroupAdvanced).toEqual({ select: { groupType: "select" } });
     } finally {
-      vi.doUnmock("@subboost/core/rules/rule-model");
+      vi.doUnmock("@subfuse/core/rules/rule-model");
       vi.resetModules();
     }
   });
 
   it("normalizes legacy custom groups with dense optional field variants", async () => {
     vi.resetModules();
-    vi.doMock("@subboost/core/rules/rule-model", () => ({
+    vi.doMock("@subfuse/core/rules/rule-model", () => ({
       normalizeRuleModelFromConfig: () => ({
         customProxyGroups: [],
         customRuleSets: [],
@@ -207,7 +207,7 @@ describe("subscription config utils legacy and mixed persistence", () => {
         },
       ]);
     } finally {
-      vi.doUnmock("@subboost/core/rules/rule-model");
+      vi.doUnmock("@subfuse/core/rules/rule-model");
       vi.resetModules();
     }
   });

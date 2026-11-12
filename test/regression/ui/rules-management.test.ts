@@ -43,23 +43,23 @@ vi.mock("lucide-react", () => ({
   ArrowUp: () => null,
   ListOrdered: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => React.createElement("input", props),
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => React.createElement("button", props),
 }));
-vi.mock("@subboost/core/generator/rules", () => ({
+vi.mock("@subfuse/core/generator/rules", () => ({
   buildGeneratedRuleEntries: mocks.buildGeneratedRuleEntries,
   hasFullRuleOrderKeys: (ruleOrder: string[] | undefined) =>
     Array.isArray(ruleOrder) && ruleOrder.some((key) => key.startsWith("module:") || key.startsWith("special:")),
 }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/section-header", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
+vi.mock("@subfuse/ui/product/converter/advanced-mode/section-header", () => ({
   SectionHeader: (props: any) => React.createElement("header", props, props.title, props.badge),
 }));
 

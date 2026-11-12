@@ -1,4 +1,4 @@
-import { formatInBeijing } from "@subboost/core/time/beijing";
+import { formatInBeijing } from "@subfuse/core/time/beijing";
 
 export function formatDashboardDate(dateString: string | null): string {
   if (!dateString) return "从未";

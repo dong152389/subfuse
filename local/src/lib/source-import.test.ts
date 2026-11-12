@@ -21,8 +21,8 @@ vi.mock("./pinned-http", async (importOriginal) => {
   return { ...actual, requestPinnedText: mocks.requestPinnedText };
 });
 
-vi.mock("@subboost/server-core/subscription", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@subboost/server-core/subscription")>();
+vi.mock("@subfuse/server-core/subscription", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@subfuse/server-core/subscription")>();
   return {
     ...actual,
     importSubscriptionFromUrl: mocks.importSubscriptionFromUrl,
@@ -57,7 +57,7 @@ async function runTransport(url: string, overrides: Record<string, unknown> = {}
   mocks.importSubscriptionFromUrl.mockImplementationOnce(async (request, options) => {
     return options.fetchText({
       url,
-      userAgent: "SubBoost Test",
+      userAgent: "SubFuse Test",
       purpose: "content",
       timeoutMs: 15000,
       maxBytes: 1024,
@@ -208,7 +208,7 @@ describe("local source import transport", () => {
         .mockResolvedValueOnce(dnsResponse(["1.1.1.1"]))
         .mockResolvedValueOnce(dnsResponse([]));
 
-      await expect(runTransport("https://local.subboost.test/sub")).resolves.toMatchObject({ ok: true });
+      await expect(runTransport("https://local.subfuse.test/sub")).resolves.toMatchObject({ ok: true });
       expect(mocks.requestPinnedText).toHaveBeenCalledWith(expect.objectContaining({ addresses: ["1.1.1.1"] }));
       expect(globalThis.fetch).toHaveBeenCalledTimes(2);
     });
@@ -218,19 +218,19 @@ describe("local source import transport", () => {
       vi.mocked(globalThis.fetch)
         .mockResolvedValueOnce(dnsResponse(["10.0.0.2"]))
         .mockResolvedValueOnce(dnsResponse([]));
-      await expect(runTransport("https://local.subboost.test/sub")).resolves.toMatchObject({ ok: false });
+      await expect(runTransport("https://local.subfuse.test/sub")).resolves.toMatchObject({ ok: false });
       expect(globalThis.fetch).toHaveBeenCalledTimes(2);
       expect(mocks.requestPinnedText).not.toHaveBeenCalled();
 
       vi.mocked(globalThis.fetch).mockImplementation(async () => dnsResponse([]));
-      await expect(runTransport("https://local.subboost.test/sub")).resolves.toMatchObject({ ok: false });
+      await expect(runTransport("https://local.subfuse.test/sub")).resolves.toMatchObject({ ok: false });
       expect(mocks.requestPinnedText).not.toHaveBeenCalled();
     });
   });
 
   it("does not recheck fake-ip mixed with private IPv6", async () => {
     mocks.lookup.mockResolvedValueOnce([{ address: "2001:2::7" }, { address: "fd00::1" }]);
-    await expect(runTransport("https://local.subboost.test/sub")).resolves.toMatchObject({
+    await expect(runTransport("https://local.subfuse.test/sub")).resolves.toMatchObject({
       ok: false, errorInfo: { category: "security" },
     });
     expect(globalThis.fetch).not.toHaveBeenCalled();

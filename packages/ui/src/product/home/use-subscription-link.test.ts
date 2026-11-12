@@ -58,30 +58,30 @@ vi.mock("react/jsx-runtime", () => ({
   jsxs: (type: unknown, props: Record<string, unknown>) => ({ type, props }),
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({
   ToastAction: "ToastAction",
   toast: mocks.toast,
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   getNodeSourceIds: mocks.getNodeSourceIds,
   useConfigStore: mocks.useConfigStore,
 }));
 
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({
   captureAuthConfigHandoff: mocks.captureAuthConfigHandoff,
 }));
 
-vi.mock("@subboost/core/time/beijing", () => ({
+vi.mock("@subfuse/core/time/beijing", () => ({
   formatDateInBeijing: () => "2026-06-06",
 }));
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: mocks.useProductInteractionAdapter,
 }));
 
-vi.mock("@subboost/core/subscription/auto-update-interval", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@subboost/core/subscription/auto-update-interval")>();
+vi.mock("@subfuse/core/subscription/auto-update-interval", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@subfuse/core/subscription/auto-update-interval")>();
   return actual;
 });
 
@@ -269,7 +269,7 @@ describe("useSubscriptionLink", () => {
         }),
       })
     );
-    expect(hook.subscriptionUrl).toBe("https://subboost.test/s/token-1");
+    expect(hook.subscriptionUrl).toBe("https://subfuse.test/s/token-1");
     expect(mocks.bag.interactions.subscriptionLinkSaved).toHaveBeenCalledWith(
       expect.objectContaining({ result: "success", autoUpdateEnabled: true })
     );
@@ -280,7 +280,7 @@ describe("useSubscriptionLink", () => {
     const adapter = makeAdapter({ saveSubscription: vi.fn(async () => {
       mocks.bag.storeState.draftRevision = 1;
       if (kind === "rejected") throw new Error("late request");
-      return response(kind === "unauthorized" ? 401 : 200, { subscription: { token: "late", subscriptionUrl: "https://local.subboost.test/s/late" } });
+      return response(kind === "unauthorized" ? 401 : 200, { subscription: { token: "late", subscriptionUrl: "https://local.subfuse.test/s/late" } });
     }) });
     let hook = useRenderedHook({ subscriptionAdapter: adapter, clearUser });
     hook.setSubscriptionName("Saved draft");
@@ -530,11 +530,11 @@ describe("useSubscriptionLink", () => {
     expect(clearUser).toHaveBeenCalled();
     expect(mocks.toast).toHaveBeenCalledWith(expect.objectContaining({ title: "生成订阅链接需要登录" }));
 
-    hook.setSubscriptionUrl("https://subboost.test/s/token-1");
+    hook.setSubscriptionUrl("https://subfuse.test/s/token-1");
     hook = useRenderedHook({ clearUser, subscriptionAdapter: adapter });
     await hook.handleCopyUrl();
 
-    expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith("https://subboost.test/s/token-1");
+    expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith("https://subfuse.test/s/token-1");
     expect(mocks.bag.interactions.subscriptionLinkCopied).toHaveBeenCalledWith({
       flow: "create",
       mode: "quick",
@@ -630,12 +630,12 @@ describe("useSubscriptionLink", () => {
       smartNodeMatchingEnabled: true,
     };
     let hook = useRenderedHook({ editingSubscription });
-    hook.setSubscriptionUrl("http://local.subboost.test/s/token-1");
+    hook.setSubscriptionUrl("http://local.subfuse.test/s/token-1");
     hook = useRenderedHook({ editingSubscription });
 
     await hook.handleCopyUrl();
 
-    expect(textarea.value).toBe("http://local.subboost.test/s/token-1");
+    expect(textarea.value).toBe("http://local.subfuse.test/s/token-1");
     expect(execCommand).toHaveBeenCalledWith("copy");
     expect(mocks.bag.interactions.subscriptionLinkCopied).toHaveBeenCalledWith({
       flow: "update",
@@ -658,12 +658,12 @@ describe("useSubscriptionLink", () => {
       smartNodeMatchingEnabled: true,
     };
     let hook = useRenderedHook({ editingSubscription });
-    hook.setSubscriptionUrl("https://subboost.test/s/token-1");
+    hook.setSubscriptionUrl("https://subfuse.test/s/token-1");
     hook = useRenderedHook({ editingSubscription });
 
     await hook.handleCopyUrl();
 
-    expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith("https://subboost.test/s/token-1");
+    expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith("https://subfuse.test/s/token-1");
     expect(mocks.toast).toHaveBeenCalledWith({
       title: "复制失败，请手动复制订阅链接",
       variant: "destructive",

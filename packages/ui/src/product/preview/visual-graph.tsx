@@ -3,18 +3,18 @@
 import * as React from "react";
 import { Network, Server } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
-import { ProtocolBadge } from "@subboost/ui/components/ui/protocol-badge";
-import { cn } from "@subboost/ui/lib/utils";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+import { ProtocolBadge } from "@subfuse/ui/components/ui/protocol-badge";
+import { cn } from "@subfuse/ui/lib/utils";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 import {
   PROXY_GROUP_MODULES,
   generateProxyGroups,
-} from "@subboost/core/generator/proxy-groups";
-import { getModuleRuleOrderKey } from "@subboost/core/generator/module-rules";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import { collectCustomRoutingRuleSets } from "@subboost/core/rules/custom-routing-rule-sets";
+} from "@subfuse/core/generator/proxy-groups";
+import { getModuleRuleOrderKey } from "@subfuse/core/generator/module-rules";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import { collectCustomRoutingRuleSets } from "@subfuse/core/rules/custom-routing-rule-sets";
 import { CustomRulesPreview } from "./visual-graph/custom-rules-preview";
 import { getDialerEmojiFromName } from "./visual-graph/emoji";
 import {

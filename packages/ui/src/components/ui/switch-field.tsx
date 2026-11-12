@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Label } from "@subboost/ui/components/ui/label";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { cn } from "@subboost/ui/lib/utils";
+import { Label } from "@subfuse/ui/components/ui/label";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { cn } from "@subfuse/ui/lib/utils";
 
 export interface SwitchFieldProps {
   label: React.ReactNode;

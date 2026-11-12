@@ -6,10 +6,10 @@ const mocks = vi.hoisted(() => ({
   readSourceImportResponse: vi.fn(),
 }));
 
-vi.mock("@subboost/ui/product/home/home-surface", () => ({
+vi.mock("@subfuse/ui/product/home/home-surface", () => ({
   HomeSurface: (props: any) => React.createElement("div", props, "home"),
 }));
-vi.mock("@subboost/ui/product/client-response", () => ({
+vi.mock("@subfuse/ui/product/client-response", () => ({
   readJsonResponse: mocks.readJsonResponse,
   readSourceImportResponse: mocks.readSourceImportResponse,
 }));

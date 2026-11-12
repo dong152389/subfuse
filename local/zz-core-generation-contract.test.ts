@@ -6,15 +6,15 @@ import {
   generateProxyGroups,
   generateRuleProviders,
   generateRules,
-} from "@subboost/core/generator";
-import { buildGenerateOptionsFromConfig } from "@subboost/core/subscription/config-utils";
+} from "@subfuse/core/generator";
+import { buildGenerateOptionsFromConfig } from "@subfuse/core/subscription/config-utils";
 import {
   normalizeProxyGroupAdvancedConfig,
   normalizeProxyGroupMemberRef,
   resolveProxyGroupMembers,
-} from "@subboost/core/proxy-group-advanced";
-import { withNodeSourceId } from "@subboost/core/subscription/node-source-state";
-import type { ParsedNode } from "@subboost/core/types/node";
+} from "@subfuse/core/proxy-group-advanced";
+import { withNodeSourceId } from "@subfuse/core/subscription/node-source-state";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function node(name: string, patch: Partial<ParsedNode> = {}): ParsedNode {
   return {

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { CustomRule } from "@subboost/core/types/config";
+import type { CustomRule } from "@subfuse/core/types/config";
 import { initialState } from "../definitions";
 import { createCustomActions } from "./custom-actions";
 

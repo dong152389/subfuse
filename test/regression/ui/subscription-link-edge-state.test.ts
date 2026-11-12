@@ -55,29 +55,29 @@ vi.mock("react", () => ({
   useState: mocks.useState,
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({
   ToastAction: "ToastAction",
   toast: mocks.toast,
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   getNodeSourceIds: mocks.getNodeSourceIds,
   useConfigStore: mocks.useConfigStore,
 }));
 
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({
   captureAuthConfigHandoff: mocks.captureAuthConfigHandoff,
 }));
 
-vi.mock("@subboost/core/time/beijing", () => ({
+vi.mock("@subfuse/core/time/beijing", () => ({
   formatDateInBeijing: () => "2026-08-01",
 }));
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: mocks.useProductInteractionAdapter,
 }));
 
-import { useSubscriptionLink } from "@subboost/ui/product/home/use-subscription-link";
+import { useSubscriptionLink } from "@subfuse/ui/product/home/use-subscription-link";
 
 function useHookHarness(overrides: Record<string, unknown> = {}) {
   mocks.bag.stateIndex = 0;
@@ -208,7 +208,7 @@ describe("subscription link edge state", () => {
       smartNodeMatchingEnabled: true,
     };
     let hook = useHookHarness({ editingSubscription });
-    hook.setSubscriptionUrl("https://subboost.test/s/token-1");
+    hook.setSubscriptionUrl("https://subfuse.test/s/token-1");
     hook = useHookHarness({ editingSubscription });
 
     await hook.handleCopyUrl();

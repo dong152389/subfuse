@@ -14,8 +14,8 @@ function runBackupScenario(failure: "none" | "verify" | "read" | "dump" | "write
       set -Eeuo pipefail
       home="$(mktemp -d)"
       trap 'rm -rf "$home"' EXIT
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1 SUBBOOST_HOME="$home"
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1 SUBFUSE_HOME="$home"
+      source local/scripts/subfuse.sh
       failure="${failure}"
       sudo_do() {
         if [ "$1" = "cat" ] && [ "$failure" = "read" ]; then return 29; fi

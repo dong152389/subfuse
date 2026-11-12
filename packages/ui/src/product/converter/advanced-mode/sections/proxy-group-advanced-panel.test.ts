@@ -1,8 +1,8 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { withNodeSourceId } from "@subboost/core/subscription/node-source-state";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { withNodeSourceId } from "@subfuse/core/subscription/node-source-state";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 const mocks = vi.hoisted(() => ({
   buttons: [] as any[],
@@ -17,37 +17,37 @@ vi.mock("lucide-react", () => ({
   X: () => React.createElement("span", null, "x-icon"),
 }));
 
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({
   confirmDialog: vi.fn(),
 }));
 
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({
   toast: mocks.toast,
 }));
 
-vi.mock("@subboost/ui/lib/utils", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({
   cn: (...parts: unknown[]) => parts.filter(Boolean).join(" "),
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: () => mocks.store,
 }));
 

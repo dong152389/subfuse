@@ -5,7 +5,7 @@ import {
   normalizeParseErrors,
   normalizeParseResult,
 } from "./normalize";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function node(name: string, server = "ss.example.com"): ParsedNode {
   return {

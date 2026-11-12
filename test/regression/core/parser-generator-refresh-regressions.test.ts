@@ -1,23 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { generateClashConfig } from "@subboost/core/generator";
+import { generateClashConfig } from "@subfuse/core/generator";
 import {
   applyCommonNodeParams,
   applyTransport,
-} from "@subboost/core/parser/config-line-tokenizer";
-import { parseHttp, parseSimpleProxy } from "@subboost/core/parser/protocols/simple-proxy";
-import { parseVMess } from "@subboost/core/parser/protocols/vmess";
-import { preprocessSubscriptionContent } from "@subboost/core/parser/preprocess";
+} from "@subfuse/core/parser/config-line-tokenizer";
+import { parseHttp, parseSimpleProxy } from "@subfuse/core/parser/protocols/simple-proxy";
+import { parseVMess } from "@subfuse/core/parser/protocols/vmess";
+import { preprocessSubscriptionContent } from "@subfuse/core/parser/preprocess";
 import {
   formatParseSegmentError,
   parseLineBasedSubscriptionContent,
   splitNodeLinkSegments,
-} from "@subboost/core/parser/content-parsers";
+} from "@subfuse/core/parser/content-parsers";
 import {
   mergeParsedSourceNodes,
   prepareSourceParsedNodes,
-} from "@subboost/core/subscription/source-node-refresh";
-import { ORIGIN_NAME_KEY, SOURCE_IDS_KEY } from "@subboost/core/subscription/node-source-state";
-import type { ParsedNode } from "@subboost/core/types/node";
+} from "@subfuse/core/subscription/source-node-refresh";
+import { ORIGIN_NAME_KEY, SOURCE_IDS_KEY } from "@subfuse/core/subscription/node-source-state";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 const UUID = "11111111-1111-4111-8111-111111111111";
 

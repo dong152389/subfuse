@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { useEditingSubscriptionLoader } from "@subboost/ui/product/home/use-editing-subscription-loader";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { useEditingSubscriptionLoader } from "@subfuse/ui/product/home/use-editing-subscription-loader";
 
 const mocks = vi.hoisted(() => {
   const bag: {
@@ -52,15 +52,15 @@ vi.mock("../../../node_modules/react/index.js", async (importOriginal) => ({
   useEffect: mocks.useEffect,
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: mocks.useConfigStore,
 }));
 
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({
   captureAuthConfigHandoff: mocks.captureAuthConfigHandoff,
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({
   toast: mocks.toast,
 }));
 

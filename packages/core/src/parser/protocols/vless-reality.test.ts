@@ -4,7 +4,7 @@ import { parseSubscription } from "../index";
 import { generateClashYaml } from "../../generator";
 import * as yaml from "js-yaml";
 
-const uri = `vless://11111111-1111-4111-8111-111111111111@local.subboost.test:443?security=reality&pbk=${"A".repeat(43)}`;
+const uri = `vless://11111111-1111-4111-8111-111111111111@local.subfuse.test:443?security=reality&pbk=${"A".repeat(43)}`;
 const encryption = "mlkem768x25519plus.native.0rtt.valid_token";
 const encryptedUri = `${uri}&encryption=${encryption}`;
 const supportKeys = ["support-x25519mlkem768", "support_x25519mlkem768", "supportX25519MLKEM768"];
@@ -20,7 +20,7 @@ describe("VLESS Reality key exchange support", () => {
   });
 
   it("does not infer Reality from a support flag alone", () => {
-    const plain = "vless://11111111-1111-4111-8111-111111111111@local.subboost.test:443";
+    const plain = "vless://11111111-1111-4111-8111-111111111111@local.subfuse.test:443";
     expect(parseVLESS(`${plain}?support-x25519mlkem768=1`)).not.toHaveProperty("reality-opts");
     expect(parseVLESS(`${plain}?security=reality&support-x25519mlkem768=1`)).not.toHaveProperty("reality-opts");
   });

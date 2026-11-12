@@ -109,25 +109,25 @@ vi.mock("lucide-react", async (importOriginal) => ({
   Search: () => null,
   Upload: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.input = props;
     return React.createElement("input", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => {
     mocks.captures.cards.push(props);
     return React.createElement("section", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.captures.dialog = props;
     return props.children;
@@ -136,7 +136,7 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogHeader: (props: any) => props.children,
   DialogTitle: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.captures.switches.push(props);
     return React.createElement("button", {
@@ -146,7 +146,7 @@ vi.mock("@subboost/ui/components/ui/switch", () => ({
     });
   },
 }));
-vi.mock("@subboost/ui/components/ui/tabs", () => ({
+vi.mock("@subfuse/ui/components/ui/tabs", () => ({
   Tabs: (props: any) => {
     mocks.captures.tabs = props;
     return props.children;
@@ -158,11 +158,11 @@ vi.mock("@subboost/ui/components/ui/tabs", () => ({
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.configStore }));
-vi.mock("@subboost/core/templates/builtin", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.configStore }));
+vi.mock("@subfuse/core/templates/builtin", () => ({
   BUILTIN_TEMPLATE_IDS: {
     minimal: "builtin-minimal",
     standard: "builtin-standard",
@@ -170,21 +170,21 @@ vi.mock("@subboost/core/templates/builtin", () => ({
   },
   builtinIdToType: () => null,
 }));
-vi.mock("@subboost/core/time/beijing", () => ({ formatDateInBeijing: (iso: string) => `fmt:${iso}` }));
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/core/time/beijing", () => ({ formatDateInBeijing: (iso: string) => `fmt:${iso}` }));
+vi.mock("@subfuse/ui/product/interactions", () => ({
   ProductInteractionAdapterProvider: (props: any) => props.children,
   useProductInteractionAdapter: () => mocks.interactions,
 }));
-vi.mock("@subboost/ui/product/api-adapter", () => ({
+vi.mock("@subfuse/ui/product/api-adapter", () => ({
   useProductApiAdapter: () => mocks.productApi,
 }));
-vi.mock("@subboost/ui/templates/template-card", () => ({
+vi.mock("@subfuse/ui/templates/template-card", () => ({
   TemplateCard: (props: any) => {
     mocks.captures.templateCards.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/templates/template-upload-dialog", () => ({
+vi.mock("@subfuse/ui/templates/template-upload-dialog", () => ({
   TemplateUploadDialog: (props: any) => {
     mocks.captures.uploadDialog = props;
     return null;

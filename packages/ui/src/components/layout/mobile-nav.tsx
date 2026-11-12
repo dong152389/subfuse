@@ -4,9 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bot, Eye, Home, Library, Settings2, User, type LucideIcon } from "lucide-react";
-import { cn } from "@subboost/ui/lib/utils";
+import { cn } from "@subfuse/ui/lib/utils";
 import { zeroRightClassName } from "react-remove-scroll-bar";
-import { useUserStore } from "@subboost/ui/store/user-store";
+import { useUserStore } from "@subfuse/ui/store/user-store";
 
 type MobileNavItem = {
   id: "config" | "preview" | "ai" | "dashboard" | "home" | "templates";

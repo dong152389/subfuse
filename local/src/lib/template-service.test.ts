@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  buildDefaultSubBoostTemplateConfig: vi.fn(),
+  buildDefaultSubFuseTemplateConfig: vi.fn(),
   builtinIdToType: vi.fn(),
   getBuiltinTemplateId: vi.fn(),
   getBuiltinTemplateSummaryMetadata: vi.fn(),
   getTemplateList: vi.fn(),
-  validateSubBoostTemplateConfig: vi.fn(),
+  validateSubFuseTemplateConfig: vi.fn(),
   decryptJsonObject: vi.fn(),
   encryptJson: vi.fn(),
   prisma: {
@@ -19,17 +19,17 @@ const mocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@subboost/core/config/defaults", () => ({
-  buildDefaultSubBoostTemplateConfig: mocks.buildDefaultSubBoostTemplateConfig,
+vi.mock("@subfuse/core/config/defaults", () => ({
+  buildDefaultSubFuseTemplateConfig: mocks.buildDefaultSubFuseTemplateConfig,
 }));
-vi.mock("@subboost/core/templates/builtin", () => ({
+vi.mock("@subfuse/core/templates/builtin", () => ({
   builtinIdToType: mocks.builtinIdToType,
   getBuiltinTemplateId: mocks.getBuiltinTemplateId,
   getBuiltinTemplateSummaryMetadata: mocks.getBuiltinTemplateSummaryMetadata,
 }));
-vi.mock("@subboost/core/templates", () => ({ getTemplateList: mocks.getTemplateList }));
-vi.mock("@subboost/core/templates/config-template", () => ({
-  validateSubBoostTemplateConfig: mocks.validateSubBoostTemplateConfig,
+vi.mock("@subfuse/core/templates", () => ({ getTemplateList: mocks.getTemplateList }));
+vi.mock("@subfuse/core/templates/config-template", () => ({
+  validateSubFuseTemplateConfig: mocks.validateSubFuseTemplateConfig,
 }));
 vi.mock("./crypto", () => ({
   decryptJsonObject: mocks.decryptJsonObject,
@@ -72,10 +72,10 @@ describe("local template service", () => {
       if (id === "builtin-minimal") return "minimal";
       return null;
     });
-    mocks.buildDefaultSubBoostTemplateConfig.mockReturnValue({ template: "minimal" });
+    mocks.buildDefaultSubFuseTemplateConfig.mockReturnValue({ template: "minimal" });
     mocks.decryptJsonObject.mockReturnValue({ enabledProxyGroups: ["auto"], ruleOrder: ["MATCH"] });
     mocks.encryptJson.mockReturnValue("encrypted-new");
-    mocks.validateSubBoostTemplateConfig.mockReturnValue({ ok: true, config: { rules: [] } });
+    mocks.validateSubFuseTemplateConfig.mockReturnValue({ ok: true, config: { rules: [] } });
   });
 
   it("lists built-in templates and owner templates", async () => {
@@ -142,7 +142,7 @@ describe("local template service", () => {
     await expect(createTemplate("owner-1", null)).rejects.toThrow("Invalid request body.");
     await expect(createTemplate("owner-1", { name: "", config: {} })).rejects.toThrow("Invalid name.");
 
-    mocks.validateSubBoostTemplateConfig.mockReturnValueOnce({ ok: false, error: "bad config" });
+    mocks.validateSubFuseTemplateConfig.mockReturnValueOnce({ ok: false, error: "bad config" });
     await expect(createTemplate("owner-1", { name: "Template", config: {} })).rejects.toThrow("bad config");
 
     mocks.prisma.localTemplate.create.mockResolvedValueOnce(row({ name: "Template", description: "saved" }));

@@ -1,4 +1,4 @@
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-group-modules";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-group-modules";
 import {
   buildCnRuleCandidatesFromSources,
   buildCnRuleVariantIds,
@@ -7,14 +7,14 @@ import {
   type CnCandidateParent,
   type CnRuleCandidate,
   type CnRuleCandidateSource,
-} from "@subboost/core/rules/cn-candidate-utils";
-import { ALL_RULES } from "@subboost/core/rules-database";
+} from "@subfuse/core/rules/cn-candidate-utils";
+import { ALL_RULES } from "@subfuse/core/rules-database";
 import {
   DEFAULT_RULE_PROVIDER_BASE_URL,
   RULE_CATEGORIES,
   RULE_PROVIDER_CONFIG,
   type RuleSetInfo,
-} from "@subboost/core/rules/metadata";
+} from "@subfuse/core/rules/metadata";
 import {
   RuleIndexUnavailableError,
   type CnRuleCandidateDiscovery,
@@ -35,7 +35,7 @@ import {
 
 export * from "./types";
 
-const DEFAULT_USER_AGENT = "SubBoost";
+const DEFAULT_USER_AGENT = "SubFuse";
 const REMOTE_ONLY_SAMPLE_SIZE = 50;
 const GEOSITE_PATH_PREFIX = "geosite/";
 

@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   parseSubscription: vi.fn(),
 }));
 
-vi.mock("@subboost/core/parser", () => ({
+vi.mock("@subfuse/core/parser", () => ({
   parseSubscription: mocks.parseSubscription,
 }));
 

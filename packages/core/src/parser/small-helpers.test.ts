@@ -17,7 +17,7 @@ import {
   pickAliasValue,
 } from "./canonical-fields";
 import { splitWsPathEarlyData } from "./ws-early-data";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function node(partial: Partial<ParsedNode>): ParsedNode {
   return {

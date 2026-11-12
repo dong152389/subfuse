@@ -7,8 +7,8 @@
  */
 
 import { decodeBase64 } from "../base64";
-import type { AnyTLSNode } from "@subboost/core/types/node";
-import { buildMihomoEchOptsFromShareValue } from "@subboost/core/mihomo/ech";
+import type { AnyTLSNode } from "@subfuse/core/types/node";
+import { buildMihomoEchOptsFromShareValue } from "@subfuse/core/mihomo/ech";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 
 function parseBool(value: string): boolean | undefined {

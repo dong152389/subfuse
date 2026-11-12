@@ -1,9 +1,9 @@
-import type { BuiltinRuleEdits, CustomRule, CustomRuleSet } from "@subboost/core/types/config";
-import type { CustomProxyGroup } from "@subboost/core/types/config";
-import { getCustomRuleOrderKey } from "@subboost/core/rules/custom-rule-utils";
-import { supportsNoResolve } from "@subboost/core/rules/custom-rule-types";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { isDisabledCustomProxyGroupTarget, resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
+import type { BuiltinRuleEdits, CustomRule, CustomRuleSet } from "@subfuse/core/types/config";
+import type { CustomProxyGroup } from "@subfuse/core/types/config";
+import { getCustomRuleOrderKey } from "@subfuse/core/rules/custom-rule-utils";
+import { supportsNoResolve } from "@subfuse/core/rules/custom-rule-types";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { isDisabledCustomProxyGroupTarget, resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
 import { PROXY_GROUP_MODULES, type ProxyGroupModule, type ProxyGroupRule } from "./proxy-group-modules";
 import { getEffectiveModuleRules, getModuleRuleOrderKey } from "./module-rules";
 import { createPolicyTargetResolver } from "./policy-targets";

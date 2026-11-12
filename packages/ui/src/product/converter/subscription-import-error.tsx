@@ -8,18 +8,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@subboost/ui/components/ui/dialog";
-import { Button } from "@subboost/ui/components/ui/button";
-import { cn } from "@subboost/ui/lib/utils";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { formatInBeijing } from "@subboost/core/time/beijing";
+} from "@subfuse/ui/components/ui/dialog";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { cn } from "@subfuse/ui/lib/utils";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { formatInBeijing } from "@subfuse/core/time/beijing";
 import {
   getSubscriptionImportErrorBadgeText,
   getSubscriptionImportErrorCategoryLabel,
   normalizeSubscriptionImportErrorInfo,
   sanitizePublicErrorText,
   type SubscriptionImportErrorInfo,
-} from "@subboost/core/subscription/import-error";
+} from "@subfuse/core/subscription/import-error";
 
 interface ErrorDetailDialogProps {
   error: SubscriptionImportErrorInfo;

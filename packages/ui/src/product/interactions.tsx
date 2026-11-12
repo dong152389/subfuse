@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import type { TemplateType } from "@subboost/core/types/config";
-import type { SourceType } from "@subboost/ui/store/config-store";
+import type { TemplateType } from "@subfuse/core/types/config";
+import type { SourceType } from "@subfuse/ui/store/config-store";
 
 export type ProductMode = "quick" | "advanced";
 export type ProductInteractionResult = "success" | "validationError" | "runtimeError" | "noInput";

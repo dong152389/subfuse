@@ -1,17 +1,17 @@
 "use client";
 
 import * as React from "react";
-import type { SubscriptionSource } from "@subboost/ui/store/config-store";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { isSourcePendingImport } from "@subboost/ui/product/subscription/source-import-state";
+import type { SubscriptionSource } from "@subfuse/ui/store/config-store";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { isSourcePendingImport } from "@subfuse/ui/product/subscription/source-import-state";
 import {
   useProductInteractionAdapter,
   type ProductInteractionResult,
   type ProductMode,
-} from "@subboost/ui/product/interactions";
-import { getCompactDateStampInBeijing } from "@subboost/core/time/beijing";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { toast } from "@subboost/ui/components/ui/toaster";
+} from "@subfuse/ui/product/interactions";
+import { getCompactDateStampInBeijing } from "@subfuse/core/time/beijing";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { toast } from "@subfuse/ui/components/ui/toaster";
 
 type UseHomeActionsOptions = {
   generatedYaml: string;

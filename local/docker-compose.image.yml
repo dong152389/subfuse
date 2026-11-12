@@ -3,11 +3,11 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-subboost}
-      POSTGRES_USER: ${POSTGRES_USER:-subboost}
+      POSTGRES_DB: ${POSTGRES_DB:-subfuse}
+      POSTGRES_USER: ${POSTGRES_USER:-subfuse}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
     volumes:
-      - subboost-local-db:/var/lib/postgresql/data
+      - subfuse-local-db:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
@@ -15,13 +15,13 @@ services:
       retries: 10
 
   app:
-    image: ${SUBBOOST_IMAGE:?set SUBBOOST_IMAGE}
+    image: ${SUBFUSE_IMAGE:?set SUBFUSE_IMAGE}
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - "${SUBBOOST_PORT:-3000}:3000"
+      - "${SUBFUSE_PORT:-3000}:3000"
     environment:
       DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL}
       ENCRYPTION_KEY: ${ENCRYPTION_KEY:?set ENCRYPTION_KEY}
@@ -47,4 +47,4 @@ services:
       ]
 
 volumes:
-  subboost-local-db:
+  subfuse-local-db:

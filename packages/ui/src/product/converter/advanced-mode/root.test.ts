@@ -35,7 +35,7 @@ function section(name: string) {
   return SectionMock;
 }
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: vi.fn(),
 }));
 

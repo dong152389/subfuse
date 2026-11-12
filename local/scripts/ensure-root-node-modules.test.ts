@@ -16,7 +16,7 @@ function runEnsureRootNodeModules() {
 
 describe("ensure-root-node-modules script", () => {
   beforeEach(() => {
-    tempRoot = mkdtempSync(join(tmpdir(), "subboost-local-node-modules-"));
+    tempRoot = mkdtempSync(join(tmpdir(), "subfuse-local-node-modules-"));
     mkdirSync(join(tempRoot, "app"), { recursive: true });
     process.chdir(join(tempRoot, "app"));
     vi.spyOn(console, "log").mockImplementation(() => undefined);

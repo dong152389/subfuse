@@ -1,7 +1,7 @@
 import * as React from "react";
-import { isValidRuleSetFormatBehavior, parseManualRuleSetUrl, parseRuleSetUrl } from "@subboost/core/rules/rule-model";
-import type { RuleSetMetadata } from "@subboost/core/types/config";
-import type { ProductRulesApi } from "@subboost/ui/product/api-adapter";
+import { isValidRuleSetFormatBehavior, parseManualRuleSetUrl, parseRuleSetUrl } from "@subfuse/core/rules/rule-model";
+import type { RuleSetMetadata } from "@subfuse/core/types/config";
+import type { ProductRulesApi } from "@subfuse/ui/product/api-adapter";
 
 export function resolveRuleSetUrl(url: string, api?: ProductRulesApi, signal?: AbortSignal): RuleSetMetadata | Promise<RuleSetMetadata> {
   const parsed = parseRuleSetUrl(url);

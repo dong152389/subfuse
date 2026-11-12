@@ -35,7 +35,7 @@ vi.mock("@local/lib/verification-code", () => ({
 }));
 
 vi.mock("@local/lib/session", () => ({
-  SESSION_COOKIE: "subboost_local_session",
+  SESSION_COOKIE: "subfuse_local_session",
   sessionCookieOptions: mocks.sessionCookieOptions,
   signSession: mocks.signSession,
 }));
@@ -114,7 +114,7 @@ describe("Email Auth Routes", () => {
         body: { success: true, user: { id: "user-1", username: "testuser" } },
       });
       expect(mocks.signSession).toHaveBeenCalledWith({ adminId: "user-1", username: "testuser" });
-      expect(res.headers.get("set-cookie")).toContain("subboost_local_session=test-session-token");
+      expect(res.headers.get("set-cookie")).toContain("subfuse_local_session=test-session-token");
     });
 
     it("auto-registers new user on first email code login", async () => {

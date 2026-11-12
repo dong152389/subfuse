@@ -1,7 +1,7 @@
-import type { GenerateOptions } from "@subboost/core/generator";
-import { normalizePersistedRuleOrder } from "@subboost/core/generator/rules";
-import type { DialerProxyGroup } from "@subboost/core/types/template-config";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { GenerateOptions } from "@subfuse/core/generator";
+import { normalizePersistedRuleOrder } from "@subfuse/core/generator/rules";
+import type { DialerProxyGroup } from "@subfuse/core/types/template-config";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import {
   DEFAULT_LOAD_BALANCE_STRATEGY,
   isLoadBalanceStrategy,
@@ -12,17 +12,17 @@ import {
   type ProxyGroupRuleTarget,
   type TemplateType,
   type UserConfig,
-} from "@subboost/core/types/config";
-import { stripImportedNodeControlFieldsFromList } from "@subboost/core/subscription/imported-node-controls";
-import { buildProxyProvidersFromConfig } from "@subboost/core/subscription/proxy-providers";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import { ensureCustomRuleId, isCustomRuleType } from "@subboost/core/rules/custom-rule-utils";
-import { normalizeCustomRuleValue } from "@subboost/core/rules/custom-rule-value";
-import { supportsNoResolve } from "@subboost/core/rules/custom-rule-types";
-import { DEFAULT_SUBBOOST_CONFIG } from "@subboost/core/config/defaults";
-import { normalizeRuleModelFromConfig } from "@subboost/core/rules/rule-model";
-import { normalizeGroupTestUrl, normalizeProxyGroupAdvancedConfig } from "@subboost/core/proxy-group-advanced";
-import { normalizeProxyGroupTargetRef } from "@subboost/core/proxy-group-targets";
+} from "@subfuse/core/types/config";
+import { stripImportedNodeControlFieldsFromList } from "@subfuse/core/subscription/imported-node-controls";
+import { buildProxyProvidersFromConfig } from "@subfuse/core/subscription/proxy-providers";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import { ensureCustomRuleId, isCustomRuleType } from "@subfuse/core/rules/custom-rule-utils";
+import { normalizeCustomRuleValue } from "@subfuse/core/rules/custom-rule-value";
+import { supportsNoResolve } from "@subfuse/core/rules/custom-rule-types";
+import { DEFAULT_SUBFUSE_CONFIG } from "@subfuse/core/config/defaults";
+import { normalizeRuleModelFromConfig } from "@subfuse/core/rules/rule-model";
+import { normalizeGroupTestUrl, normalizeProxyGroupAdvancedConfig } from "@subfuse/core/proxy-group-advanced";
+import { normalizeProxyGroupTargetRef } from "@subfuse/core/proxy-group-targets";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -251,10 +251,10 @@ export function getEffectiveTestOptions(config: Record<string, unknown>): { test
   const testUrl =
     typeof config.testUrl === "string" && config.testUrl.trim().startsWith("http")
       ? config.testUrl.trim()
-      : DEFAULT_SUBBOOST_CONFIG.testUrl;
+      : DEFAULT_SUBFUSE_CONFIG.testUrl;
 
   const rawInterval = normalizeNonNegativeInt(config.testInterval);
-  const testInterval = rawInterval === null ? DEFAULT_SUBBOOST_CONFIG.testInterval : rawInterval;
+  const testInterval = rawInterval === null ? DEFAULT_SUBFUSE_CONFIG.testInterval : rawInterval;
 
   return { testUrl, testInterval };
 }

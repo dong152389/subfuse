@@ -1,7 +1,7 @@
 import { withCurrentAdmin } from "@local/lib/api-auth";
 import { apiError, json, jsonBodyError, LOCAL_JSON_BODY_LIMITS, readJsonBody } from "@local/lib/http";
 import { importSourceUrlDirect } from "@local/lib/source-import";
-import { buildSourceImportParseResult } from "@subboost/server-core/subscription";
+import { buildSourceImportParseResult } from "@subfuse/server-core/subscription";
 
 function getStringField(body: unknown, key: string): string {
   if (!body || typeof body !== "object" || Array.isArray(body)) return "";

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { ProxyGroupModule } from "@subboost/core/generator/proxy-groups";
+import type { ProxyGroupModule } from "@subfuse/core/generator/proxy-groups";
 
 const mocks = vi.hoisted(() => ({
   buttons: [] as any[],
@@ -36,34 +36,34 @@ vi.mock("lucide-react", () => ({
   X: () => React.createElement("span", null, "x-icon"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.switches.push(props);
     return React.createElement("input", { type: "checkbox", checked: props.checked, onChange: props.onCheckedChange });
   },
 }));
 
-vi.mock("@subboost/core/generator/module-rules", () => ({
+vi.mock("@subfuse/core/generator/module-rules", () => ({
   getEffectiveModuleRuleItems: () => mocks.effectiveRules,
   getExcludedModuleRuleIds: () => mocks.excludedIds,
   isModuleRuleMovedFrom: (_moduleId: string, ruleId: string) => mocks.movedRuleIds.has(ruleId),
 }));
 
-vi.mock("@subboost/ui/lib/utils", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({
   cn: (...parts: unknown[]) => parts.filter(Boolean).join(" "),
 }));
 

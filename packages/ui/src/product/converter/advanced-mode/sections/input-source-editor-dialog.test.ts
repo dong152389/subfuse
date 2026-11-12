@@ -26,13 +26,13 @@ vi.mock("lucide-react", () => ({
   Link2: () => React.createElement("span", null, "link-icon"),
   Server: () => React.createElement("span", null, "server-icon"),
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.dialogs.push(props);
     return React.createElement("div", null, props.children);
@@ -41,25 +41,25 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogHeader: (props: any) => React.createElement("header", props, props.children),
   DialogTitle: (props: any) => React.createElement("h2", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.switches.push(props);
     return React.createElement("input", { type: "checkbox", checked: props.checked, onChange: props.onCheckedChange });
   },
 }));
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     mocks.textareas.push(props);
     return React.createElement("textarea", props);
   },
 }));
-vi.mock("@subboost/core/node-name-template", () => ({
+vi.mock("@subfuse/core/node-name-template", () => ({
   DEFAULT_NODE_NAME_TEMPLATE: "{tag}-{name}",
 }));
 vi.mock("../constants", () => ({

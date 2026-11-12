@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { sourceTypeInfo, templates } from "./constants";
-import { getTemplateList } from "@subboost/core/templates";
+import { getTemplateList } from "@subfuse/core/templates";
 
 describe("quick mode constants", () => {
   it("defines all supported source type labels and placeholders", () => {

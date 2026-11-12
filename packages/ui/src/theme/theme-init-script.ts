@@ -1,4 +1,4 @@
-import { DEFAULT_THEME, SYSTEM_THEME_QUERY, THEME_ATTRIBUTE, THEME_META_COLORS, THEME_STORAGE_KEY } from "@subboost/ui/theme/theme";
+import { DEFAULT_THEME, SYSTEM_THEME_QUERY, THEME_ATTRIBUTE, THEME_META_COLORS, THEME_STORAGE_KEY } from "@subfuse/ui/theme/theme";
 
 const json = JSON.stringify;
 

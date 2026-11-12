@@ -21,7 +21,7 @@ describe("subscription TLS field round trips", () => {
     "preserves certificate and client fingerprints independently for %s YAML",
     (type) => {
       const proxy = importAndExport(yaml.dump({ proxies: [{
-        name: "TLS test", type, server: "local.subboost.test", port: 443,
+        name: "TLS test", type, server: "local.subfuse.test", port: 443,
         uuid: UUID, password: "synthetic-password", cipher: "auto", tls: true,
         fingerprint: "AB".repeat(32), "client-fingerprint": "chrome",
       }] }));
@@ -37,7 +37,7 @@ describe("subscription TLS field round trips", () => {
     ["tfo=invalid", undefined], ["", undefined],
   ])("preserves VLESS transport setting %s through export", (query, expected) => {
     const proxy = importAndExport(
-      `vless://${UUID}@local.subboost.test:443?security=tls&${query}#VLESS`,
+      `vless://${UUID}@local.subfuse.test:443?security=tls&${query}#VLESS`,
     );
     expect(proxy.tfo).toBe(expected);
   });

@@ -3,7 +3,7 @@ import { createRulesProductApi } from "./api-adapter";
 
 describe("createRulesProductApi", () => {
   it.each([undefined, "/custom/detect"])("posts rule detection to the configured endpoint: %s", async (endpoint) => {
-    const metadata = { name: "rules", path: "https://local.subboost.test/rules", format: "text", behavior: "domain" };
+    const metadata = { name: "rules", path: "https://local.subfuse.test/rules", format: "text", behavior: "domain" };
     const fetchImpl = vi.fn(async () => Response.json(metadata));
     const signal = new AbortController().signal;
     const api = createRulesProductApi({ ruleDetectionEndpoint: endpoint, fetchImpl });
@@ -16,13 +16,13 @@ describe("createRulesProductApi", () => {
 
   it("surfaces rule detection failures", async () => {
     const api = createRulesProductApi({ fetchImpl: vi.fn(async () => Response.json({ error: "unsupported" }, { status: 422 })) });
-    await expect(api.detectRuleSet?.({ url: "https://local.subboost.test/rules" })).rejects.toThrow("unsupported");
+    await expect(api.detectRuleSet?.({ url: "https://local.subfuse.test/rules" })).rejects.toThrow("unsupported");
   });
 
   it("uses the default rules endpoints and preserves response fallbacks", async () => {
     const calls: Array<{ url: URL; init?: RequestInit }> = [];
     const fetchImpl = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = new URL(String(input), "https://subboost.test");
+      const url = new URL(String(input), "https://subfuse.test");
       calls.push({ url, init });
 
       if (url.pathname === "/api/rules/search" && url.searchParams.get("keyword") === "") {

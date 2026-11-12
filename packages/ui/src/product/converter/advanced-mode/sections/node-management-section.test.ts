@@ -47,31 +47,31 @@ vi.mock("lucide-react", () => ({
   List: () => null,
   Search: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: () => null }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: () => null }));
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons = [...(mocks.captures.buttons || []), props];
     if (props.children === "批量编辑") mocks.captures.button = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.input = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.captures.switch = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/node-name-template", () => ({ DEFAULT_NODE_NAME_TEMPLATE: "[{tag}] {name}" }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
-vi.mock("@subboost/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/node-name-template", () => ({ DEFAULT_NODE_NAME_TEMPLATE: "[{tag}] {name}" }));
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
+vi.mock("@subfuse/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
 vi.mock("../section-header", () => ({
   SectionHeader: (props: any) => {
     mocks.captures.header = props;

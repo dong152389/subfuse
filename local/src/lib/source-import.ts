@@ -4,7 +4,7 @@ import {
   createSubscriptionImportErrorInfo,
   inferSubscriptionImportErrorCategory,
   sanitizePublicErrorText,
-} from "@subboost/core/subscription/import-error";
+} from "@subfuse/core/subscription/import-error";
 import {
   importSubscriptionFromUrl,
   SUBSCRIPTION_IMPORT_USER_AGENTS,
@@ -12,14 +12,14 @@ import {
   type SourceImportResult,
   type SourceImportTransportRequest,
   type SourceImportTransportResult,
-} from "@subboost/server-core/subscription";
-import { resolveHostnameByDoh } from "@subboost/server-core/subscription/doh-resolver";
+} from "@subfuse/server-core/subscription";
+import { resolveHostnameByDoh } from "@subfuse/server-core/subscription/doh-resolver";
 import {
   isPrivateOrReservedIp,
   normalizeResolvedIpAddresses,
   selectDnsAddressesAfterFakeIpRecheck,
   shouldRecheckFakeIpDnsAnswers,
-} from "@subboost/server-core/subscription/ssrf-ip";
+} from "@subfuse/server-core/subscription/ssrf-ip";
 import { getAllowUnsafeSubscriptionSources } from "./source-import-settings";
 import { requestPinnedText, ResponseTooLargeError, type DirectHttpResponse } from "./pinned-http";
 

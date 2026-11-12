@@ -15,20 +15,20 @@ vi.mock("lucide-react", () => ({
   Trash2: () => React.createElement("span", null, "Trash2"),
   X: () => React.createElement("span", null, "X"),
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => React.createElement("input", props),
 }));
-vi.mock("@subboost/ui/components/ui/protocol-badge", () => ({
+vi.mock("@subfuse/ui/components/ui/protocol-badge", () => ({
   ProtocolBadge: (props: any) => React.createElement("span", null, `protocol:${props.type}`),
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/node-name-template", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/node-name-template", () => ({
   formatNodeNameFromTemplate: ({ originName, tag }: { originName: string; tag: string }) => `[${tag}] ${originName}`,
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
 
 import { NodeManagementNodeList } from "../../../packages/ui/src/product/converter/advanced-mode/sections/node-management/node-list";
 

@@ -2,26 +2,26 @@
 
 import * as React from "react";
 import { Check, Loader2, Search, X } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Input } from "@subboost/ui/components/ui/input";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Input } from "@subfuse/ui/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@subboost/ui/components/ui/select";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { cn } from "@subboost/ui/lib/utils";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { getModuleRuleOrderKey } from "@subboost/core/generator/module-rules";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
-import { normalizeRuleSetPathInput } from "@subboost/core/rules/rule-model";
-import { RULE_CATEGORIES, type RuleSetInfo } from "@subboost/core/rules/metadata";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
+} from "@subfuse/ui/components/ui/select";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { cn } from "@subfuse/ui/lib/utils";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { getModuleRuleOrderKey } from "@subfuse/core/generator/module-rules";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
+import { normalizeRuleSetPathInput } from "@subfuse/core/rules/rule-model";
+import { RULE_CATEGORIES, type RuleSetInfo } from "@subfuse/core/rules/metadata";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
 import { ProxyGroupsAddedRuleSets } from "./proxy-groups-added-rule-sets";
 import { getRuleDisplayName, useRulesLibrarySearch } from "./proxy-groups-rules-search";
 

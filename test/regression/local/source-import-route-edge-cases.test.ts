@@ -21,7 +21,7 @@ import { GET, PATCH } from "../../../local/app/api/settings/source-import/route"
 import { POST } from "../../../local/app/api/source-import/route";
 
 function request(pathname: string, body: unknown) {
-  return new Request(`http://local.subboost.test${pathname}`, {
+  return new Request(`http://local.subfuse.test${pathname}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

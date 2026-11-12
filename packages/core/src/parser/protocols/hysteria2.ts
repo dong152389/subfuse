@@ -6,7 +6,7 @@
  * - hy2://auth@server:port?params#name
  */
 
-import type { Hysteria2Node } from "@subboost/core/types/node";
+import type { Hysteria2Node } from "@subfuse/core/types/node";
 import { normalizePortsSpec, pickStablePortFromPorts } from "../port-spec";
 import { safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 import { buildMihomoEchOptsFromShareValue } from "../../mihomo/ech";

@@ -1,13 +1,13 @@
-import { SUBBOOST_THEME_COLOR } from "@subboost/ui/brand";
+import { SUBFUSE_THEME_COLOR } from "@subfuse/ui/brand";
 
 export type ThemeName = "dark" | "light";
 
-export const THEME_STORAGE_KEY = "subboost-theme";
+export const THEME_STORAGE_KEY = "subfuse-theme";
 export const THEME_ATTRIBUTE = "data-theme";
 export const DEFAULT_THEME: ThemeName = "dark";
 export const SYSTEM_THEME_QUERY = "(prefers-color-scheme: light)";
 export const THEME_META_COLORS: Record<ThemeName, string> = {
-  dark: SUBBOOST_THEME_COLOR,
+  dark: SUBFUSE_THEME_COLOR,
   light: "#F6F8FC",
 };
 

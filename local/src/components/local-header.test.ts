@@ -20,7 +20,7 @@ vi.mock("react", async (importOriginal) => {
   };
 });
 
-vi.mock("@subboost/ui/components/layout/header", async () => {
+vi.mock("@subfuse/ui/components/layout/header", async () => {
   const actualReact = await vi.importActual<typeof import("react")>("react");
   return {
     Header: (props: { mode: string; extraBrandBadge?: unknown }) => {
@@ -59,7 +59,7 @@ describe("LocalHeader", () => {
           JSON.stringify({
             hasUpdate: true,
             latestTag: "v9.8.7",
-            releaseUrl: "https://github.com/SubBoost/subboost/releases/tag/v9.8.7",
+            releaseUrl: "https://github.com/SubFuse/subfuse/releases/tag/v9.8.7",
           })
         )
       )
@@ -84,10 +84,10 @@ describe("LocalHeader", () => {
     );
     expect(mocks.setState).toHaveBeenCalledWith({
       label: "new",
-      href: "https://github.com/SubBoost/subboost/releases/tag/v9.8.7",
+      href: "https://github.com/SubFuse/subfuse/releases/tag/v9.8.7",
       external: true,
-      title: "SubBoost v9.8.7 已发布",
-      ariaLabel: "SubBoost v9.8.7 已发布",
+      title: "SubFuse v9.8.7 已发布",
+      ariaLabel: "SubFuse v9.8.7 已发布",
     });
   });
 
@@ -99,7 +99,7 @@ describe("LocalHeader", () => {
           JSON.stringify({
             hasUpdate: true,
             latestTag: " ",
-            releaseUrl: "https://github.com/SubBoost/subboost/releases/latest",
+            releaseUrl: "https://github.com/SubFuse/subfuse/releases/latest",
           })
         )
       )
@@ -110,10 +110,10 @@ describe("LocalHeader", () => {
 
     expect(mocks.setState).toHaveBeenCalledWith({
       label: "new",
-      href: "https://github.com/SubBoost/subboost/releases/latest",
+      href: "https://github.com/SubFuse/subfuse/releases/latest",
       external: true,
-      title: "SubBoost 有新版本",
-      ariaLabel: "SubBoost 有新版本",
+      title: "SubFuse 有新版本",
+      ariaLabel: "SubFuse 有新版本",
     });
   });
 
@@ -190,7 +190,7 @@ describe("LocalHeader", () => {
         JSON.stringify({
           hasUpdate: true,
           latestTag: "v9.8.7",
-          releaseUrl: "https://github.com/SubBoost/subboost/releases/tag/v9.8.7",
+          releaseUrl: "https://github.com/SubFuse/subfuse/releases/tag/v9.8.7",
         })
       )
     );

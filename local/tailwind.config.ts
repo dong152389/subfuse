@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import preset from "@subboost/config/tailwind-preset";
+import preset from "@subfuse/config/tailwind-preset";
 
 export default {
   presets: [preset],

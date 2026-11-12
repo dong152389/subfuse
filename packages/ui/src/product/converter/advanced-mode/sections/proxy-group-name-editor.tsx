@@ -7,11 +7,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@subboost/ui/components/ui/dropdown-menu";
-import { Input } from "@subboost/ui/components/ui/input";
-import { Button } from "@subboost/ui/components/ui/button";
-import { cn } from "@subboost/ui/lib/utils";
-import { splitLeadingEmoji } from "@subboost/core/proxy-group-name";
+} from "@subfuse/ui/components/ui/dropdown-menu";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { cn } from "@subfuse/ui/lib/utils";
+import { splitLeadingEmoji } from "@subfuse/core/proxy-group-name";
 
 export type ProxyGroupNameDraft = {
   emoji: string;

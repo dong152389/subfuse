@@ -1,10 +1,10 @@
-import { stripImportedNodeControlFieldsFromList } from "@subboost/core/subscription/imported-node-controls";
-import { parseNodeNameFilterConfig } from "@subboost/core/subscription/node-name-filter";
-import { normalizeSubscriptionResponseInfo } from "@subboost/core/subscription/subscription-response-info";
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { getNodeEndpointError } from "@subboost/core/node-endpoint";
-import { MIHOMO_STRING_SCALAR_FIELDS, normalizeMihomoStringScalar } from "@subboost/core/mihomo/string-scalar";
+import { stripImportedNodeControlFieldsFromList } from "@subfuse/core/subscription/imported-node-controls";
+import { parseNodeNameFilterConfig } from "@subfuse/core/subscription/node-name-filter";
+import { normalizeSubscriptionResponseInfo } from "@subfuse/core/subscription/subscription-response-info";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { getNodeEndpointError } from "@subfuse/core/node-endpoint";
+import { MIHOMO_STRING_SCALAR_FIELDS, normalizeMihomoStringScalar } from "@subfuse/core/mihomo/string-scalar";
 import { resolveSubscriptionAutoUpdateState, type SubscriptionAutoUpdateStateFields } from "./auto-update-state";
 import { normalizeSavedSourcesForPersistence, type NormalizeSavedSourcesForPersistenceOptions } from "./saved-sources";
 import { resolveSmartNodeMatchingEnabled } from "./refresh-node-snapshot";

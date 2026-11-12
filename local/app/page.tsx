@@ -1,8 +1,8 @@
 "use client";
 
-import { HomeSurface, type HomeSurfaceAdapter } from "@subboost/ui/product/home/home-surface";
-import { readSourceImportResponse } from "@subboost/ui/product/client-response";
-import { createRulesProductApi } from "@subboost/ui/product/api-adapter";
+import { HomeSurface, type HomeSurfaceAdapter } from "@subfuse/ui/product/home/home-surface";
+import { readSourceImportResponse } from "@subfuse/ui/product/client-response";
+import { createRulesProductApi } from "@subfuse/ui/product/api-adapter";
 import { LOCAL_AUTO_UPDATE_POLICY } from "@local/lib/auto-update-policy";
 
 const localHomeAdapter: HomeSurfaceAdapter = {

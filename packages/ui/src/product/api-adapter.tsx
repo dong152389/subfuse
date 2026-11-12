@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import type { ParseResult, ParsedNode } from "@subboost/core/types/node";
-import type { RuleSetInfo } from "@subboost/core/rules/metadata";
-import type { TemplateType } from "@subboost/core/types/config";
+import type { ParseResult, ParsedNode } from "@subfuse/core/types/node";
+import type { RuleSetInfo } from "@subfuse/core/rules/metadata";
+import type { TemplateType } from "@subfuse/core/types/config";
 import { readJsonResponse } from "./client-response";
 
 export type SourceImportRequest = {
@@ -78,7 +78,7 @@ export type CnCandidateRule = {
 };
 
 export type ProductRulesApi = {
-  detectRuleSet?: (request: { url: string; signal?: AbortSignal }) => Promise<import("@subboost/core/types/config").RuleSetMetadata>;
+  detectRuleSet?: (request: { url: string; signal?: AbortSignal }) => Promise<import("@subfuse/core/types/config").RuleSetMetadata>;
   getTotalRules?: (signal?: AbortSignal) => Promise<number>;
   searchRules?: (request: RulesSearchRequest) => Promise<RulesSearchResponse>;
   loadCnCandidateRules?: (request: CnCandidateRulesRequest) => Promise<CnCandidateRule[]>;

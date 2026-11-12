@@ -28,9 +28,9 @@ describe("self-host shell scripts", () => {
   it("preserves an explicit Docker config when Docker requires sudo", () => {
     const result = runBash(`
       set -Eeuo pipefail
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
       source local/scripts/install.sh
-      export DOCKER_CONFIG=/tmp/subboost-isolated-docker-config
+      export DOCKER_CONFIG=/tmp/subfuse-isolated-docker-config
       DOCKER_RUNNER="sudo docker"
       sudo() { printf 'sudo-call=%s\\n' "$*"; }
       docker_cmd info
@@ -38,16 +38,16 @@ describe("self-host shell scripts", () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(
-      "sudo-call=env DOCKER_CONFIG=/tmp/subboost-isolated-docker-config docker info",
+      "sudo-call=env DOCKER_CONFIG=/tmp/subfuse-isolated-docker-config docker info",
     );
   });
 
   it("uses prompt defaults without /dev/tty errors in non-interactive mode", () => {
     const result = runBash(`
       set -Eeuo pipefail
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
       source local/scripts/install.sh
-      export SUBBOOST_ASSUME_YES=0
+      export SUBFUSE_ASSUME_YES=0
       value="$(prompt 'Question: ' 'default-value')"
       printf 'value=%s\\n' "$value"
     `);
@@ -63,23 +63,23 @@ describe("self-host shell scripts", () => {
       home="$(mktemp -d)"
       trap 'rm -rf "$home"' EXIT
       cat > "$home/.env" <<'ENV'
-SUBBOOST_IMAGE=image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_IMAGE=image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31000
-SUBBOOST_PORT=31000
+SUBFUSE_PORT=31000
 ENV
       : > "$home/docker-compose.yml"
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=1
-      export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=1
+      export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+      source local/scripts/subfuse.sh
       docker() {
         if [ "$1" = "info" ]; then return 0; fi
         if [ "$1" = "compose" ]; then
@@ -125,23 +125,23 @@ ENV
       home="$(mktemp -d)"
       trap 'rm -rf "$home"' EXIT
       cat > "$home/.env" <<'ENV'
-SUBBOOST_IMAGE=image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_IMAGE=image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31000
-SUBBOOST_PORT=31000
+SUBFUSE_PORT=31000
 ENV
       : > "$home/docker-compose.yml"
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=1
-      export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=1
+      export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+      source local/scripts/subfuse.sh
       docker() {
         if [ "$1" = "info" ]; then return 0; fi
         if [ "$1" = "compose" ]; then
@@ -172,30 +172,30 @@ ENV
     expect(result.stdout).toContain("Doctor: OK");
   });
 
-  it("loads SUBBOOST_PORT from .env before doctor health checks", () => {
+  it("loads SUBFUSE_PORT from .env before doctor health checks", () => {
     const script = `
       set -Eeuo pipefail
       home="$(mktemp -d)"
       trap 'rm -rf "$home"' EXIT
       cat > "$home/.env" <<'ENV'
-SUBBOOST_IMAGE=image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_IMAGE=image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31041
-SUBBOOST_PORT=31041
+SUBFUSE_PORT=31041
 ENV
       : > "$home/docker-compose.yml"
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=1
-      export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-      unset SUBBOOST_PORT APP_URL
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=1
+      export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+      unset SUBFUSE_PORT APP_URL
+      source local/scripts/subfuse.sh
       docker() {
         if [ "$1" = "info" ]; then return 0; fi
         if [ "$1" = "compose" ]; then
@@ -243,23 +243,23 @@ ENV
       home="$(mktemp -d)"
       trap 'rm -rf "$home"' EXIT
       cat > "$home/.env" <<'ENV'
-SUBBOOST_IMAGE=image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_IMAGE=image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31000
-SUBBOOST_PORT=31000
+SUBFUSE_PORT=31000
 ENV
       : > "$home/docker-compose.yml"
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=3
-      export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=3
+      export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+      source local/scripts/subfuse.sh
       sudo_do() { "$@"; }
       docker_calls_file="$home/docker-calls"
       docker() {
@@ -325,39 +325,39 @@ ENV
       release_dir="$home/release"
       mkdir -p "$release_dir" "$home/bin"
       cat > "$release_dir/release.json" <<'JSON'
-{"image":"new-image","composeUrl":"docker-compose.image.yml","managerUrl":"subboost-manager"}
+{"image":"new-image","composeUrl":"docker-compose.image.yml","managerUrl":"subfuse-manager"}
 JSON
-      printf 'services:\n  app:\n    image: \${SUBBOOST_IMAGE}\n' > "$release_dir/docker-compose.image.yml"
-      printf '#!/usr/bin/env bash\necho new-manager\n' > "$release_dir/subboost-manager"
-      printf '#!/usr/bin/env bash\necho old-manager\n' > "$home/bin/subboost"
+      printf 'services:\n  app:\n    image: \${SUBFUSE_IMAGE}\n' > "$release_dir/docker-compose.image.yml"
+      printf '#!/usr/bin/env bash\necho new-manager\n' > "$release_dir/subfuse-manager"
+      printf '#!/usr/bin/env bash\necho old-manager\n' > "$home/bin/subfuse"
       cat > "$home/.env" <<ENV
-SUBBOOST_RELEASE_URL=file://$release_dir/release.json
-SUBBOOST_IMAGE=old-image
-SUBBOOST_CANDIDATE_IMAGE=old-candidate-image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_RELEASE_URL=file://$release_dir/release.json
+SUBFUSE_IMAGE=old-image
+SUBFUSE_CANDIDATE_IMAGE=old-candidate-image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31000
-SUBBOOST_PORT=31000
+SUBFUSE_PORT=31000
 ENV
       : > "$home/docker-compose.yml"
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      export SUBBOOST_BIN="$home/bin/subboost"
-      export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=1
-      export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      export SUBFUSE_BIN="$home/bin/subfuse"
+      export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=1
+      export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+      source local/scripts/subfuse.sh
       sudo_do() { "$@"; }
       docker_calls_file="$home/docker-calls"
       docker() {
         if [ "$1" = "info" ]; then return 0; fi
         if [ "$1" = "compose" ]; then
           printf '%s\\n' "$*" >> "$docker_calls_file"
-          printf 'image=%s candidate_image=%s command=%s\\n' "\${SUBBOOST_IMAGE:-}" "\${SUBBOOST_CANDIDATE_IMAGE:-}" "$*" >> "$docker_calls_file"
+          printf 'image=%s candidate_image=%s command=%s\\n' "\${SUBFUSE_IMAGE:-}" "\${SUBFUSE_CANDIDATE_IMAGE:-}" "$*" >> "$docker_calls_file"
           case "$*" in
             "compose version"*) return 0 ;;
             *" config --services") printf 'app\\ndb\\ncron\\n'; return 0 ;;
@@ -381,7 +381,7 @@ ENV
       else
         update_status=$?
       fi
-      printf 'update_status=%s parent_image=%s parent_candidate_image=%s\\n' "$update_status" "$SUBBOOST_IMAGE" "$SUBBOOST_CANDIDATE_IMAGE"
+      printf 'update_status=%s parent_image=%s parent_candidate_image=%s\\n' "$update_status" "$SUBFUSE_IMAGE" "$SUBFUSE_CANDIDATE_IMAGE"
       cat "$docker_calls_file"
       [ "$update_status" -eq 1 ]
     `;
@@ -410,31 +410,31 @@ ENV
       release_dir="$home/release"
       mkdir -p "$release_dir" "$home/bin"
       cat > "$release_dir/release.json" <<'JSON'
-{"image":"new-image","composeUrl":"docker-compose.image.yml","managerUrl":"subboost-manager"}
+{"image":"new-image","composeUrl":"docker-compose.image.yml","managerUrl":"subfuse-manager"}
 JSON
-      printf 'services:\\n  app:\\n    image: \${SUBBOOST_IMAGE}\\n' > "$release_dir/docker-compose.image.yml"
-      printf '#!/usr/bin/env bash\\necho manager\\n' > "$release_dir/subboost-manager"
+      printf 'services:\\n  app:\\n    image: \${SUBFUSE_IMAGE}\\n' > "$release_dir/docker-compose.image.yml"
+      printf '#!/usr/bin/env bash\\necho manager\\n' > "$release_dir/subfuse-manager"
       cat > "$home/.env" <<ENV
-SUBBOOST_RELEASE_URL=file://$release_dir/release.json
-SUBBOOST_IMAGE=old-image
-SUBBOOST_CANDIDATE_IMAGE=old-candidate-image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_RELEASE_URL=file://$release_dir/release.json
+SUBFUSE_IMAGE=old-image
+SUBFUSE_CANDIDATE_IMAGE=old-candidate-image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31000
-SUBBOOST_PORT=31000
+SUBFUSE_PORT=31000
 ENV
       : > "$home/docker-compose.yml"
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      export SUBBOOST_BIN="$home/bin/subboost"
-      export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=1
-      export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      export SUBFUSE_BIN="$home/bin/subfuse"
+      export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=1
+      export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+      source local/scripts/subfuse.sh
       sudo_do() { "$@"; }
       install_secret_file() { cp "$1" "$2"; }
       read_env_file() { cat "$ENV_FILE"; }
@@ -446,7 +446,7 @@ ENV
         if [ "$1" = "compose" ]; then
           case "$*" in
             *"candidate-compose.yml"*)
-              printf 'candidate_image=%s candidate_release_image=%s command=%s\n' "\${SUBBOOST_IMAGE:-}" "\${SUBBOOST_CANDIDATE_IMAGE:-}" "$*" >> "$docker_log"
+              printf 'candidate_image=%s candidate_release_image=%s command=%s\n' "\${SUBFUSE_IMAGE:-}" "\${SUBFUSE_CANDIDATE_IMAGE:-}" "$*" >> "$docker_log"
               ;;
           esac
           case "$*" in
@@ -454,7 +454,7 @@ ENV
             *" config --services") printf 'app\\ndb\\ncron\\n'; return 0 ;;
             *" config") return 0 ;;
             *" pull")
-              printf 'pull_image=%s\\n' "\${SUBBOOST_IMAGE:-}" >> "$docker_log"
+              printf 'pull_image=%s\\n' "\${SUBFUSE_IMAGE:-}" >> "$docker_log"
               return 0
               ;;
             *"pg_dump -Fc"*) printf 'custom-dump'; return 0 ;;
@@ -493,10 +493,10 @@ ENV
     expect(result.stdout).toMatch(/candidate_image=new-image candidate_release_image=new-image command=compose.*candidate-compose\.yml up -d db$/m);
     expect(result.stdout).toMatch(/candidate_image=new-image candidate_release_image=new-image command=compose.*candidate-compose\.yml up -d --no-deps app$/m);
     expect(result.stdout).toMatch(/candidate_image=new-image candidate_release_image=new-image command=compose.*candidate-compose\.yml up -d --no-deps cron$/m);
-    expect(result.stdout).toContain("SUBBOOST_IMAGE=new-image");
-    expect(result.stdout).toContain("SUBBOOST_CANDIDATE_IMAGE=new-image");
-    expect(result.stdout).toContain("SUBBOOST_COMPOSE_URL=file://");
-    expect(result.stdout).toContain("SUBBOOST_MANAGER_URL=file://");
+    expect(result.stdout).toContain("SUBFUSE_IMAGE=new-image");
+    expect(result.stdout).toContain("SUBFUSE_CANDIDATE_IMAGE=new-image");
+    expect(result.stdout).toContain("SUBFUSE_COMPOSE_URL=file://");
+    expect(result.stdout).toContain("SUBFUSE_MANAGER_URL=file://");
     const pullIndex = result.stdout.search(/^command=compose.* pull$/m);
     const pauseIndex = result.stdout.indexOf(" stop cron app");
     const dumpIndex = result.stdout.indexOf("pg_dump -Fc");
@@ -514,25 +514,25 @@ ENV
       trap 'rm -rf "$home"' EXIT
       mkdir -p "$home/bin"
       cat > "$home/.env" <<'ENV'
-SUBBOOST_RELEASE_URL=https://github.com/SubBoost/subboost/releases/download/v2.4.0/release.json
-SUBBOOST_IMAGE=old-image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_RELEASE_URL=https://github.com/SubFuse/subfuse/releases/download/v2.4.0/release.json
+SUBFUSE_IMAGE=old-image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31000
-SUBBOOST_PORT=31000
+SUBFUSE_PORT=31000
 ENV
       : > "$home/docker-compose.yml"
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      export SUBBOOST_BIN="$home/bin/subboost"
-      export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=1
-      export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      export SUBFUSE_BIN="$home/bin/subfuse"
+      export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=1
+      export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+      source local/scripts/subfuse.sh
       sudo_do() { "$@"; }
       install_secret_file() { cp "$1" "$2"; }
       read_env_file() { cat "$ENV_FILE"; }
@@ -543,7 +543,7 @@ ENV
         case "$1" in
           *release.json)
             cat > "$2" <<'JSON'
-{"image":"new-image","composeUrl":"docker-compose.image.yml","managerUrl":"subboost-manager"}
+{"image":"new-image","composeUrl":"docker-compose.image.yml","managerUrl":"subfuse-manager"}
 JSON
             ;;
           *)
@@ -561,7 +561,7 @@ JSON
             *" config --services") printf 'app\\ndb\\ncron\\n'; return 0 ;;
             *" config") return 0 ;;
             *" pull")
-              printf 'pull_image=%s\\n' "\${SUBBOOST_IMAGE:-}" >> "$docker_log"
+              printf 'pull_image=%s\\n' "\${SUBFUSE_IMAGE:-}" >> "$docker_log"
               return 0
               ;;
             *"pg_dump -Fc"*) printf 'custom-dump'; return 0 ;;
@@ -593,10 +593,10 @@ JSON
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("Detected old fixed release update source");
-    expect(result.stdout).toContain("https://github.com/dong152389/subboost/releases/latest/download/release.json");
+    expect(result.stdout).toContain("https://github.com/dong152389/subfuse/releases/latest/download/release.json");
     expect(result.stdout).toContain("pull_image=new-image");
     expect(result.stdout).toContain(
-      "SUBBOOST_RELEASE_URL=https://github.com/dong152389/subboost/releases/latest/download/release.json"
+      "SUBFUSE_RELEASE_URL=https://github.com/dong152389/subfuse/releases/latest/download/release.json"
     );
   }, 10_000);
 
@@ -605,9 +605,9 @@ JSON
       set -Eeuo pipefail
       home="$(mktemp -d)"
       trap 'rm -rf "$home"' EXIT
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      source local/scripts/subfuse.sh
       install_secret_file() {
         cp "$1" "$2"
       }
@@ -615,32 +615,32 @@ JSON
         cat "$ENV_FILE"
       }
       cat > "$ENV_FILE" <<'ENV'
-SUBBOOST_PORT_EXTRA=keep
-SUBBOOST_PORT=3000
+SUBFUSE_PORT_EXTRA=keep
+SUBFUSE_PORT=3000
 APP_URL=http://old.example
 ENV
-      write_env_value SUBBOOST_PORT 31000
+      write_env_value SUBFUSE_PORT 31000
       cat "$ENV_FILE"
     `;
 
     const result = runBash(script);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("SUBBOOST_PORT_EXTRA=keep");
-    expect(result.stdout).toContain("SUBBOOST_PORT=31000");
-    expect(result.stdout).not.toContain("SUBBOOST_PORT=3000");
+    expect(result.stdout).toContain("SUBFUSE_PORT_EXTRA=keep");
+    expect(result.stdout).toContain("SUBFUSE_PORT=31000");
+    expect(result.stdout).not.toContain("SUBFUSE_PORT=3000");
   });
 
   it("prunes old backups without parsing ls output", () => {
     const script = `
       set -Eeuo pipefail
       base="$(mktemp -d)"
-      home="$base/subboost home"
+      home="$base/subfuse home"
       mkdir -p "$home/backups"
       trap 'rm -rf "$base"' EXIT
-      export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-      export SUBBOOST_HOME="$home"
-      source local/scripts/subboost.sh
+      export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+      export SUBFUSE_HOME="$home"
+      source local/scripts/subfuse.sh
       sudo_do() { "$@"; }
       load_env() { :; }
       compose() {
@@ -650,24 +650,24 @@ ENV
         esac
       }
       cat > "$ENV_FILE" <<'ENV'
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 ENV
       for i in $(seq -w 1 12); do
-        : > "$BACKUP_DIR/subboost-20240101T0000\${i}Z.dump"
-        : > "$BACKUP_DIR/subboost-20240101T0000\${i}Z.env"
+        : > "$BACKUP_DIR/subfuse-20240101T0000\${i}Z.dump"
+        : > "$BACKUP_DIR/subfuse-20240101T0000\${i}Z.env"
       done
       backup_cmd >/dev/null
-      sql_count="$(find "$BACKUP_DIR" -maxdepth 1 -type f -name 'subboost-*.dump' | wc -l | tr -d '[:space:]')"
-      env_count="$(find "$BACKUP_DIR" -maxdepth 1 -type f -name 'subboost-*.env' | wc -l | tr -d '[:space:]')"
+      sql_count="$(find "$BACKUP_DIR" -maxdepth 1 -type f -name 'subfuse-*.dump' | wc -l | tr -d '[:space:]')"
+      env_count="$(find "$BACKUP_DIR" -maxdepth 1 -type f -name 'subfuse-*.env' | wc -l | tr -d '[:space:]')"
       unsafe_files="$(find "$BACKUP_DIR" -maxdepth 1 -type f ! -perm 600 | wc -l | tr -d '[:space:]')"
       unsafe_dirs="$(find "$BACKUP_DIR" -maxdepth 0 -type d ! -perm 700 | wc -l | tr -d '[:space:]')"
       printf 'sql=%s env=%s unsafe_files=%s unsafe_dirs=%s\\n' "$sql_count" "$env_count" "$unsafe_files" "$unsafe_dirs"
       [ "$sql_count" = "10" ]
       [ "$env_count" = "10" ]
       ${POSIX_BACKUP_MODE_ASSERTIONS}
-      [ ! -e "$BACKUP_DIR/subboost-20240101T000001Z.dump" ]
-      [ ! -e "$BACKUP_DIR/subboost-20240101T000001Z.env" ]
+      [ ! -e "$BACKUP_DIR/subfuse-20240101T000001Z.dump" ]
+      [ ! -e "$BACKUP_DIR/subfuse-20240101T000001Z.env" ]
     `;
 
     const result = runBash(script);

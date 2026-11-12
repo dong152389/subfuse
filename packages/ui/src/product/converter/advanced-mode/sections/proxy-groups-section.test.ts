@@ -11,7 +11,7 @@ vi.mock("lucide-react", () => ({
   Layers: () => React.createElement("span", null, "layers-icon"),
 }));
 
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "select" },
     { id: "auto" },
@@ -19,11 +19,11 @@ vi.mock("@subboost/core/generator/proxy-groups", () => ({
   ],
 }));
 
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: () => mocks.store,
 }));
 

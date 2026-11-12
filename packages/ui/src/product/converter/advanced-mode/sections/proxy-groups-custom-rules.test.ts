@@ -10,9 +10,9 @@ const mocks = vi.hoisted(() => ({
   },
   createCustomRuleId: vi.fn(),
   toast: vi.fn(),
-  rulesApi: undefined as import("@subboost/ui/product/api-adapter").ProductRulesApi | undefined,
+  rulesApi: undefined as import("@subfuse/ui/product/api-adapter").ProductRulesApi | undefined,
 }));
-vi.mock("@subboost/ui/product/api-adapter", () => ({ useProductApiAdapter: () => ({ rules: mocks.rulesApi }) }));
+vi.mock("@subfuse/ui/product/api-adapter", () => ({ useProductApiAdapter: () => ({ rules: mocks.rulesApi }) }));
 
 const stateMock = vi.hoisted(() => ({
   callIndex: 0,
@@ -65,13 +65,13 @@ vi.mock("lucide-react", () => ({
   Trash2: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return React.createElement("input", {
@@ -81,7 +81,7 @@ vi.mock("@subboost/ui/components/ui/input", () => ({
     });
   },
 }));
-vi.mock("@subboost/ui/components/ui/select", () => ({
+vi.mock("@subfuse/ui/components/ui/select", () => ({
   Select: (props: any) => {
     mocks.captures.selects.push(props);
     return React.createElement("select", null, props.children);
@@ -100,7 +100,7 @@ vi.mock("@subboost/ui/components/ui/select", () => ({
   },
   SelectValue: () => React.createElement("span"),
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.captures.switches.push(props);
     return React.createElement("button", {
@@ -109,27 +109,27 @@ vi.mock("@subboost/ui/components/ui/switch", () => ({
     });
   },
 }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "Auto", rules: [] },
     { id: "fallback", name: "Fallback", rules: [] },
   ],
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (
     module: { name: string; id: string },
     override?: string,
   ) => override || module.name,
 }));
-vi.mock("@subboost/core/rules/custom-rule-utils", async (importOriginal) => ({
-  ...await importOriginal<typeof import("@subboost/core/rules/custom-rule-utils")>(),
+vi.mock("@subfuse/core/rules/custom-rule-utils", async (importOriginal) => ({
+  ...await importOriginal<typeof import("@subfuse/core/rules/custom-rule-utils")>(),
   createCustomRuleId: mocks.createCustomRuleId,
 }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: () => mocks.store,
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 vi.mock("./proxy-groups-custom-rules-batch-dialog", () => ({
@@ -140,7 +140,7 @@ vi.mock("./proxy-groups-custom-rules-batch-dialog", () => ({
 }));
 
 import { ProxyGroupsCustomRules } from "./proxy-groups-custom-rules";
-import { CUSTOM_RULE_TYPES, getCustomRuleDefinition, supportsNoResolve } from "@subboost/core/rules/custom-rule-types";
+import { CUSTOM_RULE_TYPES, getCustomRuleDefinition, supportsNoResolve } from "@subfuse/core/rules/custom-rule-types";
 import {
   RULE_ADD_ROW_FRAME_CLASS,
   RULE_EDIT_ACTIONS_CLASS,
@@ -229,7 +229,7 @@ describe("ProxyGroupsCustomRules", () => {
   });
 
   it("detects remote text/yaml once and preserves input until successful completion", async () => {
-    const url = "https://local.subboost.test/remote.txt";
+    const url = "https://local.subfuse.test/remote.txt";
     let resolve!: (value: any) => void;
     const detectRuleSet = vi.fn(() => new Promise<any>((done) => { resolve = done; }));
     mocks.rulesApi = { detectRuleSet };
@@ -245,7 +245,7 @@ describe("ProxyGroupsCustomRules", () => {
 
   it("keeps the URL when remote detection fails", async () => {
     mocks.rulesApi = { detectRuleSet: vi.fn().mockRejectedValue(new Error("无法识别规则文件")) };
-    const { setters } = renderRules({ 0: "RULE-SET", 1: "https://local.subboost.test/error", 2: "Custom Group" });
+    const { setters } = renderRules({ 0: "RULE-SET", 1: "https://local.subfuse.test/error", 2: "Custom Group" });
     mocks.captures.buttons.find((button) => button.children === "添加规则").onClick();
     await vi.waitFor(() => expect(mocks.toast).toHaveBeenCalledWith(expect.objectContaining({ title: "无法识别规则文件" })));
     expect(mocks.store.addModuleRules).not.toHaveBeenCalled();
@@ -253,7 +253,7 @@ describe("ProxyGroupsCustomRules", () => {
   });
 
   it("ignores a late detection result after the draft effect is cleaned up", async () => {
-    const url = "https://local.subboost.test/pending";
+    const url = "https://local.subfuse.test/pending";
     let resolve!: (value: any) => void;
     const detectRuleSet = vi.fn(() => new Promise<any>((done) => { resolve = done; }));
     mocks.rulesApi = { detectRuleSet };
@@ -271,7 +271,7 @@ describe("ProxyGroupsCustomRules", () => {
 
   it("suffixes existing provider names and imports provider batches into their selected group", () => {
     mocks.store.customRuleSets = [{ id: "udemy", path: "geosite/udemy.mrs", target: { kind: "custom", id: "custom-1" } }];
-    renderRules({ 0: "RULE-SET", 1: "https://local.subboost.test/geosite/udemy.mrs", 2: "Custom Group" });
+    renderRules({ 0: "RULE-SET", 1: "https://local.subfuse.test/geosite/udemy.mrs", 2: "Custom Group" });
     mocks.captures.buttons.find((button) => button.children === "添加规则").onClick();
     expect(mocks.store.addModuleRules).toHaveBeenCalledWith("custom-1", [expect.objectContaining({ id: "udemy-2", name: "udemy-2" })]);
     const batch = mocks.captures.batchDialogs[0];
@@ -281,7 +281,7 @@ describe("ProxyGroupsCustomRules", () => {
   });
 
   it.each(["DIRECT", "REJECT"])("requires a proxy group for rule sets instead of %s", (target) => {
-    const { setters } = renderRules({ 0: "RULE-SET", 1: "https://local.subboost.test/geosite/finance.mrs", 2: target });
+    const { setters } = renderRules({ 0: "RULE-SET", 1: "https://local.subfuse.test/geosite/finance.mrs", 2: target });
     mocks.captures.buttons.find((button) => button.children === "添加规则").onClick();
     expect(mocks.store.addModuleRules).not.toHaveBeenCalled();
     expect(mocks.toast).toHaveBeenCalledWith(expect.objectContaining({ title: "请选择规则集使用的代理组" }));
@@ -297,7 +297,7 @@ describe("ProxyGroupsCustomRules", () => {
     expect(setters[2]).toHaveBeenCalledWith("");
   });
 
-  it.each(["invalid", "https://local.subboost.test/geosite/finance.yaml"])("rejects unsupported rule-set input %s", (url) => {
+  it.each(["invalid", "https://local.subfuse.test/geosite/finance.yaml"])("rejects unsupported rule-set input %s", (url) => {
     const { setters } = renderRules({ 0: "RULE-SET", 1: url, 2: "Custom Group" });
     mocks.captures.buttons.find((button) => button.children === "添加规则").onClick();
     expect(mocks.store.addModuleRules).not.toHaveBeenCalled();
@@ -307,7 +307,7 @@ describe("ProxyGroupsCustomRules", () => {
 
   it("reports an unexpected provider-add failure without clearing input", () => {
     mocks.store.addModuleRules.mockImplementationOnce(() => { throw "failed"; });
-    const { setters } = renderRules({ 0: "RULE-SET", 1: "https://local.subboost.test/geosite/finance.mrs", 2: "Custom Group" });
+    const { setters } = renderRules({ 0: "RULE-SET", 1: "https://local.subfuse.test/geosite/finance.mrs", 2: "Custom Group" });
     mocks.captures.buttons.find((button) => button.children === "添加规则").onClick();
     expect(setters[1]).not.toHaveBeenCalled();
     expect(mocks.toast).toHaveBeenCalledWith(expect.objectContaining({ title: "规则集链接无效" }));

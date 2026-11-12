@@ -1,5 +1,5 @@
 import type { ConfigActions } from "../definitions";
-import { parseNodeNameFilterConfig } from "@subboost/core/subscription/node-name-filter";
+import { parseNodeNameFilterConfig } from "@subfuse/core/subscription/node-name-filter";
 import type { GetState, SetAndGenerateConfig, SetState } from "../store-types";
 
 type SettingsActions = Pick<

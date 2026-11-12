@@ -1,5 +1,5 @@
 import { FileCode, Link2, Server } from "lucide-react";
-import type { SourceType } from "@subboost/ui/store/config-store";
+import type { SourceType } from "@subfuse/ui/store/config-store";
 
 export type SourceTypeInfo = {
   label: string;

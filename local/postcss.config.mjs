@@ -1,1 +1,1 @@
-export { default } from "@subboost/config/postcss";
+export { default } from "@subfuse/config/postcss";

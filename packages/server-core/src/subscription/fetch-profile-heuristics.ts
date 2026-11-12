@@ -1,4 +1,4 @@
-import type { ParseResult } from "@subboost/core/types/node";
+import type { ParseResult } from "@subfuse/core/types/node";
 
 function looksLikeSchemeLink(line: string): boolean {
   return /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(line.trim());

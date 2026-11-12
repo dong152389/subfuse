@@ -1,17 +1,17 @@
-import type { ParsedNode, ParseResult } from "@subboost/core/types/node";
-import { parseSubscription } from "@subboost/core/parser";
-import { buildNodeContentKey, buildScopedNodeIdentityKey } from "@subboost/core/node-identity";
+import type { ParsedNode, ParseResult } from "@subfuse/core/types/node";
+import { parseSubscription } from "@subfuse/core/parser";
+import { buildNodeContentKey, buildScopedNodeIdentityKey } from "@subfuse/core/node-identity";
 import {
   detachSourceNodesFromState,
   mergeParsedSourceNodes,
   prepareSourceParsedNodes,
-} from "@subboost/core/subscription/source-node-refresh";
+} from "@subfuse/core/subscription/source-node-refresh";
 import {
   hasSubscriptionUserInfo,
   parseSubscriptionUserInfo,
   resolveSubscriptionUserInfo,
   type SubscriptionUserInfo,
-} from "@subboost/core/subscription/subscription-userinfo";
+} from "@subfuse/core/subscription/subscription-userinfo";
 import {
   createSubscriptionImportErrorInfo,
   inferSubscriptionImportErrorCategory,
@@ -19,11 +19,11 @@ import {
   maskUrlForPublicDisplay,
   sanitizePublicErrorText,
   type SubscriptionImportErrorInfo,
-} from "@subboost/core/subscription/import-error";
-import { stripImportedNodeControlFieldsFromList } from "@subboost/core/subscription/imported-node-controls";
-import { getValidDialerRelayGroupNames } from "@subboost/core/subscription/dialer-relay-group-names";
-import { reconcileNodeNameReferences } from "@subboost/core/subscription/node-name-references";
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
+} from "@subfuse/core/subscription/import-error";
+import { stripImportedNodeControlFieldsFromList } from "@subfuse/core/subscription/imported-node-controls";
+import { getValidDialerRelayGroupNames } from "@subfuse/core/subscription/dialer-relay-group-names";
+import { reconcileNodeNameReferences } from "@subfuse/core/subscription/node-name-references";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
 import type { ConfigActions, SubscriptionSource } from "./definitions";
 import {
   fetchUrlContentInBrowser,

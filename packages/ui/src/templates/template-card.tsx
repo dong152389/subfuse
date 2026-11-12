@@ -12,10 +12,10 @@ import {
   Lock,
   Trash2,
 } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Card, CardContent } from "@subboost/ui/components/ui/card";
-import { cn } from "@subboost/ui/lib/utils";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Card, CardContent } from "@subfuse/ui/components/ui/card";
+import { cn } from "@subfuse/ui/lib/utils";
 import type { Template } from "./types";
 
 export function TemplateCard({

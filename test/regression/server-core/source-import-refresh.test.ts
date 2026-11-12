@@ -10,7 +10,7 @@ const oneNodeWithParseError = [
   "proxies:",
   "  - name: first",
   "    type: trojan",
-  "    server: local.subboost.test",
+  "    server: local.subfuse.test",
   "    port: 443",
   "    password: secret",
   "not a valid node",
@@ -20,7 +20,7 @@ const oneCleanNode = [
   "proxies:",
   "  - name: clean",
   "    type: trojan",
-  "    server: local.subboost.test",
+  "    server: local.subfuse.test",
   "    port: 443",
   "    password: secret",
 ].join("\n");
@@ -47,7 +47,7 @@ describe("subscription import attempt selection", () => {
     );
 
     const result = await importSubscriptionFromUrl(
-      { url: "https://local.subboost.test/sub" },
+      { url: "https://local.subfuse.test/sub" },
       { fetchText, userAgents: ["first", "same-quality", "placeholder", "clean"] }
     );
 
@@ -61,7 +61,7 @@ describe("subscription import attempt selection", () => {
 
 describe("static subscription refresh metadata and failures", () => {
   afterEach(() => {
-    vi.doUnmock("@subboost/core/parser");
+    vi.doUnmock("@subfuse/core/parser");
     vi.resetModules();
   });
 
@@ -79,12 +79,12 @@ describe("static subscription refresh metadata and failures", () => {
               "proxies:",
               '  - name: "总流量: 10 GB"',
               "    type: trojan",
-              "    server: local.subboost.test",
+              "    server: local.subfuse.test",
               "    port: 443",
               "    password: secret",
               '  - name: "已用流量: 1 GB"',
               "    type: trojan",
-              "    server: local.subboost.test",
+              "    server: local.subfuse.test",
               "    port: 8443",
               "    password: secret",
             ].join("\n"),
@@ -106,7 +106,7 @@ describe("static subscription refresh metadata and failures", () => {
 
   it("records an unexpected parser exception as a source parse failure", async () => {
     vi.resetModules();
-    vi.doMock("@subboost/core/parser", () => ({
+    vi.doMock("@subfuse/core/parser", () => ({
       parseSubscription: () => {
         throw new Error("parser exploded");
       },

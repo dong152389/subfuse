@@ -18,13 +18,13 @@ describe("subscription CRUD boundary behavior", () => {
   it("rejects non-string node names and types with indexed messages", () => {
     expect(() =>
       validateSubscriptionNodeList([
-        { name: 123, type: "trojan", server: "local.subboost.test", port: 443 },
+        { name: 123, type: "trojan", server: "local.subfuse.test", port: 443 },
       ])
     ).toThrow("节点 #1 缺少有效名称");
 
     expect(() =>
       validateSubscriptionNodeList([
-        { name: "Node", type: null, server: "local.subboost.test", port: 443 },
+        { name: "Node", type: null, server: "local.subfuse.test", port: 443 },
       ])
     ).toThrow("节点 #1 缺少有效类型");
   });
@@ -32,8 +32,8 @@ describe("subscription CRUD boundary behavior", () => {
   it("detects unequal URL lists even when their lengths match", () => {
     expect(
       areSubscriptionUrlListsEquivalent(
-        ["https://local.subboost.test/a", "https://local.subboost.test/b"],
-        ["https://local.subboost.test/a", "https://local.subboost.test/c"]
+        ["https://local.subfuse.test/a", "https://local.subfuse.test/b"],
+        ["https://local.subfuse.test/a", "https://local.subfuse.test/c"]
       )
     ).toBe(false);
   });
@@ -58,7 +58,7 @@ describe("subscription CRUD boundary behavior", () => {
         isPrimary: false,
       },
       { config: {}, nodes: [] },
-      { subscriptionUrl: "https://local.subboost.test/s/token-minimal" }
+      { subscriptionUrl: "https://local.subfuse.test/s/token-minimal" }
     );
 
     expect(result).not.toHaveProperty("cacheExpiresAt");

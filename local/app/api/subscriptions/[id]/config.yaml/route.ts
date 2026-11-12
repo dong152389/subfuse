@@ -1,6 +1,6 @@
 import { apiError } from "@local/lib/http";
 import { generateSubscriptionYaml } from "@local/lib/subscription-service";
-import { buildSubscriptionResponseHeaders } from "@subboost/server-core/subscription";
+import { buildSubscriptionResponseHeaders } from "@subfuse/server-core/subscription";
 import {
   consumeLocalRateLimit,
   getTrustedClientRateLimitKey,

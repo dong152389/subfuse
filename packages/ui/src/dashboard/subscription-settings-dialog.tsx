@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@subboost/ui/components/ui/button";
+import { Button } from "@subfuse/ui/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,17 +8,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@subboost/ui/components/ui/dialog";
-import { Input } from "@subboost/ui/components/ui/input";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { SmartNodeMatchingHelp } from "@subboost/ui/components/subscription/smart-node-matching-help";
+} from "@subfuse/ui/components/ui/dialog";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { SmartNodeMatchingHelp } from "@subfuse/ui/components/subscription/smart-node-matching-help";
 import {
   getAutoUpdateIntervalPolicyMinLabel,
   resolveAutoUpdateIntervalPolicy,
   type AutoUpdateIntervalPolicy,
-} from "@subboost/core/subscription/auto-update-interval";
+} from "@subfuse/core/subscription/auto-update-interval";
 import type { Subscription } from "./dashboard-types";
 import {
   buildNodeQuotaWarning,

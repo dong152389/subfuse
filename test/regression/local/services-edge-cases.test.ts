@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  buildDefaultSubBoostTemplateConfig: vi.fn(),
+  buildDefaultSubFuseTemplateConfig: vi.fn(),
   buildSubscriptionCacheExpiry: vi.fn(),
   buildSubscriptionFetchCallbacks: vi.fn(),
   builtinIdToType: vi.fn(),
@@ -23,7 +23,7 @@ const mocks = vi.hoisted(() => ({
   resolveSubscriptionAutoUpdateState: vi.fn(),
   applyCronUpdateOutcome: vi.fn(),
   recordCronUpdateSkipped: vi.fn(),
-  validateSubBoostTemplateConfig: vi.fn(),
+  validateSubFuseTemplateConfig: vi.fn(),
   prisma: {
     $transaction: vi.fn(),
     localTemplate: {
@@ -42,17 +42,17 @@ const mocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@subboost/core/config/defaults", () => ({
-  buildDefaultSubBoostTemplateConfig: mocks.buildDefaultSubBoostTemplateConfig,
+vi.mock("@subfuse/core/config/defaults", () => ({
+  buildDefaultSubFuseTemplateConfig: mocks.buildDefaultSubFuseTemplateConfig,
 }));
-vi.mock("@subboost/core/templates/builtin", () => ({
+vi.mock("@subfuse/core/templates/builtin", () => ({
   builtinIdToType: mocks.builtinIdToType,
   getBuiltinTemplateId: mocks.getBuiltinTemplateId,
   getBuiltinTemplateSummaryMetadata: mocks.getBuiltinTemplateSummaryMetadata,
 }));
-vi.mock("@subboost/core/templates", () => ({ getTemplateList: mocks.getTemplateList }));
-vi.mock("@subboost/core/templates/config-template", () => ({
-  validateSubBoostTemplateConfig: mocks.validateSubBoostTemplateConfig,
+vi.mock("@subfuse/core/templates", () => ({ getTemplateList: mocks.getTemplateList }));
+vi.mock("@subfuse/core/templates/config-template", () => ({
+  validateSubFuseTemplateConfig: mocks.validateSubFuseTemplateConfig,
 }));
 vi.mock("../../../local/src/lib/crypto", () => ({
   decryptJsonObject: mocks.decryptJsonObject,
@@ -65,7 +65,7 @@ vi.mock("../../../local/src/lib/subscription-service", () => ({
   MAX_NODES_PER_SUBSCRIPTION: 500,
   readSubscriptionSecrets: mocks.readSubscriptionSecrets,
 }));
-vi.mock("@subboost/server-core/subscription", () => ({
+vi.mock("@subfuse/server-core/subscription", () => ({
   applyCronUpdateOutcome: mocks.applyCronUpdateOutcome,
   createCronUpdateAccumulator: mocks.createCronUpdateAccumulator,
   extractHostsFromSubscriptionUrls: mocks.extractHostsFromSubscriptionUrls,
@@ -137,10 +137,10 @@ describe("public local services remaining branch coverage", () => {
       isPublic: true,
     });
     mocks.builtinIdToType.mockImplementation((id: string) => (id === "builtin-ghost" ? "ghost" : null));
-    mocks.buildDefaultSubBoostTemplateConfig.mockImplementation((type: string) => ({ template: type }));
+    mocks.buildDefaultSubFuseTemplateConfig.mockImplementation((type: string) => ({ template: type }));
     mocks.decryptJsonObject.mockReturnValue({ enabledProxyGroups: "bad", ruleOrder: "bad" });
     mocks.encryptJson.mockImplementation((value) => ({ encrypted: value }));
-    mocks.validateSubBoostTemplateConfig.mockReturnValue({ ok: true, config: { template: "minimal" } });
+    mocks.validateSubFuseTemplateConfig.mockReturnValue({ ok: true, config: { template: "minimal" } });
 
     mocks.createCronUpdateAccumulator.mockImplementation((total: number) => ({ total, outcomes: [], skipped: 0 }));
     mocks.recordCronUpdateSkipped.mockImplementation((acc) => {
@@ -217,7 +217,7 @@ describe("public local services remaining branch coverage", () => {
 
   it("rejects overlong template names before validation", async () => {
     await expect(createTemplate("owner-1", { name: "x".repeat(101), config: {} })).rejects.toThrow("Invalid name.");
-    expect(mocks.validateSubBoostTemplateConfig).not.toHaveBeenCalled();
+    expect(mocks.validateSubFuseTemplateConfig).not.toHaveBeenCalled();
   });
 
   it("persists successful local auto-refresh while disabling future auto updates", async () => {

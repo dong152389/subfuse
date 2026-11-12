@@ -1,7 +1,7 @@
 import * as React from "react";
-import type { RuleSetInfo } from "@subboost/core/rules/metadata";
-import { useProductApiAdapter } from "@subboost/ui/product/api-adapter";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
+import type { RuleSetInfo } from "@subfuse/core/rules/metadata";
+import { useProductApiAdapter } from "@subfuse/ui/product/api-adapter";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
 
 const RULES_SEARCH_PAGE_SIZE = 50;
 type RulesSearchSource = "remote" | "stale" | "unavailable";

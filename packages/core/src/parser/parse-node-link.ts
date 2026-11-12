@@ -1,6 +1,6 @@
 import { parseNodeLinkByRegistry, normalizeNodeLinkScheme } from "./link-parsers";
 import { canonicalizeParsedNode } from "./canonical-fields";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 /**
  * 检测是否为裸代理格式（无协议前缀）

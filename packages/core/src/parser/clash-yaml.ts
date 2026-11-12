@@ -3,8 +3,8 @@
  */
 
 import { loadSubscriptionYaml } from "./yaml-scalars";
-import type { BaseNode, ParsedNode, ParseResult, UnknownNodeType, XHttpOpts } from "@subboost/core/types/node";
-import { normalizeRealityShortId } from "@subboost/core/mihomo/reality";
+import type { BaseNode, ParsedNode, ParseResult, UnknownNodeType, XHttpOpts } from "@subfuse/core/types/node";
+import { normalizeRealityShortId } from "@subfuse/core/mihomo/reality";
 import { canonicalizeParsedNode } from "./canonical-fields";
 import { normalizePortsSpecValue, parsePortNumber, pickStablePortFromPorts } from "./port-spec";
 import { normalizeSsPlugin } from "./protocols/ss";

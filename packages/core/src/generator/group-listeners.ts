@@ -7,7 +7,7 @@
  * - listen 控制监听地址；mixed 类型支持 udp: true。
  */
 
-import type { GroupListenerBinding } from "@subboost/core/types/config";
+import type { GroupListenerBinding } from "@subfuse/core/types/config";
 
 export class GroupListenerError extends Error {
   constructor(message: string) {

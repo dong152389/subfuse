@@ -44,7 +44,7 @@ vi.mock("@local/lib/session", () => ({
   clearSessionCookieOptions: mocks.clearSessionCookieOptions,
   revokeCurrentSession: mocks.revokeCurrentSession,
   SessionRevocationStoreUnavailableError: mocks.SessionRevocationStoreUnavailableError,
-  SESSION_COOKIE: "subboost-local-session",
+  SESSION_COOKIE: "subfuse-local-session",
   sessionCookieOptions: mocks.sessionCookieOptions,
   signSession: mocks.signSession,
 }));
@@ -84,7 +84,7 @@ describe("local auth and health routes", () => {
       data: { lastLoginAt: expect.any(Date) },
     });
     expect(mocks.signSession).toHaveBeenCalledWith({ adminId: "admin-1", username: "admin" });
-    expect(response.headers.get("set-cookie")).toContain("subboost-local-session=signed-session");
+    expect(response.headers.get("set-cookie")).toContain("subfuse-local-session=signed-session");
   });
 
   it("logs in a user via email and password", async () => {
@@ -153,7 +153,7 @@ describe("local auth and health routes", () => {
 
     expect(await readJson(response)).toEqual({ status: 200, body: { success: true } });
     expect(mocks.revokeCurrentSession).toHaveBeenCalledTimes(1);
-    expect(response.headers.get("set-cookie")).toContain("subboost-local-session=");
+    expect(response.headers.get("set-cookie")).toContain("subfuse-local-session=");
   });
 
   it("does not clear the cookie or report success when revocation storage fails", async () => {
@@ -179,7 +179,7 @@ describe("local auth and health routes", () => {
     try {
       const response = await POST();
       expect(await readJson(response)).toEqual({ status: 200, body: { success: true } });
-      expect(response.headers.get("set-cookie")).toContain("subboost-local-session=");
+      expect(response.headers.get("set-cookie")).toContain("subfuse-local-session=");
       expect(log).toHaveBeenCalledWith("Local session revocation cleanup failed:", cause);
     } finally {
       log.mockRestore();
@@ -227,7 +227,7 @@ describe("local auth and health routes", () => {
 
     await expect(readJson(await live.GET())).resolves.toEqual({
       status: 200,
-      body: { ok: true, service: "subboost-local" },
+      body: { ok: true, service: "subfuse-local" },
     });
 
     mocks.prisma.$queryRaw.mockResolvedValueOnce([{ "?column?": 1 }]).mockRejectedValueOnce(new Error("db down"));

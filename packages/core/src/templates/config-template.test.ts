@@ -1,17 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { getModulesForTemplate } from "../generator/proxy-groups";
 import {
-  SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
-  validateSubBoostTemplateConfig,
+  SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
+  validateSubFuseTemplateConfig,
 } from "./config-template";
-import { DEFAULT_LOAD_BALANCE_STRATEGY } from "@subboost/core/types/config";
+import { DEFAULT_LOAD_BALANCE_STRATEGY } from "@subfuse/core/types/config";
 import { expectInvalid, validConfig } from "./config-template.test-helpers";
 
-describe("validateSubBoostTemplateConfig", () => {
+describe("validateSubFuseTemplateConfig", () => {
   it("round-trips independent test URLs and rejects malformed dialer addresses", () => {
-    const testUrl = "https://local.subboost.test/probe";
+    const testUrl = "https://local.subfuse.test/probe";
     const dialer = { id: "relay", name: "Relay", type: "url-test" as const, relayNodes: ["A"], targetNodes: ["B"], testUrl };
-    const result = validateSubBoostTemplateConfig(validConfig({
+    const result = validateSubFuseTemplateConfig(validConfig({
       proxyGroupAdvanced: { auto: { testUrl } },
       customProxyGroups: [{ id: "custom", name: "Custom", emoji: "", groupType: "url-test", advanced: { testUrl } }],
       dialerProxyGroups: [dialer],
@@ -21,37 +21,37 @@ describe("validateSubBoostTemplateConfig", () => {
     expect(result.config.proxyGroupAdvanced?.auto.testUrl).toBe(testUrl);
     expect(result.config.customProxyGroups[0].advanced?.testUrl).toBe(testUrl);
     expect(result.config.dialerProxyGroups[0].testUrl).toBe(testUrl);
-    expect(validateSubBoostTemplateConfig(validConfig({dialerProxyGroups: [{...dialer, testUrl: "invalid"}]})).ok).toBe(false);
+    expect(validateSubFuseTemplateConfig(validConfig({dialerProxyGroups: [{...dialer, testUrl: "invalid"}]})).ok).toBe(false);
   });
   it("accepts a minimal v1 config template", () => {
-    const result = validateSubBoostTemplateConfig(validConfig());
+    const result = validateSubFuseTemplateConfig(validConfig());
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.config.schema).toBe(SUBBOOST_TEMPLATE_CONFIG_SCHEMA);
+      expect(result.config.schema).toBe(SUBFUSE_TEMPLATE_CONFIG_SCHEMA);
       expect(result.config.template).toBe("minimal");
       expect(result.config.enabledProxyGroups.length).toBeGreaterThan(0);
     }
   });
 
   it("rejects non-object and wrong-template configs", () => {
-    expect(validateSubBoostTemplateConfig(null).ok).toBe(false);
-    expect(validateSubBoostTemplateConfig(validConfig({ schema: "legacy" as never }))).toEqual({
+    expect(validateSubFuseTemplateConfig(null).ok).toBe(false);
+    expect(validateSubFuseTemplateConfig(validConfig({ schema: "legacy" as never }))).toEqual({
       ok: false,
       error: "模板配置 schema 无效",
     });
-    expect(validateSubBoostTemplateConfig(validConfig({ template: "bad" as never })).ok).toBe(false);
+    expect(validateSubFuseTemplateConfig(validConfig({ template: "bad" as never })).ok).toBe(false);
   });
 
   it("rejects invalid numeric fields", () => {
     expectInvalid({ mixedPort: 0 }, "mixedPort 必须是正整数");
-    expect(validateSubBoostTemplateConfig(validConfig({ mixedPort: 70000 })).ok).toBe(false);
+    expect(validateSubFuseTemplateConfig(validConfig({ mixedPort: 70000 })).ok).toBe(false);
     expectInvalid({ testInterval: 1.5 }, "testInterval 必须是正整数");
-    expect(validateSubBoostTemplateConfig(validConfig({ testInterval: -1 })).ok).toBe(false);
+    expect(validateSubFuseTemplateConfig(validConfig({ testInterval: -1 })).ok).toBe(false);
   });
 
   it("rejects invalid array fields", () => {
-    const result = validateSubBoostTemplateConfig({
+    const result = validateSubFuseTemplateConfig({
       ...validConfig(),
       enabledProxyGroups: "minimal",
     });
@@ -65,7 +65,7 @@ describe("validateSubBoostTemplateConfig", () => {
 
   it("normalizes rich template config fields", () => {
     const moduleId = "ai";
-    const result = validateSubBoostTemplateConfig(
+    const result = validateSubFuseTemplateConfig(
       validConfig({
         enabledProxyGroups: [...getModulesForTemplate("minimal"), moduleId],
         hiddenProxyGroups: [],
@@ -182,7 +182,7 @@ describe("validateSubBoostTemplateConfig", () => {
   });
 
   it("drops ordered rules that target disabled custom proxy groups", () => {
-    const result = validateSubBoostTemplateConfig(
+    const result = validateSubFuseTemplateConfig(
       validConfig({
         customProxyGroups: [
           {
@@ -218,7 +218,7 @@ describe("validateSubBoostTemplateConfig", () => {
 
   it("uses defaults when optional compatibility fields are omitted", () => {
     const [moduleId] = getModulesForTemplate("minimal");
-    const result = validateSubBoostTemplateConfig(
+    const result = validateSubFuseTemplateConfig(
       validConfig({
         hiddenProxyGroups: undefined as never,
         proxyGroupAdvanced: {
@@ -263,7 +263,7 @@ describe("validateSubBoostTemplateConfig", () => {
 
   it("rejects template configs that hide every enabled module", () => {
     const enabledProxyGroups = getModulesForTemplate("minimal");
-    const result = validateSubBoostTemplateConfig(
+    const result = validateSubFuseTemplateConfig(
       validConfig({
         enabledProxyGroups,
         hiddenProxyGroups: enabledProxyGroups,

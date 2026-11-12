@@ -4,7 +4,7 @@ import { parsePlatformConfigContent, looksLikePlatformConfigContent, isPlatformC
 import { parsePlatformProxyLine } from "./platform/parse-platform-proxy-line";
 import { parseNodeLink } from "./parse-node-link";
 import { loadSubscriptionYaml } from "./yaml-scalars";
-import type { ParseResult } from "@subboost/core/types/node";
+import type { ParseResult } from "@subfuse/core/types/node";
 
 interface SubscriptionContentParser {
   name: string;

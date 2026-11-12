@@ -41,7 +41,7 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/store/config-store", () => {
   const state = {
     nodes: [{ name: "Node" }],
     deletedNodeNames: [],
@@ -83,11 +83,11 @@ vi.mock("@subboost/ui/store/config-store", () => {
   };
 });
 
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({
   consumeAuthConfigHandoff: mocks.consumeAuthConfigHandoff,
 }));
 
-vi.mock("@subboost/ui/store/user-store", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({
   useUserStore: () => ({
     user: mocks.user,
     fetchUser: mocks.fetchUser,
@@ -95,7 +95,7 @@ vi.mock("@subboost/ui/store/user-store", () => ({
   }),
 }));
 
-vi.mock("@subboost/ui/store/ui-store", () => ({
+vi.mock("@subfuse/ui/store/ui-store", () => ({
   useUIStore: (selector: (state: any) => unknown) =>
     selector({
       editingSubscription: { id: "sub-1", name: "Existing" },
@@ -103,7 +103,7 @@ vi.mock("@subboost/ui/store/ui-store", () => ({
     }),
 }));
 
-vi.mock("@subboost/ui/product/home/use-subscription-link", () => ({
+vi.mock("@subfuse/ui/product/home/use-subscription-link", () => ({
   useSubscriptionLink: vi.fn(() => ({
     saveRequirementDialog: true,
     setSaveRequirementDialog: mocks.setSaveRequirementDialog,
@@ -114,20 +114,20 @@ vi.mock("@subboost/ui/product/home/use-subscription-link", () => ({
   })),
 }));
 
-vi.mock("@subboost/ui/product/home/use-clean-new-subscription-intent", () => ({
+vi.mock("@subfuse/ui/product/home/use-clean-new-subscription-intent", () => ({
   useCleanNewSubscriptionIntent: vi.fn((props: any) => {
     mocks.captures.cleanIntent = props;
   }),
 }));
 
-vi.mock("@subboost/ui/product/home/use-editing-subscription-loader", () => ({
+vi.mock("@subfuse/ui/product/home/use-editing-subscription-loader", () => ({
   useEditingSubscriptionLoader: vi.fn((props: any) => {
     mocks.captures.editingLoader = props;
     return false;
   }),
 }));
 
-vi.mock("@subboost/ui/product/home/use-home-actions", () => ({
+vi.mock("@subfuse/ui/product/home/use-home-actions", () => ({
   useHomeActions: vi.fn((props: any) => {
     mocks.captures.homeActions = props;
     return {
@@ -138,21 +138,21 @@ vi.mock("@subboost/ui/product/home/use-home-actions", () => ({
   }),
 }));
 
-vi.mock("@subboost/ui/product/api-adapter", () => ({
+vi.mock("@subfuse/ui/product/api-adapter", () => ({
   ProductApiAdapterProvider: ({ adapter, children }: React.PropsWithChildren<{ adapter?: unknown }>) => {
     mocks.captures.productApiAdapter = adapter;
     return React.createElement(React.Fragment, null, children);
   },
 }));
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   ProductInteractionAdapterProvider: ({ adapter, children }: React.PropsWithChildren<{ adapter?: unknown }>) => {
     mocks.captures.interactions = adapter;
     return React.createElement(React.Fragment, null, children);
   },
 }));
 
-vi.mock("@subboost/ui/product/home/home-layout", () => ({
+vi.mock("@subfuse/ui/product/home/home-layout", () => ({
   HomeLayout: (props: any) => {
     mocks.captures.homeLayout = props;
     return React.createElement("section", null, props.noticeSlot, props.saveRequirementSlot, props.generatedYaml);

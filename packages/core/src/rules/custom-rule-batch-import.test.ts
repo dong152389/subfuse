@@ -5,7 +5,7 @@ import { isLogicRuleType } from "./custom-rule-value";
 import { supportsNoResolve } from "./custom-rule-types";
 import { allocateRuleSetId } from "./rule-model";
 
-const url = "https://local.subboost.test/geosite/udemy.mrs";
+const url = "https://local.subfuse.test/geosite/udemy.mrs";
 function parse(text: string, overrides: Partial<ParseCustomRuleBatchImportOptions> = {}) {
   return parseCustomRuleBatchImport({ text, defaultType: "RULE-SET", defaultTarget: "Proxy", defaultNoResolve: true,
     targetOptions: ["Proxy", "Other", "DIRECT"], existingRules: [], ...overrides });

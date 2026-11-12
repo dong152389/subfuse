@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { refreshNodeSnapshot } from "./refresh-node-snapshot";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { SOURCE_IDS_KEY } from "@subboost/core/subscription/node-source-state";
-import * as parser from "@subboost/core/parser";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { SOURCE_IDS_KEY } from "@subfuse/core/subscription/node-source-state";
+import * as parser from "@subfuse/core/parser";
 
 const node: ParsedNode = {
   name: "node-a",

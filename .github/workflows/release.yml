@@ -219,7 +219,7 @@ jobs:
           set -euo pipefail
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
             gh release edit "${RELEASE_TAG}" \
-              --title "SubBoost ${RELEASE_TAG}" \
+              --title "SubFuse ${RELEASE_TAG}" \
               --notes-file docs/release-notes.md \
               --target "${GITHUB_SHA}" \
               --draft
@@ -227,16 +227,16 @@ jobs:
               dist/release-assets/release.json \
               dist/release-assets/install.sh \
               dist/release-assets/docker-compose.image.yml \
-              dist/release-assets/subboost-manager \
+              dist/release-assets/subfuse-manager \
               --clobber
           else
             gh release create "${RELEASE_TAG}" \
               --target "${GITHUB_SHA}" \
-              --title "SubBoost ${RELEASE_TAG}" \
+              --title "SubFuse ${RELEASE_TAG}" \
               --notes-file docs/release-notes.md \
               --draft \
               dist/release-assets/release.json \
               dist/release-assets/install.sh \
               dist/release-assets/docker-compose.image.yml \
-              dist/release-assets/subboost-manager
+              dist/release-assets/subfuse-manager
           fi

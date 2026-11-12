@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { buildGeneratedRuleEntries, resolveAppliedRuleOrder } from "@subboost/core/generator/rules";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { buildGeneratedRuleEntries, resolveAppliedRuleOrder } from "@subfuse/core/generator/rules";
 import { initialState, type ConfigState } from "../definitions";
 import type { SetAndGenerateConfig, StoreState } from "../store-types";
 import { createProxyGroupActions } from "./proxy-group-actions";

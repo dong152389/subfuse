@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-DEFAULT_HOME="/opt/subboost"
-DEFAULT_STABLE_RELEASE_URL="https://github.com/dong152389/subboost/releases/latest/download/release.json"
+DEFAULT_HOME="/opt/subfuse"
+DEFAULT_STABLE_RELEASE_URL="https://github.com/dong152389/subfuse/releases/latest/download/release.json"
 DEFAULT_BACKUP_RETENTION_COUNT="10"
-SUBBOOST_HOME="${SUBBOOST_HOME:-$DEFAULT_HOME}"
-ENV_FILE="$SUBBOOST_HOME/.env"
-COMPOSE_FILE="$SUBBOOST_HOME/docker-compose.yml"
-BACKUP_DIR="$SUBBOOST_HOME/backups"
-TMP_DIR="${TMPDIR:-/tmp}/subboost-manager.$$"
+SUBFUSE_HOME="${SUBFUSE_HOME:-$DEFAULT_HOME}"
+ENV_FILE="$SUBFUSE_HOME/.env"
+COMPOSE_FILE="$SUBFUSE_HOME/docker-compose.yml"
+BACKUP_DIR="$SUBFUSE_HOME/backups"
+TMP_DIR="${TMPDIR:-/tmp}/subfuse-manager.$$"
 
 say() {
   printf '%s\n' "$*"
@@ -76,13 +76,13 @@ compose_files() {
   shift 2
   [ -f "$compose_file" ] || die "Missing $compose_file"
   [ -f "$env_file" ] || die "Missing $env_file"
-  (cd "$SUBBOOST_HOME" && docker_cmd compose --project-directory "$SUBBOOST_HOME" --env-file "$env_file" -f "$compose_file" "$@")
+  (cd "$SUBFUSE_HOME" && docker_cmd compose --project-directory "$SUBFUSE_HOME" --env-file "$env_file" -f "$compose_file" "$@")
 }
 
 compose_files_with_image() {
   local image="$1"
   shift
-  SUBBOOST_IMAGE="$image" SUBBOOST_CANDIDATE_IMAGE="$image" compose_files "$@"
+  SUBFUSE_IMAGE="$image" SUBFUSE_CANDIDATE_IMAGE="$image" compose_files "$@"
 }
 
 load_env() {
@@ -162,8 +162,8 @@ write_runtime_env_value() {
 
 is_official_fixed_release_url() {
   case "$1" in
-    https://github.com/dong152389/subboost/releases/download/v[0-9]*.[0-9]*.[0-9]*/release.json|\
-    https://github.com/SubBoost/subboost/releases/download/v[0-9]*.[0-9]*.[0-9]*/release.json) return 0 ;;
+    https://github.com/dong152389/subfuse/releases/download/v[0-9]*.[0-9]*.[0-9]*/release.json|\
+    https://github.com/SubFuse/subfuse/releases/download/v[0-9]*.[0-9]*.[0-9]*/release.json) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -228,7 +228,7 @@ create_verified_dump() {
   prepare_private_directory "$(dirname "$output")"
   sudo_do install -m 600 /dev/null "$partial"
   set +e
-  compose exec -T db pg_dump -Fc -U "${POSTGRES_USER:-subboost}" -d "${POSTGRES_DB:-subboost}" | sudo_do tee "$partial" >/dev/null
+  compose exec -T db pg_dump -Fc -U "${POSTGRES_USER:-subfuse}" -d "${POSTGRES_DB:-subfuse}" | sudo_do tee "$partial" >/dev/null
   dump_status=("${PIPESTATUS[@]}")
   set -e
   if (( dump_status[0] != 0 || dump_status[1] != 0 )) || [ ! -s "$partial" ]; then
@@ -317,7 +317,7 @@ health_status_text() {
 
 health_status_code() {
   local port base live_ok
-  port="$(port_number "${SUBBOOST_PORT:-3000}")"
+  port="$(port_number "${SUBFUSE_PORT:-3000}")"
   base="http://127.0.0.1:$port"
   if ! command -v curl >/dev/null 2>&1; then
     printf 'curl-missing\n'
@@ -349,8 +349,8 @@ health_status_label() {
 
 wait_for_health() {
   # Default max wait is about 30 seconds: 15 attempts with a 2-second interval.
-  local attempts="${SUBBOOST_DOCTOR_HEALTH_ATTEMPTS:-15}"
-  local interval="${SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS:-2}"
+  local attempts="${SUBFUSE_DOCTOR_HEALTH_ATTEMPTS:-15}"
+  local interval="${SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS:-2}"
   local index status
   for index in $(seq 1 "$attempts"); do
     status="$(health_status_code)"
@@ -375,9 +375,9 @@ doctor_health_failure_message() {
 
 status_cmd() {
   load_env
-  say "SubBoost 状态"
+  say "SubFuse 状态"
   say "访问地址: ${APP_URL:-未配置}"
-  say "安装目录: $SUBBOOST_HOME"
+  say "安装目录: $SUBFUSE_HOME"
   say ""
   say "服务状态:"
   say "应用: $(service_status_text app)"
@@ -387,12 +387,12 @@ status_cmd() {
   say "健康检查: $(health_status_text)"
   say "备份目录: $BACKUP_DIR"
   say ""
-  say "常用命令: subboost logs / subboost backup / subboost update / subboost restart / subboost doctor"
+  say "常用命令: subfuse logs / subfuse backup / subfuse update / subfuse restart / subfuse doctor"
 }
 
 update_cmd() {
   load_env
-  local release_url="${SUBBOOST_RELEASE_URL:-}"
+  local release_url="${SUBFUSE_RELEASE_URL:-}"
   local release_file="$TMP_DIR/release.json"
   local candidate_env="$TMP_DIR/candidate.env"
   local candidate_compose="$TMP_DIR/candidate-compose.yml"
@@ -401,7 +401,7 @@ update_cmd() {
   local old_compose="$TMP_DIR/old-compose.yml"
   local old_manager="$TMP_DIR/old-manager"
   local rollback_dump="$BACKUP_DIR/update-rollback-$(date -u +%Y%m%dT%H%M%SZ).dump"
-  local image="${SUBBOOST_IMAGE:-}" compose_url="" manager_url="" services=""
+  local image="${SUBFUSE_IMAGE:-}" compose_url="" manager_url="" services=""
   local app_id old_image_id rollback_tag old_image_ref update_error restore_error db_ready
   local manager_present=0 old_manager_present=0
   local -a restore_status
@@ -421,25 +421,25 @@ update_cmd() {
   else
     say "Release manifest unavailable; updating current image and compose only."
     cp "$COMPOSE_FILE" "$candidate_compose"
-    if [ -f "${SUBBOOST_BIN:-/usr/local/bin/subboost}" ]; then
-      sudo_do cp "${SUBBOOST_BIN:-/usr/local/bin/subboost}" "$candidate_manager"
+    if [ -f "${SUBFUSE_BIN:-/usr/local/bin/subfuse}" ]; then
+      sudo_do cp "${SUBFUSE_BIN:-/usr/local/bin/subfuse}" "$candidate_manager"
       manager_present=1
     fi
   fi
   [ -n "$manager_url" ] && manager_present=1
-  [ -n "$image" ] || die "SUBBOOST_IMAGE is missing."
+  [ -n "$image" ] || die "SUBFUSE_IMAGE is missing."
   read_env_file > "$candidate_env"
   cp "$candidate_env" "$old_env"
   cp "$COMPOSE_FILE" "$old_compose"
-  if [ -f "${SUBBOOST_BIN:-/usr/local/bin/subboost}" ]; then
-    sudo_do cp "${SUBBOOST_BIN:-/usr/local/bin/subboost}" "$old_manager"
+  if [ -f "${SUBFUSE_BIN:-/usr/local/bin/subfuse}" ]; then
+    sudo_do cp "${SUBFUSE_BIN:-/usr/local/bin/subfuse}" "$old_manager"
     old_manager_present=1
   fi
-  set_file_env_value "$candidate_env" SUBBOOST_IMAGE "$image"
-  set_file_env_value "$candidate_env" SUBBOOST_CANDIDATE_IMAGE "$image"
-  set_file_env_value "$candidate_env" SUBBOOST_RELEASE_URL "$release_url"
-  [ -n "$compose_url" ] && set_file_env_value "$candidate_env" SUBBOOST_COMPOSE_URL "$compose_url"
-  [ -n "$manager_url" ] && set_file_env_value "$candidate_env" SUBBOOST_MANAGER_URL "$manager_url"
+  set_file_env_value "$candidate_env" SUBFUSE_IMAGE "$image"
+  set_file_env_value "$candidate_env" SUBFUSE_CANDIDATE_IMAGE "$image"
+  set_file_env_value "$candidate_env" SUBFUSE_RELEASE_URL "$release_url"
+  [ -n "$compose_url" ] && set_file_env_value "$candidate_env" SUBFUSE_COMPOSE_URL "$compose_url"
+  [ -n "$manager_url" ] && set_file_env_value "$candidate_env" SUBFUSE_MANAGER_URL "$manager_url"
   if ! grep -q '^LOCAL_SETUP_TOKEN=.' "$candidate_env"; then
     set_file_env_value "$candidate_env" LOCAL_SETUP_TOKEN "$(random_hex 32)"
   fi
@@ -455,29 +455,29 @@ update_cmd() {
   [ -n "$app_id" ] || die "Cannot identify the current app container for rollback."
   old_image_id="$(docker_cmd inspect -f '{{.Image}}' "$app_id" 2>/dev/null || true)"
   [ -n "$old_image_id" ] || die "Cannot identify the current app image for rollback."
-  old_image_ref="${SUBBOOST_IMAGE:-}"
-  rollback_tag="subboost-rollback:update-$$"
+  old_image_ref="${SUBFUSE_IMAGE:-}"
+  rollback_tag="subfuse-rollback:update-$$"
   if ! stage_install_file "$candidate_env" "$ENV_FILE" 600 \
     || ! stage_install_file "$candidate_compose" "$COMPOSE_FILE" 644 \
-    || { [ "$manager_present" = "1" ] && ! stage_install_file "$candidate_manager" "${SUBBOOST_BIN:-/usr/local/bin/subboost}" 755; }; then
-    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBBOOST_BIN:-/usr/local/bin/subboost}.candidate.$$"
+    || { [ "$manager_present" = "1" ] && ! stage_install_file "$candidate_manager" "${SUBFUSE_BIN:-/usr/local/bin/subfuse}" 755; }; then
+    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBFUSE_BIN:-/usr/local/bin/subfuse}.candidate.$$"
     die "Candidate metadata could not be staged safely."
   fi
   if ! docker_cmd tag "$old_image_id" "$rollback_tag"; then
-    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBBOOST_BIN:-/usr/local/bin/subboost}.candidate.$$"
+    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBFUSE_BIN:-/usr/local/bin/subfuse}.candidate.$$"
     die "Could not create the rollback image tag."
   fi
 
   say "Pausing app and cron for a stable database snapshot..."
   if ! compose stop cron app; then
-    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBBOOST_BIN:-/usr/local/bin/subboost}.candidate.$$"
+    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBFUSE_BIN:-/usr/local/bin/subfuse}.candidate.$$"
     docker_cmd image rm "$rollback_tag" >/dev/null 2>&1 || true
     die "Update aborted because app and cron could not be paused safely."
   fi
   if ! create_verified_dump "$rollback_dump"; then
     compose up -d app cron || true
     wait_for_health || true
-    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBBOOST_BIN:-/usr/local/bin/subboost}.candidate.$$"
+    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBFUSE_BIN:-/usr/local/bin/subfuse}.candidate.$$"
     docker_cmd image rm "$rollback_tag" >/dev/null 2>&1 || true
     die "Update aborted because a verified rollback dump could not be created."
   fi
@@ -497,7 +497,7 @@ update_cmd() {
     activate_staged_file "$COMPOSE_FILE" || update_error="candidate Compose activation failed"
   fi
   if [ -z "$update_error" ] && [ "$manager_present" = "1" ]; then
-    activate_staged_file "${SUBBOOST_BIN:-/usr/local/bin/subboost}" || update_error="candidate manager activation failed"
+    activate_staged_file "${SUBFUSE_BIN:-/usr/local/bin/subfuse}" || update_error="candidate manager activation failed"
   fi
   if [ -z "$update_error" ]; then
     compose_files_with_image "$image" "$candidate_env" "$candidate_compose" up -d --no-deps cron || update_error="candidate cron startup failed"
@@ -507,18 +507,18 @@ update_cmd() {
     say "Candidate update failed: $update_error"
     compose_files_with_image "$image" "$candidate_env" "$candidate_compose" stop cron app >/dev/null 2>&1 || true
     docker_cmd tag "$rollback_tag" "$old_image_ref" || true
-    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBBOOST_BIN:-/usr/local/bin/subboost}.candidate.$$"
+    sudo_do rm -f "${ENV_FILE}.candidate.$$" "${COMPOSE_FILE}.candidate.$$" "${SUBFUSE_BIN:-/usr/local/bin/subfuse}.candidate.$$"
     restore_error=""
     atomic_install_file "$old_env" "$ENV_FILE" 600 || restore_error="old environment metadata restore failed"
     atomic_install_file "$old_compose" "$COMPOSE_FILE" 644 || restore_error="old Compose metadata restore failed"
     if [ "$old_manager_present" = "1" ]; then
-      atomic_install_file "$old_manager" "${SUBBOOST_BIN:-/usr/local/bin/subboost}" 755 || restore_error="old manager metadata restore failed"
+      atomic_install_file "$old_manager" "${SUBFUSE_BIN:-/usr/local/bin/subfuse}" 755 || restore_error="old manager metadata restore failed"
     fi
     db_ready=1
     compose_files "$old_env" "$old_compose" up -d db || { restore_error="old database container did not start"; db_ready=0; }
     if [ "$db_ready" = "1" ]; then
       set +e
-      sudo_do cat "$rollback_dump" | compose_files "$old_env" "$old_compose" exec -T db pg_restore --clean --if-exists --exit-on-error --no-owner --no-privileges -U "${POSTGRES_USER:-subboost}" -d "${POSTGRES_DB:-subboost}"
+      sudo_do cat "$rollback_dump" | compose_files "$old_env" "$old_compose" exec -T db pg_restore --clean --if-exists --exit-on-error --no-owner --no-privileges -U "${POSTGRES_USER:-subfuse}" -d "${POSTGRES_DB:-subfuse}"
       restore_status=("${PIPESTATUS[@]}")
       set -e
       if (( restore_status[0] != 0 || restore_status[1] != 0 )); then restore_error="database restore failed"; fi
@@ -549,7 +549,7 @@ update_cmd() {
 }
 
 logs_cmd() {
-  compose logs -f --tail="${SUBBOOST_LOG_TAIL:-200}" "$@"
+  compose logs -f --tail="${SUBFUSE_LOG_TAIL:-200}" "$@"
 }
 
 backup_cmd() {
@@ -558,19 +558,19 @@ backup_cmd() {
   local stamp db_out env_out
   local -a sql_backups env_backups
   local i backup_retention_count
-  backup_retention_count="${SUBBOOST_BACKUP_RETENTION_COUNT:-$DEFAULT_BACKUP_RETENTION_COUNT}"
+  backup_retention_count="${SUBFUSE_BACKUP_RETENTION_COUNT:-$DEFAULT_BACKUP_RETENTION_COUNT}"
   if ! [[ "$backup_retention_count" =~ ^[0-9]+$ ]] || (( backup_retention_count < 1 )); then
-    die "SUBBOOST_BACKUP_RETENTION_COUNT must be a positive integer"
+    die "SUBFUSE_BACKUP_RETENTION_COUNT must be a positive integer"
   fi
   stamp="$(date -u +%Y%m%dT%H%M%SZ)"
-  db_out="$BACKUP_DIR/subboost-$stamp.dump"
-  env_out="$BACKUP_DIR/subboost-$stamp.env"
+  db_out="$BACKUP_DIR/subfuse-$stamp.dump"
+  env_out="$BACKUP_DIR/subfuse-$stamp.env"
   create_verified_dump "$db_out"
   sudo_do install -m 600 "$ENV_FILE" "$env_out"
 
   shopt -s nullglob
-  sql_backups=("$BACKUP_DIR"/subboost-*.dump)
-  env_backups=("$BACKUP_DIR"/subboost-*.env)
+  sql_backups=("$BACKUP_DIR"/subfuse-*.dump)
+  env_backups=("$BACKUP_DIR"/subfuse-*.env)
   shopt -u nullglob
 
   if ((${#sql_backups[@]} > 0)); then sudo_do chmod 600 "${sql_backups[@]}"; fi
@@ -596,11 +596,11 @@ restart_cmd() {
 doctor_cmd() {
   command -v docker >/dev/null 2>&1 || die "docker command is missing"
   docker_cmd compose version >/dev/null 2>&1 || die "docker compose plugin is missing"
-  [ -d "$SUBBOOST_HOME" ] || die "Missing $SUBBOOST_HOME"
+  [ -d "$SUBFUSE_HOME" ] || die "Missing $SUBFUSE_HOME"
   [ -f "$ENV_FILE" ] || die "Missing $ENV_FILE"
   [ -f "$COMPOSE_FILE" ] || die "Missing $COMPOSE_FILE"
   load_env
-  for key in SUBBOOST_IMAGE POSTGRES_DB POSTGRES_USER POSTGRES_PASSWORD DATABASE_URL ENCRYPTION_KEY JWT_SECRET CRON_SECRET APP_URL SUBBOOST_PORT; do
+  for key in SUBFUSE_IMAGE POSTGRES_DB POSTGRES_USER POSTGRES_PASSWORD DATABASE_URL ENCRYPTION_KEY JWT_SECRET CRON_SECRET APP_URL SUBFUSE_PORT; do
     grep -q "^$key=" "$ENV_FILE" || die "Missing $key in $ENV_FILE"
   done
   compose config >/dev/null
@@ -615,7 +615,7 @@ doctor_cmd() {
 }
 
 menu_cmd() {
-  say "SubBoost"
+  say "SubFuse"
   say "1) Status"
   say "2) Update"
   say "3) Logs"
@@ -655,7 +655,7 @@ main() {
   esac
 }
 
-if [ "${SUBBOOST_SCRIPT_SOURCE_ONLY:-0}" != "1" ]; then
+if [ "${SUBFUSE_SCRIPT_SOURCE_ONLY:-0}" != "1" ]; then
   trap 'rm -rf "$TMP_DIR"' EXIT
   DOCKER_RUNNER=""
   main "$@"

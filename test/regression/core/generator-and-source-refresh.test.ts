@@ -5,19 +5,19 @@ import {
   generateProxyGroups,
   generateRules,
   generateRuleProviders,
-} from "@subboost/core/generator";
+} from "@subfuse/core/generator";
 import {
   normalizePersistedRuleOrder,
   resolveAppliedRuleOrder,
-} from "@subboost/core/generator/rules";
-import { collectDnsPolicyEntries } from "@subboost/core/generator/yaml";
+} from "@subfuse/core/generator/rules";
+import { collectDnsPolicyEntries } from "@subfuse/core/generator/yaml";
 import {
   detachSourceNodesFromState,
   mergeParsedSourceNodes,
   prepareSourceParsedNodes,
-} from "@subboost/core/subscription/source-node-refresh";
-import { ORIGIN_NAME_KEY, SOURCE_IDS_KEY } from "@subboost/core/subscription/node-source-state";
-import type { ParsedNode } from "@subboost/core/types/node";
+} from "@subfuse/core/subscription/source-node-refresh";
+import { ORIGIN_NAME_KEY, SOURCE_IDS_KEY } from "@subfuse/core/subscription/node-source-state";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 const UUID = "11111111-1111-4111-8111-111111111111";
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { buildApiErrorBody } from "@subboost/server-core/http";
-import type { ReadJsonBodyResult } from "@subboost/server-core/http";
-export { readJsonBody, type ReadJsonBodyResult } from "@subboost/server-core/http";
+import { buildApiErrorBody } from "@subfuse/server-core/http";
+import type { ReadJsonBodyResult } from "@subfuse/server-core/http";
+export { readJsonBody, type ReadJsonBodyResult } from "@subfuse/server-core/http";
 
 export type LocalApiErrorCode =
   | "BAD_REQUEST"

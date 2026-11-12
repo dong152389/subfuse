@@ -1,17 +1,17 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { initialState } from "@subboost/ui/store/config-store/definitions";
+import { initialState } from "@subfuse/ui/store/config-store/definitions";
 import type { VisualDisplayGroup } from "./preview/visual-graph/proxy-groups-preview";
 
 const mocks = vi.hoisted(() => ({
   state: {} as Record<string, unknown>,
   groups: [] as VisualDisplayGroup[],
 }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: (selector?: (state: Record<string, unknown>) => unknown) => selector ? selector(mocks.state) : mocks.state,
 }));
-vi.mock("@subboost/ui/product/interactions", () => ({ useProductInteractionAdapter: () => ({}) }));
+vi.mock("@subfuse/ui/product/interactions", () => ({ useProductInteractionAdapter: () => ({}) }));
 vi.mock("./converter/advanced-mode/sections/proxy-groups-added-rule-sets", () => ({ ProxyGroupsAddedRuleSets: () => null }));
 vi.mock("./converter/advanced-mode/sections/proxy-groups-rules-search", () => ({
   getRuleDisplayName: () => "CollisionFixture",
@@ -43,7 +43,7 @@ describe("real routing resolution in library and preview", () => {
         { id: "literal", name: "custom:regional", emoji: "", groupType: "select", enabled: false }],
       customRuleSets: [{ id: "fixture-collision-rule", name: "CollisionFixture", behavior: "domain",
         path: "geosite/fixture.mrs", target: "custom:regional" }],
-      customRules: [{ id: "plain", type: "DOMAIN", value: "local.subboost.test", target: "custom:regional" }],
+      customRules: [{ id: "plain", type: "DOMAIN", value: "local.subfuse.test", target: "custom:regional" }],
       setProxyGroupOrder: vi.fn(),
     };
   });

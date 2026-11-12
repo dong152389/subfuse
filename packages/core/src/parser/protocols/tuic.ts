@@ -6,7 +6,7 @@
  * - tuic://token@server:port?params#name
  */
 
-import type { TuicNode } from "@subboost/core/types/node";
+import type { TuicNode } from "@subfuse/core/types/node";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 
 function parseBoolParam(params: URLSearchParams, keys: string[]): boolean {

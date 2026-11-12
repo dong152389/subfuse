@@ -5,18 +5,18 @@ import {
   parseSocks,
   parseSsh,
   parseTelegramProxyLink,
-} from "@subboost/core/parser/protocols/simple-proxy";
-import { parseVMess } from "@subboost/core/parser/protocols/vmess";
-import { parseVLESS } from "@subboost/core/parser/protocols/vless";
-import { normalizeSsPlugin, parseSS } from "@subboost/core/parser/protocols/ss";
-import { parseNetch } from "@subboost/core/parser/protocols/netch";
-import { preprocessSubscriptionContent } from "@subboost/core/parser/preprocess";
-import { parseConfigLine } from "@subboost/core/parser/config-line-parser";
-import { parsePlatformProxyLine } from "@subboost/core/parser/platform/parse-platform-proxy-line";
+} from "@subfuse/core/parser/protocols/simple-proxy";
+import { parseVMess } from "@subfuse/core/parser/protocols/vmess";
+import { parseVLESS } from "@subfuse/core/parser/protocols/vless";
+import { normalizeSsPlugin, parseSS } from "@subfuse/core/parser/protocols/ss";
+import { parseNetch } from "@subfuse/core/parser/protocols/netch";
+import { preprocessSubscriptionContent } from "@subfuse/core/parser/preprocess";
+import { parseConfigLine } from "@subfuse/core/parser/config-line-parser";
+import { parsePlatformProxyLine } from "@subfuse/core/parser/platform/parse-platform-proxy-line";
 import {
-  SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
-  validateSubBoostTemplateConfig,
-} from "@subboost/core/templates/config-template";
+  SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
+  validateSubFuseTemplateConfig,
+} from "@subfuse/core/templates/config-template";
 
 const UUID = "11111111-1111-4111-8111-111111111111";
 
@@ -42,7 +42,7 @@ describe("public core branch coverage regressions", () => {
       const token = b64url("proxyUser:proxyPass@base64.example.com:8080");
       const node = parseHttp(
         `http://${token}?remarks=Query%20Name&skip-cert-verify=off&headers=${encodeURIComponent(
-          JSON.stringify({ "User-Agent": "SubBoost", "X-Test": "yes" })
+          JSON.stringify({ "User-Agent": "SubFuse", "X-Test": "yes" })
         )}`
       );
 
@@ -55,7 +55,7 @@ describe("public core branch coverage regressions", () => {
         password: "proxyPass",
         "skip-cert-verify": false,
         headers: {
-          "User-Agent": "SubBoost",
+          "User-Agent": "SubFuse",
           "X-Test": "yes",
         },
       });

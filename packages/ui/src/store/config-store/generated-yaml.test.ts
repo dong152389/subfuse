@@ -8,15 +8,15 @@ const mocks = vi.hoisted(() => ({
   resolveNodeNameFilter: vi.fn(),
 }));
 
-vi.mock("@subboost/core/generator", () => ({
+vi.mock("@subfuse/core/generator", () => ({
   generateClashYaml: mocks.generateClashYaml,
 }));
 
-vi.mock("@subboost/core/subscription/imported-node-controls", () => ({
+vi.mock("@subfuse/core/subscription/imported-node-controls", () => ({
   stripImportedNodeControlFieldsFromList: mocks.stripImportedNodeControlFieldsFromList,
 }));
 
-vi.mock("@subboost/core/subscription/node-name-filter", () => ({
+vi.mock("@subfuse/core/subscription/node-name-filter", () => ({
   DEFAULT_NODE_NAME_FILTER_CONFIG: { enabled: false, excludeRegexes: [] },
   resolveNodeNameFilter: mocks.resolveNodeNameFilter,
 }));

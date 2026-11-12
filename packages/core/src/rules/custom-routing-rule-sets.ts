@@ -1,12 +1,12 @@
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { normalizeProxyGroupRuleTarget, parseProxyGroupTargetValue } from "@subboost/core/proxy-group-targets";
-import type { CustomProxyGroup, CustomRuleSet, ProxyGroupRuleTarget } from "@subboost/core/types/config";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { normalizeProxyGroupRuleTarget, parseProxyGroupTargetValue } from "@subfuse/core/proxy-group-targets";
+import type { CustomProxyGroup, CustomRuleSet, ProxyGroupRuleTarget } from "@subfuse/core/types/config";
 import {
   buildRuleSetUrlFromPath,
   extractRuleSetPathFromUrl,
   normalizeRuleSetPathInput,
-} from "@subboost/core/rules/rule-model";
+} from "@subfuse/core/rules/rule-model";
 
 export type CustomRoutingRuleSetTarget = {
   kind: "module" | "custom";

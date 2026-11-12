@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { validateSubBoostTemplateConfig } from "./config-template";
+import { validateSubFuseTemplateConfig } from "./config-template";
 import { expectInvalid, validConfig } from "./config-template.test-helpers";
 
-describe("validateSubBoostTemplateConfig field validation", () => {
+describe("validateSubFuseTemplateConfig field validation", () => {
   it("rejects invalid dialer, module rule, scalar, and URL fields", () => {
     expectInvalid({ dialerProxyGroups: "bad" as never }, "dialerProxyGroups 必须是数组");
     expectInvalid({ dialerProxyGroups: [1 as never] }, "dialerProxyGroups 只能包含对象");
@@ -35,7 +35,7 @@ describe("validateSubBoostTemplateConfig field validation", () => {
       "dialerProxyGroups.name 不能为空"
     );
     expect(
-      validateSubBoostTemplateConfig(
+      validateSubFuseTemplateConfig(
         validConfig({
           dialerProxyGroups: [
             {
@@ -49,7 +49,7 @@ describe("validateSubBoostTemplateConfig field validation", () => {
         })
       )
     ).toEqual({ ok: false, error: "dialerProxyGroups.type 无效" });
-    const validDialerGroupType = validateSubBoostTemplateConfig(
+    const validDialerGroupType = validateSubFuseTemplateConfig(
       validConfig({
         dialerProxyGroups: [
           {
@@ -265,7 +265,7 @@ describe("validateSubBoostTemplateConfig field validation", () => {
       "builtinRuleEdits.enabled 只能是 false"
     );
 
-    expect(validateSubBoostTemplateConfig(validConfig({ allowLan: "yes" as never }))).toEqual({
+    expect(validateSubFuseTemplateConfig(validConfig({ allowLan: "yes" as never }))).toEqual({
       ok: false,
       error: "allowLan 必须是布尔值",
     });
@@ -278,11 +278,11 @@ describe("validateSubBoostTemplateConfig field validation", () => {
       { proxyGroupAdvancedModeEnabled: "yes" as never },
       "proxyGroupAdvancedModeEnabled 必须是布尔值"
     );
-    expect(validateSubBoostTemplateConfig(validConfig({ dnsYaml: 1 as never }))).toEqual({
+    expect(validateSubFuseTemplateConfig(validConfig({ dnsYaml: 1 as never }))).toEqual({
       ok: false,
       error: "dnsYaml 必须是字符串",
     });
-    expect(validateSubBoostTemplateConfig(validConfig({ testUrl: "ftp://example.com" }))).toEqual({
+    expect(validateSubFuseTemplateConfig(validConfig({ testUrl: "ftp://example.com" }))).toEqual({
       ok: false,
       error: "testUrl 必须是 http(s) URL",
     });
@@ -291,7 +291,7 @@ describe("validateSubBoostTemplateConfig field validation", () => {
     expectInvalid({ ruleProviderBaseUrl: "ftp://example.com" }, "ruleProviderBaseUrl 必须是 http(s) URL");
     expectInvalid({ proxyGroupNameOverrides: "bad" as never }, "proxyGroupNameOverrides 必须是对象");
     expect(
-      validateSubBoostTemplateConfig(
+      validateSubFuseTemplateConfig(
         validConfig({
           proxyGroupNameOverrides: {
             bad: 1 as never,
@@ -301,7 +301,7 @@ describe("validateSubBoostTemplateConfig field validation", () => {
     ).toEqual({ ok: false, error: "proxyGroupNameOverrides 的值必须是字符串" });
     expectInvalid({ ruleOrder: "bad" as never }, "ruleOrder 必须是数组");
     expectInvalid({ ruleOrder: ["module:auto", 1 as never] }, "ruleOrder 只能包含字符串");
-    const defaultDialerStrategy = validateSubBoostTemplateConfig(
+    const defaultDialerStrategy = validateSubFuseTemplateConfig(
       validConfig({
         dialerProxyGroups: [
           {

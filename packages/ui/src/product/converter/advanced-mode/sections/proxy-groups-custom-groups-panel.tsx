@@ -2,16 +2,16 @@
 
 import * as React from "react";
 import { Check, Trash2 } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { Input } from "@subboost/ui/components/ui/input";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { PROXY_GROUP_MODULES, type ProxyGroupModule } from "@subboost/core/generator/proxy-groups";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
-import { DEFAULT_LOAD_BALANCE_STRATEGY, type LoadBalanceStrategy, type ProxyGroupGroupType } from "@subboost/core/types/config";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { PROXY_GROUP_MODULES, type ProxyGroupModule } from "@subfuse/core/generator/proxy-groups";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
+import { DEFAULT_LOAD_BALANCE_STRATEGY, type LoadBalanceStrategy, type ProxyGroupGroupType } from "@subfuse/core/types/config";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
 import {
   buildManualRuleTargets,
   listCustomRulesForTarget,

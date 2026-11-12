@@ -57,11 +57,11 @@ vi.mock("react", () => ({
   useState: mocks.useState,
 }));
 
-vi.mock("@subboost/ui/product/api-adapter", () => ({
+vi.mock("@subfuse/ui/product/api-adapter", () => ({
   useProductApiAdapter: mocks.useProductApiAdapter,
 }));
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: mocks.useProductInteractionAdapter,
 }));
 

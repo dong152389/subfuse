@@ -1,4 +1,4 @@
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
 
 /**
  * 从订阅的结构化配置里提取 proxy-providers（proxy-providers模式）。

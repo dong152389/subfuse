@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import type { RefreshNodeSnapshotResult } from "./refresh-node-snapshot";
 import { prepareRefreshCacheResult } from "./refresh-cache-result";
 

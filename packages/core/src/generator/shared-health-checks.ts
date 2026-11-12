@@ -35,7 +35,7 @@ export function shareHealthChecks(config: Mapping): Mapping {
   for (const { groups: matching, members, health } of cohorts.values()) {
     if (matching.length < 2) continue;
     let name: string;
-    do { name = `subboost_shared_${nextId++}`; } while (usedNames.has(name));
+    do { name = `subfuse_shared_${nextId++}`; } while (usedNames.has(name));
     usedNames.add(name);
     providers[name] = {
       type: "inline", payload: members.map((member) => canonicalizeProxy(byName.get(member)!)),

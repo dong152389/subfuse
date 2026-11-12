@@ -4,8 +4,8 @@
  * 格式: trojan://password@server:port?params#name
  */
 
-import type { TrojanNode } from "@subboost/core/types/node";
-import { buildMihomoEchOptsFromShareValue } from "@subboost/core/mihomo/ech";
+import type { TrojanNode } from "@subfuse/core/types/node";
+import { buildMihomoEchOptsFromShareValue } from "@subfuse/core/mihomo/ech";
 import { splitWsPathEarlyData } from "../ws-early-data";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 

@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { resolveAppVersionInfo } from "@subboost/server-core/app-version";
+import { resolveAppVersionInfo } from "@subfuse/server-core/app-version";
 import { compareStableVersions, parseStableVersion } from "@local/lib/release-version";
 
 export const revalidate = 3600;
 
 const RELEASE_CACHE_SECONDS = 3600;
-const GITHUB_REPOSITORY = "dong152389/subboost";
+const GITHUB_REPOSITORY = "dong152389/subfuse";
 const GITHUB_LATEST_RELEASE_URL = `https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest`;
 
 const CACHE_HEADERS = {
@@ -57,7 +57,7 @@ export async function GET() {
     const releaseResponse = await fetch(GITHUB_LATEST_RELEASE_URL, {
       headers: {
         Accept: "application/vnd.github+json",
-        "User-Agent": "SubBoost local release check",
+        "User-Agent": "SubFuse local release check",
       },
       next: { revalidate: RELEASE_CACHE_SECONDS },
     } as RequestInit & { next: { revalidate: number } });

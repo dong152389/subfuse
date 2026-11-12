@@ -9,11 +9,11 @@ describe("base64 helpers", () => {
   });
 
   it("decodes standard, URL-safe, whitespace, and URL-encoded Base64", () => {
-    expect(decodeBase64("U3ViQm9vc3Q=")).toBe("SubBoost");
-    expect(decodeBase64("U3ViQm9vc3Q")).toBe("SubBoost");
-    expect(decodeBase64("U3Vi%51m9vc3Q%3D")).toBe("SubBoost");
+    expect(decodeBase64("U3ViRnVzZQ==")).toBe("SubFuse");
+    expect(decodeBase64("U3ViRnVzZQ")).toBe("SubFuse");
+    expect(decodeBase64("U3Vi%52nVzZQ%3D%3D")).toBe("SubFuse");
     expect(decodeBase64("5Lit5paH")).toBe("中文");
-    expect(decodeBase64(" U3Vi\nQm9vc3Q= ")).toBe("SubBoost");
+    expect(decodeBase64(" U3Vi\nRnVzZQ== ")).toBe("SubFuse");
   });
 
   it("returns null for unsupported safe decode and rejects binary-looking parsed text", () => {
@@ -22,7 +22,7 @@ describe("base64 helpers", () => {
     vi.stubGlobal("Buffer", undefined);
     vi.stubGlobal("atob", undefined);
 
-    expect(safeDecodeBase64("U3ViQm9vc3Q=")).toBeNull();
+    expect(safeDecodeBase64("U3ViRnVzZQ==")).toBeNull();
     expect(() => parseBase64("AA==")).toThrow("无效的 Base64 编码");
   });
 
@@ -31,8 +31,8 @@ describe("base64 helpers", () => {
     vi.stubGlobal("atob", (value: string) => nodeBuffer.from(value, "base64").toString("binary"));
     vi.stubGlobal("btoa", (value: string) => nodeBuffer.from(value, "binary").toString("base64"));
 
-    expect(decodeBase64("U3ViQm9vc3Q=")).toBe("SubBoost");
-    expect(encodeBase64("SubBoost")).toBe("U3ViQm9vc3Q=");
+    expect(decodeBase64("U3ViRnVzZQ==")).toBe("SubFuse");
+    expect(encodeBase64("SubFuse")).toBe("U3ViRnVzZQ==");
   });
 
   it("falls back to Latin-1 decoding when TextDecoder is unavailable", () => {
@@ -40,7 +40,7 @@ describe("base64 helpers", () => {
     vi.stubGlobal("TextDecoder", undefined);
     vi.stubGlobal("atob", (value: string) => nodeBuffer.from(value, "base64").toString("binary"));
 
-    expect(decodeBase64("U3ViQm9vc3Q=")).toBe("SubBoost");
+    expect(decodeBase64("U3ViRnVzZQ==")).toBe("SubFuse");
   });
 
   it("throws a clear encode error when neither Node nor browser primitives exist", () => {
@@ -48,6 +48,6 @@ describe("base64 helpers", () => {
     vi.stubGlobal("TextEncoder", undefined);
     vi.stubGlobal("btoa", undefined);
 
-    expect(() => encodeBase64("SubBoost")).toThrow("当前环境不支持 Base64 编码");
+    expect(() => encodeBase64("SubFuse")).toThrow("当前环境不支持 Base64 编码");
   });
 });

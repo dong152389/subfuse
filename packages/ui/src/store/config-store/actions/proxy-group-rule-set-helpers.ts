@@ -1,8 +1,8 @@
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { buildModuleNameMap, normalizePersistedRuleOrder } from "@subboost/core/generator/rules";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { normalizeProxyGroupRuleTarget, normalizeProxyGroupTargetRef } from "@subboost/core/proxy-group-targets";
-import { isValidRuleSetFormatBehavior, isValidRuleSetPathOrUrl, normalizeRuleSetPathInput } from "@subboost/core/rules/rule-model";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { buildModuleNameMap, normalizePersistedRuleOrder } from "@subfuse/core/generator/rules";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { normalizeProxyGroupRuleTarget, normalizeProxyGroupTargetRef } from "@subfuse/core/proxy-group-targets";
+import { isValidRuleSetFormatBehavior, isValidRuleSetPathOrUrl, normalizeRuleSetPathInput } from "@subfuse/core/rules/rule-model";
 import type {
   BuiltinRuleEdits,
   CustomProxyGroup,
@@ -10,7 +10,7 @@ import type {
   ProxyGroupRuleTarget,
   ProxyGroupTargetRef,
   RuleSetBehavior,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 import type { ConfigState, RuleSetDraft } from "../definitions";
 
 type RuleTargetState = Pick<ConfigState, "customProxyGroups" | "proxyGroupNameOverrides">;

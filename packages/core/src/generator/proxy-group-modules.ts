@@ -9,7 +9,7 @@
 /**
  * 分流代理组规则
  */
-import type { ProxyGroupGroupType } from "@subboost/core/types/config";
+import type { ProxyGroupGroupType } from "@subfuse/core/types/config";
 
 export interface ProxyGroupRule {
   id: string;

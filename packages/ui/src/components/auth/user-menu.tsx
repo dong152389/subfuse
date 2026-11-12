@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Button } from "@subboost/ui/components/ui/button";
+import { Button } from "@subfuse/ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,13 +10,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@subboost/ui/components/ui/dropdown-menu";
-import { SafeImage } from "@subboost/ui/components/ui/safe-image";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { captureAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { useUserStore } from "@subboost/ui/store/user-store";
-import { cn } from "@subboost/ui/lib/utils";
+} from "@subfuse/ui/components/ui/dropdown-menu";
+import { SafeImage } from "@subfuse/ui/components/ui/safe-image";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { captureAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { useUserStore } from "@subfuse/ui/store/user-store";
+import { cn } from "@subfuse/ui/lib/utils";
 import {
   LogIn,
   LogOut,

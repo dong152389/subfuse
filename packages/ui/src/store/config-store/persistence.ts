@@ -1,6 +1,6 @@
 import type { ConfigState } from "./definitions";
-import { safeParseJsonObject } from "@subboost/core/json";
-import { normalizeNodeNameFilterConfig } from "@subboost/core/subscription/node-name-filter";
+import { safeParseJsonObject } from "@subfuse/core/json";
+import { normalizeNodeNameFilterConfig } from "@subfuse/core/subscription/node-name-filter";
 import { getConfigDraftStorageNameForUser } from "./draft-storage";
 
 export {

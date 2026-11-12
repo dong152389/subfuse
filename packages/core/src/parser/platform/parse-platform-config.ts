@@ -1,5 +1,5 @@
 import { parseConfigLine } from "../config-line-parser";
-import type { ParseResult } from "@subboost/core/types/node";
+import type { ParseResult } from "@subfuse/core/types/node";
 import { parsePlatformProxyLine } from "./parse-platform-proxy-line";
 
 function buildParseResult(nodes: ParseResult["nodes"], errors: string[]): ParseResult {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { TEMPLATES } from "@subboost/core/templates";
-import { getBuiltinTemplateId } from "@subboost/core/templates/builtin";
-import { initialState, type ConfigState, type SubBoostTemplateConfig } from "../definitions";
+import { TEMPLATES } from "@subfuse/core/templates";
+import { getBuiltinTemplateId } from "@subfuse/core/templates/builtin";
+import { initialState, type ConfigState, type SubFuseTemplateConfig } from "../definitions";
 import { createTemplateActions } from "./template-actions";
 
 function createHarness(overrides: Record<string, unknown> = {}) {
@@ -85,7 +85,7 @@ describe("createTemplateActions", () => {
     });
 
     const config = {
-      schema: "subboost-template-config/v1",
+      schema: "subfuse-template-config/v1",
       template: "full",
       enabledProxyGroups: ["select", "ai", "google"],
       hiddenProxyGroups: [" ai ", "missing", "", "ai"],
@@ -121,7 +121,7 @@ describe("createTemplateActions", () => {
       testUrl: "https://example.com/generate_204",
       testInterval: 60,
       ruleProviderBaseUrl: "https://example.com/rules",
-    } as unknown as SubBoostTemplateConfig;
+    } as unknown as SubFuseTemplateConfig;
 
     actions.applyTemplateConfig(config);
 

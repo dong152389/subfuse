@@ -1,11 +1,11 @@
-import { getBuiltinTemplateId } from "@subboost/core/templates/builtin";
-import { TEMPLATES } from "@subboost/core/templates";
-import { ensureCustomRulesHaveIds } from "@subboost/core/rules/custom-rule-utils";
-import { normalizePersistedRuleOrder } from "@subboost/core/generator/rules";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { normalizeRuleModelFromConfig } from "@subboost/core/rules/rule-model";
-import { resolveProxyGroupAdvancedModeEnabled } from "@subboost/core/proxy-group-advanced-mode";
-import type { ConfigActions, SubBoostTemplateConfig } from "../definitions";
+import { getBuiltinTemplateId } from "@subfuse/core/templates/builtin";
+import { TEMPLATES } from "@subfuse/core/templates";
+import { ensureCustomRulesHaveIds } from "@subfuse/core/rules/custom-rule-utils";
+import { normalizePersistedRuleOrder } from "@subfuse/core/generator/rules";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { normalizeRuleModelFromConfig } from "@subfuse/core/rules/rule-model";
+import { resolveProxyGroupAdvancedModeEnabled } from "@subfuse/core/proxy-group-advanced-mode";
+import type { ConfigActions, SubFuseTemplateConfig } from "../definitions";
 import type { GetState, SetAndGenerateConfig, SetState } from "../store-types";
 
 type TemplateActions = Pick<
@@ -77,7 +77,7 @@ export function createTemplateActions(
     },
 
     // 应用模板配置（从模板库应用）
-    applyTemplateConfig: (config: SubBoostTemplateConfig) => {
+    applyTemplateConfig: (config: SubFuseTemplateConfig) => {
       if (!config || typeof config !== "object") return;
       setAndGenerateConfig((state) => {
         const ruleModel = normalizeRuleModelFromConfig(config);

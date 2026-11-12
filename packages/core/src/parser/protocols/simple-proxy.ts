@@ -11,7 +11,7 @@
  * - Auth 前缀: user:pass@server:port
  */
 
-import type { SocksNode, HttpNode, SshNode } from "@subboost/core/types/node";
+import type { SocksNode, HttpNode, SshNode } from "@subfuse/core/types/node";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 import { decodeBase64 } from "../base64";
 import { parseJsonObject, parseJsonStringMap } from "../json-utils";

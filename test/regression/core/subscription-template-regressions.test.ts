@@ -5,18 +5,18 @@ import {
   parseSocks,
   parseSsh,
   parseTelegramProxyLink,
-} from "@subboost/core/parser/protocols/simple-proxy";
-import { parseVMess } from "@subboost/core/parser/protocols/vmess";
-import { parseVLESS } from "@subboost/core/parser/protocols/vless";
-import { normalizeSsPlugin, parseSS } from "@subboost/core/parser/protocols/ss";
-import { parseNetch } from "@subboost/core/parser/protocols/netch";
-import { preprocessSubscriptionContent } from "@subboost/core/parser/preprocess";
-import { parseConfigLine } from "@subboost/core/parser/config-line-parser";
-import { parsePlatformProxyLine } from "@subboost/core/parser/platform/parse-platform-proxy-line";
+} from "@subfuse/core/parser/protocols/simple-proxy";
+import { parseVMess } from "@subfuse/core/parser/protocols/vmess";
+import { parseVLESS } from "@subfuse/core/parser/protocols/vless";
+import { normalizeSsPlugin, parseSS } from "@subfuse/core/parser/protocols/ss";
+import { parseNetch } from "@subfuse/core/parser/protocols/netch";
+import { preprocessSubscriptionContent } from "@subfuse/core/parser/preprocess";
+import { parseConfigLine } from "@subfuse/core/parser/config-line-parser";
+import { parsePlatformProxyLine } from "@subfuse/core/parser/platform/parse-platform-proxy-line";
 import {
-  SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
-  validateSubBoostTemplateConfig,
-} from "@subboost/core/templates/config-template";
+  SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
+  validateSubFuseTemplateConfig,
+} from "@subfuse/core/templates/config-template";
 
 const UUID = "11111111-1111-4111-8111-111111111111";
 
@@ -233,7 +233,7 @@ describe("public core branch coverage regressions", () => {
   describe("template config validation", () => {
     function validTemplateConfig(): Record<string, unknown> {
       return {
-        schema: SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
+        schema: SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
         template: "standard",
         enabledProxyGroups: ["select", "auto", "cn", "global", "final", "select"],
         hiddenProxyGroups: ["cn"],
@@ -296,7 +296,7 @@ describe("public core branch coverage regressions", () => {
     }
 
     it("normalizes a complete template config with optional branches", () => {
-      const result = validateSubBoostTemplateConfig(validTemplateConfig());
+      const result = validateSubFuseTemplateConfig(validTemplateConfig());
       expect(result.ok).toBe(true);
       if (!result.ok) return;
 
@@ -329,7 +329,7 @@ describe("public core branch coverage regressions", () => {
         [{ mixedPort: 70000 }, "mixedPort 必须在 1 到 65535 之间"],
       ] as const) {
         const input = patch === record(patch) && Object.keys(patch).length === 0 ? null : { ...validTemplateConfig(), ...patch };
-        const result = validateSubBoostTemplateConfig(input);
+        const result = validateSubFuseTemplateConfig(input);
         expect(result).toMatchObject({ ok: false, error: expected });
       }
     });
@@ -363,7 +363,7 @@ describe("public core branch coverage regressions", () => {
         { testInterval: 0 },
         { ruleProviderBaseUrl: "ftp://rules.example.com" },
       ]) {
-        expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), ...patch }).ok).toBe(false);
+        expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), ...patch }).ok).toBe(false);
       }
     });
   });

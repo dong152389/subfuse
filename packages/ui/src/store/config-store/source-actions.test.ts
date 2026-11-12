@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import type { SubscriptionSource } from "./definitions";
 import {
   PROXY_PROVIDER_HINT,

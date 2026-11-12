@@ -2,20 +2,20 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
-import { setConfigDraftUserScope, useConfigStore } from "@subboost/ui/store/config-store";
-import { consumeAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
-import { useUserStore, type User } from "@subboost/ui/store/user-store";
-import { useUIStore } from "@subboost/ui/store/ui-store";
-import { HomeLayout } from "@subboost/ui/product/home/home-layout";
-import { useHomeActions } from "@subboost/ui/product/home/use-home-actions";
-import { useCleanNewSubscriptionIntent } from "@subboost/ui/product/home/use-clean-new-subscription-intent";
-import { useEditingSubscriptionLoader } from "@subboost/ui/product/home/use-editing-subscription-loader";
-import { useSubscriptionLink, type HomeSubscriptionAdapter } from "@subboost/ui/product/home/use-subscription-link";
-import { ProductApiAdapterProvider, type ProductApiAdapter } from "@subboost/ui/product/api-adapter";
+import { setConfigDraftUserScope, useConfigStore } from "@subfuse/ui/store/config-store";
+import { consumeAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
+import { useUserStore, type User } from "@subfuse/ui/store/user-store";
+import { useUIStore } from "@subfuse/ui/store/ui-store";
+import { HomeLayout } from "@subfuse/ui/product/home/home-layout";
+import { useHomeActions } from "@subfuse/ui/product/home/use-home-actions";
+import { useCleanNewSubscriptionIntent } from "@subfuse/ui/product/home/use-clean-new-subscription-intent";
+import { useEditingSubscriptionLoader } from "@subfuse/ui/product/home/use-editing-subscription-loader";
+import { useSubscriptionLink, type HomeSubscriptionAdapter } from "@subfuse/ui/product/home/use-subscription-link";
+import { ProductApiAdapterProvider, type ProductApiAdapter } from "@subfuse/ui/product/api-adapter";
 import {
   ProductInteractionAdapterProvider,
   type ProductInteractionAdapter,
-} from "@subboost/ui/product/interactions";
+} from "@subfuse/ui/product/interactions";
 
 type AnnouncementContext = {
   placement: "home" | "advanced";

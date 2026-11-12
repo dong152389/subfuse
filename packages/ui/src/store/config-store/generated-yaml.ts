@@ -1,7 +1,7 @@
-import { generateClashYaml } from "@subboost/core/generator";
-import { stripImportedNodeControlFieldsFromList } from "@subboost/core/subscription/imported-node-controls";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { generateClashYaml } from "@subfuse/core/generator";
+import { stripImportedNodeControlFieldsFromList } from "@subfuse/core/subscription/imported-node-controls";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import type { ConfigState } from "./definitions";
 
 function buildProxyProvidersFromSources(

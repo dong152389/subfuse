@@ -2,14 +2,14 @@
 
 import type * as React from "react";
 import { Check, Copy, Link as LinkIcon, Loader2 } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Input } from "@subboost/ui/components/ui/input";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { SmartNodeMatchingHelp } from "@subboost/ui/components/subscription/smart-node-matching-help";
-import { SubscriptionQrCode } from "@subboost/ui/product/subscription/subscription-qr-code";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { SmartNodeMatchingHelp } from "@subfuse/ui/components/subscription/smart-node-matching-help";
+import { SubscriptionQrCode } from "@subfuse/ui/product/subscription/subscription-qr-code";
 import {
   Dialog,
   DialogContent,
@@ -17,11 +17,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@subboost/ui/components/ui/dialog";
+} from "@subfuse/ui/components/ui/dialog";
 import {
   getAutoUpdateIntervalPolicyMinLabel,
   type AutoUpdateIntervalPolicy,
-} from "@subboost/core/subscription/auto-update-interval";
+} from "@subfuse/core/subscription/auto-update-interval";
 
 type Props = {
   open: boolean;

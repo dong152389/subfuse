@@ -1,17 +1,17 @@
 "use client";
 
 import { AlertCircle, Check, Loader2, Maximize2, Server, X, ChevronUp, ChevronDown } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Input } from "@subboost/ui/components/ui/input";
-import { Textarea } from "@subboost/ui/components/ui/textarea";
-import { cn } from "@subboost/ui/lib/utils";
-import { buildSourceDisplayLabel } from "@subboost/ui/product/converter/source-display-label";
-import { AddSourceMenu, SourceStatusPopover, SourceTypeChoices } from "@subboost/ui/product/converter/source-controls";
-import { useSubscriptionSourcesController } from "@subboost/ui/product/converter/use-subscription-sources-controller";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { Textarea } from "@subfuse/ui/components/ui/textarea";
+import { cn } from "@subfuse/ui/lib/utils";
+import { buildSourceDisplayLabel } from "@subfuse/ui/product/converter/source-display-label";
+import { AddSourceMenu, SourceStatusPopover, SourceTypeChoices } from "@subfuse/ui/product/converter/source-controls";
+import { useSubscriptionSourcesController } from "@subfuse/ui/product/converter/use-subscription-sources-controller";
 import { sourceTypeInfo } from "../constants";
 import { SectionHeader } from "../section-header";
-import { SubscriptionImportErrorBadge } from "@subboost/ui/product/converter/subscription-import-error";
+import { SubscriptionImportErrorBadge } from "@subfuse/ui/product/converter/subscription-import-error";
 import { InputSourceEditorDialog } from "./input-source-editor-dialog";
 
 export function InputSection({

@@ -40,11 +40,11 @@ const mocks = vi.hoisted(() => {
 vi.mock("server-only", () => ({}));
 vi.mock("./prisma", () => ({ prisma: mocks.prisma }));
 vi.mock("./session", () => ({ readSession: mocks.readSession }));
-vi.mock("@subboost/server-core/crypto", () => ({
+vi.mock("@subfuse/server-core/crypto", () => ({
   encryptEncryptedFieldV2: mocks.encryptEncryptedFieldV2,
   decryptEncryptedFieldV2: mocks.decryptEncryptedFieldV2,
 }));
-vi.mock("@subboost/server-core/rules", () => ({
+vi.mock("@subfuse/server-core/rules", () => ({
   createRuleCatalogService: mocks.createRuleCatalogService,
 }));
 
@@ -83,7 +83,7 @@ describe("local lib helpers", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     restoreEnv();
-    process.env.APP_URL = " https://local.subboost.test/// ";
+    process.env.APP_URL = " https://local.subfuse.test/// ";
     process.env.ENCRYPTION_KEY = " master-key ";
     process.env.GITHUB_TOKEN = "gh-token";
     mocks.encryptEncryptedFieldV2.mockImplementation((plaintext: string, key: string) => `enc:${key}:${plaintext}`);
@@ -101,7 +101,7 @@ describe("local lib helpers", () => {
 
   it("reads required local environment values and normalizes APP_URL", () => {
     expect(requireEnv("ENCRYPTION_KEY")).toBe("master-key");
-    expect(getAppUrl()).toBe("https://local.subboost.test");
+    expect(getAppUrl()).toBe("https://local.subfuse.test");
     expect(isHttpsAppUrl()).toBe(true);
 
     process.env.APP_URL = "http://127.0.0.1:3001/";
@@ -122,10 +122,10 @@ describe("local lib helpers", () => {
     expect(getAppUrl()).toBe("http://127.0.0.1:3001");
     expect(isHttpsAppUrl()).toBe(false);
     expect(requireEnv("DATABASE_URL")).toBe(
-      "postgresql://subboost_local_dev:subboost_local_dev_password@localhost:5432/subboost_local_dev?schema=public",
+      "postgresql://subfuse_local_dev:subfuse_local_dev_password@localhost:5432/subfuse_local_dev?schema=public",
     );
-    expect(requireEnv("ENCRYPTION_KEY")).toBe("subboost-local-dev-encryption-key-0001");
-    expect(requireEnv("JWT_SECRET")).toBe("subboost-local-dev-jwt-secret-00000001");
+    expect(requireEnv("ENCRYPTION_KEY")).toBe("subfuse-local-dev-encryption-key-0001");
+    expect(requireEnv("JWT_SECRET")).toBe("subfuse-local-dev-jwt-secret-00000001");
 
     vi.stubEnv("NODE_ENV", "production");
     expect(() => requireEnv("JWT_SECRET")).toThrow("JWT_SECRET is required");

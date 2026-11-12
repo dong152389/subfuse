@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { Check, ChevronDown, ChevronRight, Link as LinkIcon, Pencil, Plus, Search, SlidersHorizontal, Trash2, X } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,18 +13,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@subboost/ui/components/ui/dropdown-menu";
-import { Input } from "@subboost/ui/components/ui/input";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { DEFAULT_LOAD_BALANCE_STRATEGY, type ProxyGroupGroupType } from "@subboost/core/types/config";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { getValidDialerRelayGroupNames } from "@subboost/core/subscription/dialer-relay-group-names";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import { cn } from "@subboost/ui/lib/utils";
-import { useConfigStore, PRESET_RELAY_NAMES } from "@subboost/ui/store/config-store";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
+} from "@subfuse/ui/components/ui/dropdown-menu";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { DEFAULT_LOAD_BALANCE_STRATEGY, type ProxyGroupGroupType } from "@subfuse/core/types/config";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { getValidDialerRelayGroupNames } from "@subfuse/core/subscription/dialer-relay-group-names";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import { cn } from "@subfuse/ui/lib/utils";
+import { useConfigStore, PRESET_RELAY_NAMES } from "@subfuse/ui/store/config-store";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
 import { SectionHeader } from "../section-header";
 import {
   buildProxyGroupName,

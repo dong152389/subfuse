@@ -65,9 +65,9 @@ vi.mock("lucide-react", () => ({
   RotateCcw: () => null,
   Shuffle: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: (props: any) => props.children }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: (props: any) => props.children }));
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => props.children,
   DropdownMenuContent: (props: any) => props.children,
   DropdownMenuItem: (props: any) => {
@@ -77,14 +77,14 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuLabel: (props: any) => props.children,
   DropdownMenuTrigger: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   CATEGORY_INFO: {
     core: { name: "核心", order: 1 },
     service: { name: "服务", order: 1.5 },
@@ -102,7 +102,7 @@ vi.mock("@subboost/core/generator/proxy-groups", () => ({
 	  ],
   generateProxyGroups: vi.fn(() => []),
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { name: string }, override?: string) => override || module.name,
   splitLeadingEmoji: (name: string) => {
     const match = name.trim().match(/^(\S+)\s+(.+)$/);
@@ -112,7 +112,7 @@ vi.mock("@subboost/core/proxy-group-name", () => ({
     return { hasEmojiPrefix: true, emoji: match[1], label: match[2] };
   },
 }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
 vi.mock("./proxy-group-rule-targets", () => ({
   buildManualRuleTargets: vi.fn(() => [{ name: "Auto" }]),
   listCustomRulesForTarget: (_rules: any[], target: string) =>
@@ -144,8 +144,8 @@ vi.mock("./group-advanced-settings-dialog", () => ({
 }));
 
 import { ProxyGroupsCategories } from "./proxy-groups-categories";
-import { generateProxyGroups } from "@subboost/core/generator/proxy-groups";
-import { getEffectiveModuleRuleItems, isModuleRuleMovedFrom } from "@subboost/core/generator/module-rules";
+import { generateProxyGroups } from "@subfuse/core/generator/proxy-groups";
+import { getEffectiveModuleRuleItems, isModuleRuleMovedFrom } from "@subfuse/core/generator/module-rules";
 
 function renderCategories(overrides: Record<number, unknown> = {}) {
   stateMock.enabled = true;

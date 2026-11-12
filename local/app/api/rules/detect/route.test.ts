@@ -5,8 +5,8 @@ vi.mock("@local/lib/api-auth", () => ({ withCurrentAdmin: mocks.admin }));
 vi.mock("@local/lib/source-import", () => ({ fetchRuleContentDirect: mocks.fetch }));
 vi.mock("@local/lib/rate-limit", () => ({ consumeLocalRateLimit: mocks.limit,
   localRateLimitResponse: () => Response.json({}, { status: 429 }) }));
-const request = () => new Request("http://local.subboost.test/api/rules/detect", {
-  method: "POST", body: JSON.stringify({ url: "https://local.subboost.test/rules" }),
+const request = () => new Request("http://local.subfuse.test/api/rules/detect", {
+  method: "POST", body: JSON.stringify({ url: "https://local.subfuse.test/rules" }),
 });
 
 describe("local rule detection", () => {

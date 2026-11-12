@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { ArrowRightLeft, Trash2 } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@subboost/ui/components/ui/dropdown-menu";
-import { cn } from "@subboost/ui/lib/utils";
-import type { CustomRule } from "@subboost/core/types/config";
+} from "@subfuse/ui/components/ui/dropdown-menu";
+import { cn } from "@subfuse/ui/lib/utils";
+import type { CustomRule } from "@subfuse/core/types/config";
 import type {
   CustomRuleListItem,
   ProxyGroupRuleTargetOption,

@@ -1,10 +1,10 @@
 "use client";
 
 import { AlertTriangle, Globe } from "lucide-react";
-import { DEFAULT_SUBBOOST_CONFIG } from "@subboost/core/config/defaults";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Textarea } from "@subboost/ui/components/ui/textarea";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+import { DEFAULT_SUBFUSE_CONFIG } from "@subfuse/core/config/defaults";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Textarea } from "@subfuse/ui/components/ui/textarea";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 import { SectionHeader } from "../section-header";
 
 export function DnsSection({
@@ -36,8 +36,8 @@ export function DnsSection({
             onChange={(e) => setDnsYaml(e.target.value)}
             className="font-mono text-xs min-h-[400px] bg-ink/5 border-ink/10"
             placeholder={`# 基础配置
-mixed-port: ${DEFAULT_SUBBOOST_CONFIG.mixedPort}
-allow-lan: ${DEFAULT_SUBBOOST_CONFIG.allowLan}
+mixed-port: ${DEFAULT_SUBFUSE_CONFIG.mixedPort}
+allow-lan: ${DEFAULT_SUBFUSE_CONFIG.allowLan}
 ...
 
 # DNS 配置

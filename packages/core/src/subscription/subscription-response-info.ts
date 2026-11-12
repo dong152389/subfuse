@@ -1,5 +1,5 @@
 import { getMinAutoUpdateIntervalSeconds } from "./auto-update-interval";
-import type { SubscriptionUserInfo } from "@subboost/core/subscription/subscription-userinfo";
+import type { SubscriptionUserInfo } from "@subfuse/core/subscription/subscription-userinfo";
 
 export type SubscriptionResponseInfo = SubscriptionUserInfo & {
   profileWebPageUrl?: string;

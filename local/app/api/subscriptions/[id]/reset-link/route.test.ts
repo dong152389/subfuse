@@ -5,7 +5,7 @@ const mocks = vi.hoisted(() => ({ admin: vi.fn(), reset: vi.fn() }));
 vi.mock("@local/lib/api-auth", () => ({ withCurrentAdmin: mocks.admin }));
 vi.mock("@local/lib/subscription-service", () => ({ resetSubscriptionLink: mocks.reset }));
 const context = { params: Promise.resolve({ id: "sub-1" }) };
-const request = (token = "a".repeat(43)) => new Request("http://local.subboost.test/api/subscriptions/sub-1/reset-link", {
+const request = (token = "a".repeat(43)) => new Request("http://local.subfuse.test/api/subscriptions/sub-1/reset-link", {
   method: "POST", headers: { "If-Match": `"${token}"` },
 });
 
@@ -38,7 +38,7 @@ describe("local reset subscription link route", () => {
   });
 
   it("rejects missing preconditions and invalid subscription IDs without rotating", async () => {
-    const missing = new Request("http://local.subboost.test/api/subscriptions/sub-1/reset-link", { method: "POST" });
+    const missing = new Request("http://local.subfuse.test/api/subscriptions/sub-1/reset-link", { method: "POST" });
     expect((await POST(missing, context)).status).toBe(400);
     for (const id of ["", "x".repeat(129)]) {
       expect((await POST(request(), { params: Promise.resolve({ id }) })).status).toBe(400);

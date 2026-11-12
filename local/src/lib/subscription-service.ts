@@ -1,9 +1,9 @@
 import { randomBytes, randomUUID } from "node:crypto";
-import { generateClashYaml } from "@subboost/core/generator";
-import { buildGenerateOptionsFromConfig, getEffectiveTestOptions } from "@subboost/core/subscription/config-utils";
-import { buildProxyProvidersFromConfig } from "@subboost/core/subscription/proxy-providers";
-import type { SubscriptionResponseInfo } from "@subboost/core/subscription/subscription-response-info";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { generateClashYaml } from "@subfuse/core/generator";
+import { buildGenerateOptionsFromConfig, getEffectiveTestOptions } from "@subfuse/core/subscription/config-utils";
+import { buildProxyProvidersFromConfig } from "@subfuse/core/subscription/proxy-providers";
+import type { SubscriptionResponseInfo } from "@subfuse/core/subscription/subscription-response-info";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import {
   buildManualRefreshFailureResponse,
   buildManualRefreshSuccessResponseBody,
@@ -19,7 +19,7 @@ import {
   validateSubscriptionNodeList,
   type SavedSource,
   type RefreshNodeSnapshotResult,
-} from "@subboost/server-core/subscription";
+} from "@subfuse/server-core/subscription";
 import { decryptJson, decryptJsonObject, encryptJson } from "./crypto";
 import { getAppUrl } from "./env";
 import { prisma } from "./prisma";

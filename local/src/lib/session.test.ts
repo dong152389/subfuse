@@ -78,14 +78,14 @@ describe("local session helpers", () => {
     mocks.prisma.revokedSession.deleteMany.mockResolvedValue({ count: 0 });
     mocks.prisma.revokedSession.upsert.mockResolvedValue({});
     mocks.jwtVerify.mockResolvedValue({
-      payload: { exp: 4102444800, iss: "subboost-local", jti: "session-1", sub: "admin-1", username: "ry" },
+      payload: { exp: 4102444800, iss: "subfuse-local", jti: "session-1", sub: "admin-1", username: "ry" },
     });
   });
 
   it("signs sessions with the admin id as JWT subject", async () => {
     await expect(signSession({ adminId: "admin-1", username: "ry" })).resolves.toBe("signed-session-token");
     expect(mocks.signPayload).toEqual({
-      iss: "subboost-local",
+      iss: "subfuse-local",
       jti: expect.any(String),
       sub: "admin-1",
       username: "ry",

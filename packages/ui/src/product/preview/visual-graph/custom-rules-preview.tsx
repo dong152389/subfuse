@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { ArrowRight, Shield } from "lucide-react";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
-import type { CustomRoutingRuleSetItem } from "@subboost/core/rules/custom-routing-rule-sets";
-import type { CustomProxyGroup, CustomRule } from "@subboost/core/types/config";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
+import type { CustomRoutingRuleSetItem } from "@subfuse/core/rules/custom-routing-rule-sets";
+import type { CustomProxyGroup, CustomRule } from "@subfuse/core/types/config";
 
 const UNAVAILABLE_TARGET_LABEL = "目标分流组不可用";
 

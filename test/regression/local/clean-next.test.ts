@@ -18,7 +18,7 @@ function runLocalCleanNext() {
 
 describe("public local clean-next script", () => {
   beforeEach(() => {
-    tempRoot = mkdtempSync(join(tmpdir(), "subboost-public-clean-next-"));
+    tempRoot = mkdtempSync(join(tmpdir(), "subfuse-public-clean-next-"));
     process.chdir(tempRoot);
   });
 

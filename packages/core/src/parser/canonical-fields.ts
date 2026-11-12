@@ -1,5 +1,5 @@
-import type { ParsedNode } from "@subboost/core/types/node";
-import { normalizeCertificateFingerprint } from "@subboost/core/mihomo/certificate-fingerprint";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { normalizeCertificateFingerprint } from "@subfuse/core/mihomo/certificate-fingerprint";
 import { normalizeProtocolFields } from "../mihomo/protocol-fields";
 
 type FieldPath = readonly string[];

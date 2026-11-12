@@ -62,19 +62,19 @@ vi.mock("lucide-react", () => ({
   Search: () => null,
   Upload: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.input = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/tabs", () => ({
+vi.mock("@subfuse/ui/components/ui/tabs", () => ({
   Tabs: (props: any) => {
     mocks.captures.tabs = props;
     return props.children;
@@ -86,22 +86,22 @@ vi.mock("@subboost/ui/components/ui/tabs", () => ({
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.configStore }));
-vi.mock("@subboost/core/templates/builtin", () => ({ builtinIdToType: (id: string) => (id === "builtin-minimal" ? "minimal" : null) }));
-vi.mock("@subboost/core/time/beijing", () => ({ formatDateInBeijing: (iso: string) => `fmt:${iso}` }));
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.configStore }));
+vi.mock("@subfuse/core/templates/builtin", () => ({ builtinIdToType: (id: string) => (id === "builtin-minimal" ? "minimal" : null) }));
+vi.mock("@subfuse/core/time/beijing", () => ({ formatDateInBeijing: (iso: string) => `fmt:${iso}` }));
+vi.mock("@subfuse/ui/product/interactions", () => ({
   ProductInteractionAdapterProvider: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/templates/template-card", () => ({
+vi.mock("@subfuse/ui/templates/template-card", () => ({
   TemplateCard: (props: any) => {
     mocks.captures.cards.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/templates/template-upload-dialog", () => ({
+vi.mock("@subfuse/ui/templates/template-upload-dialog", () => ({
   TemplateUploadDialog: (props: any) => {
     mocks.captures.uploadDialog = props;
     return null;
@@ -351,7 +351,7 @@ describe("TemplateLibrarySurface", () => {
         isPublic: true,
         isOfficial: true,
         config: expect.objectContaining({
-          schema: "subboost-template-config/v1",
+          schema: "subfuse-template-config/v1",
           template: "minimal",
           mixedPort: 7890,
         }),

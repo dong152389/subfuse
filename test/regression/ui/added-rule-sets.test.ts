@@ -80,19 +80,19 @@ vi.mock("lucide-react", () => ({
   Trash2: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/select", () => ({
+vi.mock("@subfuse/ui/components/ui/select", () => ({
   Select: (props: any) => {
     mocks.captures.selects.push(props);
     return React.createElement("select", null, props.children);
@@ -102,26 +102,26 @@ vi.mock("@subboost/ui/components/ui/select", () => ({
   SelectTrigger: (props: any) => props.children,
   SelectValue: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.captures.switches.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "Auto" },
     { id: "fallback", name: "Fallback" },
   ],
 }));
-vi.mock("@subboost/core/generator/module-rules", () => ({
+vi.mock("@subfuse/core/generator/module-rules", () => ({
   getEffectiveModuleRules: vi.fn(() => mocks.effectiveRules),
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { name: string }, override?: string) => override || module.name,
 }));
-vi.mock("@subboost/core/rules/custom-routing-rule-sets", () => ({
+vi.mock("@subfuse/core/rules/custom-routing-rule-sets", () => ({
   buildRuleSetUrlFromPath: (path: string, base: string) => `${base.replace(/\/+$/, "")}/${path}`,
   collectCustomRoutingRuleSets: () => mocks.ruleSets,
   getRuleSetTargetValue: (target: any) => `${target.kind}:${target.id}`,
@@ -131,7 +131,7 @@ vi.mock("@subboost/core/rules/custom-routing-rule-sets", () => ({
     return kind && id ? { kind, id } : null;
   },
 }));
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return { useConfigStore };

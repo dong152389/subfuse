@@ -46,19 +46,19 @@ vi.mock("lucide-react", () => ({
   ChevronRight: () => null,
   RotateCcw: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: (props: any) => React.createElement("span", null, props.children) }));
-vi.mock("@subboost/ui/components/ui/button", () => ({ Button: (props: any) => React.createElement("button", null, props.children) }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: (props: any) => React.createElement("span", null, props.children) }));
+vi.mock("@subfuse/ui/components/ui/button", () => ({ Button: (props: any) => React.createElement("button", null, props.children) }));
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => React.createElement("div", null, props.children),
   DropdownMenuContent: (props: any) => React.createElement("div", null, props.children),
   DropdownMenuItem: (props: any) => React.createElement("button", { onClick: props.onClick }, props.children),
   DropdownMenuLabel: (props: any) => React.createElement("span", null, props.children),
   DropdownMenuTrigger: (props: any) => React.createElement("span", null, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({ Switch: () => null }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
+vi.mock("@subfuse/ui/components/ui/switch", () => ({ Switch: () => null }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
 vi.mock("../../../packages/ui/src/product/converter/advanced-mode/sections/proxy-groups-custom-groups-panel", () => ({
   ProxyGroupsCustomGroupsPanel: () => null,
 }));
@@ -75,7 +75,7 @@ vi.mock("../../../packages/ui/src/product/converter/advanced-mode/sections/group
   GroupAdvancedSettingsDialog: () => null,
 }));
 
-import { CATEGORY_INFO, PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
+import { CATEGORY_INFO, PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
 import { ProxyGroupsCategories } from "../../../packages/ui/src/product/converter/advanced-mode/sections/proxy-groups-categories";
 
 function collectElements(

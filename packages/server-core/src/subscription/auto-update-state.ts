@@ -1,7 +1,7 @@
 import {
   AUTO_UPDATE_NODE_QUOTA_DISABLED_REASON,
   AUTO_UPDATE_NODE_QUOTA_FAILURE_THRESHOLD,
-} from "@subboost/core/subscription/auto-update-failure-policy";
+} from "@subfuse/core/subscription/auto-update-failure-policy";
 
 import {
   AUTO_UPDATE_DISABLED_REASON,

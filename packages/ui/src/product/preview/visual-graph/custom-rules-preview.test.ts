@@ -1,8 +1,8 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import type { CustomRoutingRuleSetItem } from "@subboost/core/rules/custom-routing-rule-sets";
-import type { CustomProxyGroup, CustomRule } from "@subboost/core/types/config";
+import type { CustomRoutingRuleSetItem } from "@subfuse/core/rules/custom-routing-rule-sets";
+import type { CustomProxyGroup, CustomRule } from "@subfuse/core/types/config";
 
 vi.mock("lucide-react", () => ({
   ArrowRight: () => null,

@@ -15,13 +15,13 @@ import {
   Shield,
   type LucideIcon,
 } from "lucide-react";
-import { cn } from "@subboost/ui/lib/utils";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { UserMenu, type AccountMenuItem } from "@subboost/ui/components/auth/user-menu";
-import { ThemeToggle } from "@subboost/ui/components/layout/theme-toggle";
-import { captureAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { useUserStore } from "@subboost/ui/store/user-store";
+import { cn } from "@subfuse/ui/lib/utils";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { UserMenu, type AccountMenuItem } from "@subfuse/ui/components/auth/user-menu";
+import { ThemeToggle } from "@subfuse/ui/components/layout/theme-toggle";
+import { captureAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { useUserStore } from "@subfuse/ui/store/user-store";
 
 type HeaderMode = "default" | "local";
 
@@ -141,13 +141,13 @@ export function Header({
             <Link href="/" className="group flex items-center gap-2">
               <Image
                 src="/logo.png"
-                alt="SubBoost"
+                alt="SubFuse"
                 width={36}
                 height={36}
                 className="rounded-xl shadow-lg shadow-blue-500/25 transition-shadow group-hover:shadow-blue-500/40"
               />
               <span className="hidden text-xl font-bold leading-none bg-gradient-to-r from-heading-from to-heading-to bg-clip-text text-transparent sm:inline-flex">
-                SubBoost
+                SubFuse
               </span>
             </Link>
             {hasBadges && (
@@ -206,7 +206,7 @@ export function Header({
               label={mobileMenuOpen ? "关闭导航菜单" : "打开导航菜单"}
               variant="ghost"
               aria-expanded={mobileMenuOpen}
-              aria-controls="subboost-mobile-navigation"
+              aria-controls="subfuse-mobile-navigation"
               className={cn("rounded-lg p-2 transition-colors hover:bg-ink/5", tabletMenu ? "lg:hidden" : "md:hidden")}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
@@ -221,7 +221,7 @@ export function Header({
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div id="subboost-mobile-navigation" className={cn("border-t border-ink/10 py-4", tabletMenu ? "lg:hidden" : "md:hidden")}>
+          <div id="subfuse-mobile-navigation" className={cn("border-t border-ink/10 py-4", tabletMenu ? "lg:hidden" : "md:hidden")}>
             <nav className="flex flex-col gap-1">
               {visibleNavItems.map((item) => {
                 const isActive = isNavItemActive(pathname, item.href);

@@ -1,5 +1,5 @@
 {
-  "name": "@subboost/server-core",
+  "name": "@subfuse/server-core",
   "version": "0.1.0",
   "license": "AGPL-3.0-only",
   "private": true,
@@ -20,6 +20,6 @@
     "./subscription/*": "./src/subscription/*.ts"
   },
   "dependencies": {
-    "@subboost/core": "file:../core"
+    "@subfuse/core": "file:../core"
   }
 }

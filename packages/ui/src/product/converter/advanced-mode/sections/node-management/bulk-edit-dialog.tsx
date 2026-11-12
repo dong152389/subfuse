@@ -1,14 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@subboost/ui/components/ui/dialog";
-import { Input } from "@subboost/ui/components/ui/input";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { formatNodeNameFromTemplate } from "@subboost/core/node-name-template";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@subfuse/ui/components/ui/dialog";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { formatNodeNameFromTemplate } from "@subfuse/core/node-name-template";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 type NodeNameParts = {
   tags: string[];

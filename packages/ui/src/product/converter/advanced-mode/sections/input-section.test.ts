@@ -101,41 +101,41 @@ vi.mock("lucide-react", () => ({
   Server: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: (props: any) => props.children }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: (props: any) => props.children }));
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     mocks.captures.textareas.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/subscription/import-error", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/subscription/import-error", () => ({
   normalizeSubscriptionImportErrorInfo: (value: any) => (value ? { message: value.message || String(value) } : null),
 }));
-vi.mock("@subboost/core/node-name-template", () => ({
+vi.mock("@subfuse/core/node-name-template", () => ({
   DEFAULT_NODE_NAME_TEMPLATE: "[{tag}] {name}",
   formatNodeNameFromTemplate: ({ originName, tag, template }: any) => `${template || "{name}"}:${tag || ""}:${originName}`,
 }));
-vi.mock("@subboost/ui/components/ui/icon-button", () => ({
+vi.mock("@subfuse/ui/components/ui/icon-button", () => ({
   IconButton: (props: any) => {
     mocks.captures.iconButtons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return {
@@ -143,19 +143,19 @@ vi.mock("@subboost/ui/store/config-store", () => {
     useConfigStore,
   };
 });
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
-vi.mock("@subboost/ui/product/subscription/subscription-userinfo-display", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
+vi.mock("@subfuse/ui/product/subscription/subscription-userinfo-display", () => ({
   getSubscriptionUserInfoDisplay: () => mocks.userInfoDisplay,
 }));
-vi.mock("@subboost/ui/product/subscription/source-import-state", () => ({
+vi.mock("@subfuse/ui/product/subscription/source-import-state", () => ({
   markSourceAsPendingImport: mocks.markSourceAsPendingImport,
 }));
-vi.mock("@subboost/ui/product/subscription/source-order", () => ({ moveSubscriptionSource: mocks.moveSubscriptionSource }));
-vi.mock("@subboost/ui/product/converter/source-display-label", () => ({
+vi.mock("@subfuse/ui/product/subscription/source-order", () => ({ moveSubscriptionSource: mocks.moveSubscriptionSource }));
+vi.mock("@subfuse/ui/product/converter/source-display-label", () => ({
   buildSourceDisplayLabel: ({ typeLabel, order, total, tag }: any) => `${typeLabel} ${order}/${total}${tag ? ` ${tag}` : ""}`,
 }));
-vi.mock("@subboost/ui/product/converter/source-controls", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@subboost/ui/product/converter/source-controls")>();
+vi.mock("@subfuse/ui/product/converter/source-controls", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@subfuse/ui/product/converter/source-controls")>();
   return {
     ...actual,
     AddSourceMenu: (props: any) => {
@@ -168,7 +168,7 @@ vi.mock("@subboost/ui/product/converter/source-controls", async (importOriginal)
     },
   };
 });
-vi.mock("@subboost/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
+vi.mock("@subfuse/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
 vi.mock("../constants", () => ({
   sourceTypeInfo: {
     url: { label: "订阅链接", placeholder: "https://example.com/sub", icon: () => null },
@@ -182,7 +182,7 @@ vi.mock("../section-header", () => ({
     return null;
   },
 }));
-vi.mock("@subboost/ui/product/converter/subscription-import-error", () => ({
+vi.mock("@subfuse/ui/product/converter/subscription-import-error", () => ({
   SubscriptionImportErrorBadge: (props: any) => {
     mocks.captures.errorBadge = props;
     return null;

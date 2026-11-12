@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import { handleRuleDetection } from "./detect";
-const request = (body: string) => new Request("http://local.subboost.test/api/rules/detect", { method: "POST", body });
+const request = (body: string) => new Request("http://local.subfuse.test/api/rules/detect", { method: "POST", body });
 
 describe("rule detection request boundary", () => {
   it("returns only metadata using content instead of a misleading extension", async () => {
-    const url = "https://local.subboost.test/domains.txt?key=fixture";
+    const url = "https://local.subfuse.test/domains.txt?key=fixture";
     const fetchContent = vi.fn().mockResolvedValue("payload: ['+.example.test']");
     const response = await handleRuleDetection(request(JSON.stringify({ url })), fetchContent);
     expect(response.status).toBe(200);
@@ -12,7 +12,7 @@ describe("rule detection request boundary", () => {
     expect(await response.json()).toEqual({ path: url, name: "domains", format: "yaml", behavior: "domain" });
     expect(fetchContent).toHaveBeenCalledWith(url);
   });
-  it.each(["file:///etc/passwd", "https://user:pass@local.subboost.test/rules", "not-url"])("rejects URL %s before transport", async (url) => {
+  it.each(["file:///etc/passwd", "https://user:pass@local.subfuse.test/rules", "not-url"])("rejects URL %s before transport", async (url) => {
     const fetchContent = vi.fn();
     expect((await handleRuleDetection(request(JSON.stringify({ url })), fetchContent)).status).toBe(400);
     expect(fetchContent).not.toHaveBeenCalled();
@@ -24,7 +24,7 @@ describe("rule detection request boundary", () => {
     expect(fetchContent).not.toHaveBeenCalled();
   });
   it("does not expose fetch errors or import malformed content", async () => {
-    const body = JSON.stringify({ url: "https://local.subboost.test/rules" });
+    const body = JSON.stringify({ url: "https://local.subfuse.test/rules" });
     const fetchContent = vi.fn().mockRejectedValue(new Error("secret upstream details"));
     const response = await handleRuleDetection(request(body), fetchContent);
     expect(response.status).toBe(422);

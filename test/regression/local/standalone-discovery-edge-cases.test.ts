@@ -19,7 +19,7 @@ const standalone = requireCjs("../../../local/scripts/start-standalone.cjs") as 
 const roots: string[] = [];
 
 function makeRoot() {
-  const root = mkdtempSync(join(tmpdir(), "subboost-runtime-regression-"));
+  const root = mkdtempSync(join(tmpdir(), "subfuse-runtime-regression-"));
   roots.push(root);
   return root;
 }

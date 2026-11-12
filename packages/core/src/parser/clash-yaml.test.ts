@@ -175,7 +175,7 @@ proxies:
     server: http.example.com
     port: 8080
     headers:
-      User-Agent: SubBoost
+      User-Agent: SubFuse
   - name: Mieru
     type: mieru
     server: mieru.example.com
@@ -202,7 +202,7 @@ proxies:
     expect(mixed.nodes.find((node) => node.name === "SOCKS4")).toMatchObject({ type: "socks4" });
     expect(mixed.nodes.find((node) => node.name === "HTTP")).toMatchObject({
       type: "http",
-      headers: { "User-Agent": "SubBoost" },
+      headers: { "User-Agent": "SubFuse" },
     });
     expect(mixed.nodes.find((node) => node.name === "Mieru")).toMatchObject({ type: "mieru" });
     expect(mixed.errors[0]).toContain('节点 "Bad" 解析失败');

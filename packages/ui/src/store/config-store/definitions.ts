@@ -1,4 +1,4 @@
-import type { ParsedNode, ParseResult } from "@subboost/core/types/node";
+import type { ParsedNode, ParseResult } from "@subfuse/core/types/node";
 import type {
   BuiltinRuleEdits,
   CustomProxyGroup,
@@ -8,22 +8,22 @@ import type {
   GroupListenerTarget,
   ProxyGroupAdvancedConfig,
   TemplateType,
-} from "@subboost/core/types/config";
-import { DEFAULT_BASE_CONFIG_YAML, DEFAULT_SUBBOOST_CONFIG } from "@subboost/core/config/defaults";
-import { getBuiltinTemplateId } from "@subboost/core/templates/builtin";
-import { TEMPLATES } from "@subboost/core/templates";
-import type { DialerProxyGroup, SubBoostTemplateConfig } from "@subboost/core/types/template-config";
+} from "@subfuse/core/types/config";
+import { DEFAULT_BASE_CONFIG_YAML, DEFAULT_SUBFUSE_CONFIG } from "@subfuse/core/config/defaults";
+import { getBuiltinTemplateId } from "@subfuse/core/templates/builtin";
+import { TEMPLATES } from "@subfuse/core/templates";
+import type { DialerProxyGroup, SubFuseTemplateConfig } from "@subfuse/core/types/template-config";
 import {
   isSubscriptionImportError,
   type SubscriptionImportErrorInfo,
-} from "@subboost/core/subscription/import-error";
-import type { SubscriptionUserInfo } from "@subboost/core/subscription/subscription-userinfo";
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
+} from "@subfuse/core/subscription/import-error";
+import type { SubscriptionUserInfo } from "@subfuse/core/subscription/subscription-userinfo";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
 import {
   DEFAULT_NODE_NAME_FILTER_CONFIG,
   type NodeNameFilterConfig,
-} from "@subboost/core/subscription/node-name-filter";
-import { getActiveProductApiAdapter } from "@subboost/ui/product/api-adapter";
+} from "@subfuse/core/subscription/node-name-filter";
+import { getActiveProductApiAdapter } from "@subfuse/ui/product/api-adapter";
 import {
   getNodeSourceIds,
   makeUniqueName,
@@ -32,13 +32,13 @@ import {
   withNodeSourceId,
   withoutNodeSourceIds,
   withUniqueNodeNames,
-} from "@subboost/core/subscription/node-source-state";
+} from "@subfuse/core/subscription/node-source-state";
 
 export { DEFAULT_BASE_CONFIG_YAML };
 export type RuleSetDraft = Omit<CustomRuleSet, "target">;
 export type { BuiltinRuleEdits, CustomRuleSet, GroupListenerBinding, GroupListenerTarget, ProxyGroupAdvancedConfig };
-export type { DialerProxyGroup, SubBoostTemplateConfig } from "@subboost/core/types/template-config";
-export type { NodeNameFilterConfig } from "@subboost/core/subscription/node-name-filter";
+export type { DialerProxyGroup, SubFuseTemplateConfig } from "@subfuse/core/types/template-config";
+export type { NodeNameFilterConfig } from "@subfuse/core/subscription/node-name-filter";
 
 export type ConfigHistoryEntry =
   | string
@@ -74,7 +74,7 @@ export interface SubscriptionSource {
   tag?: string;
   // 节点命名模板：支持 {tag} / {name}
   nameTemplate?: string;
-  // URL 源使用 proxy-providers 模式：不在 SubBoost 内拉取/解析节点，仅在最终配置中写入 proxy-providers 供客户端拉取
+  // URL 源使用 proxy-providers 模式：不在 SubFuse 内拉取/解析节点，仅在最终配置中写入 proxy-providers 供客户端拉取
   useProxyProviders?: boolean;
   // 独立的流量/到期元信息 URL（可选）
   userinfoUrl?: string;
@@ -338,7 +338,7 @@ export interface ConfigActions {
   pushHistory: () => void;
 
   // 应用模板配置
-  applyTemplateConfig: (config: SubBoostTemplateConfig) => void;
+  applyTemplateConfig: (config: SubFuseTemplateConfig) => void;
 
   // 分流代理组名称覆盖
   setProxyGroupNameOverride: (moduleId: string, displayName: string) => void;
@@ -384,14 +384,14 @@ export const initialState: ConfigState = {
   moduleRuleEditWarningAccepted: false,
   appliedTemplateId: getBuiltinTemplateId("minimal"),
   dnsYaml: DEFAULT_BASE_CONFIG_YAML,
-  mixedPort: DEFAULT_SUBBOOST_CONFIG.mixedPort,
-  allowLan: DEFAULT_SUBBOOST_CONFIG.allowLan,
-  testUrl: DEFAULT_SUBBOOST_CONFIG.testUrl,
-  testInterval: DEFAULT_SUBBOOST_CONFIG.testInterval,
-  sharedHealthChecks: DEFAULT_SUBBOOST_CONFIG.sharedHealthChecks,
-  ruleProviderBaseUrl: DEFAULT_SUBBOOST_CONFIG.ruleProviderBaseUrl,
-  cnIpNoResolve: DEFAULT_SUBBOOST_CONFIG.cnIpNoResolve,
-  experimentalCnUseCnRuleSet: DEFAULT_SUBBOOST_CONFIG.experimentalCnUseCnRuleSet,
+  mixedPort: DEFAULT_SUBFUSE_CONFIG.mixedPort,
+  allowLan: DEFAULT_SUBFUSE_CONFIG.allowLan,
+  testUrl: DEFAULT_SUBFUSE_CONFIG.testUrl,
+  testInterval: DEFAULT_SUBFUSE_CONFIG.testInterval,
+  sharedHealthChecks: DEFAULT_SUBFUSE_CONFIG.sharedHealthChecks,
+  ruleProviderBaseUrl: DEFAULT_SUBFUSE_CONFIG.ruleProviderBaseUrl,
+  cnIpNoResolve: DEFAULT_SUBFUSE_CONFIG.cnIpNoResolve,
+  experimentalCnUseCnRuleSet: DEFAULT_SUBFUSE_CONFIG.experimentalCnUseCnRuleSet,
   listenerPorts: {},
   groupListeners: [],
   generatedYaml: "",

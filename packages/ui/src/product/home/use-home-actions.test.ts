@@ -36,19 +36,19 @@ vi.mock("react", () => ({
   useMemo: mocks.useMemo,
 }));
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: mocks.useProductInteractionAdapter,
 }));
 
-vi.mock("@subboost/core/time/beijing", () => ({
+vi.mock("@subfuse/core/time/beijing", () => ({
   getCompactDateStampInBeijing: () => "20260606",
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: mocks.useConfigStore,
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({
   toast: mocks.toast,
 }));
 

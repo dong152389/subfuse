@@ -10,9 +10,9 @@ const mocks = vi.hoisted(() => ({
     customRuleBatchImported: vi.fn(),
   },
   toast: vi.fn(),
-  rulesApi: undefined as import("@subboost/ui/product/api-adapter").ProductRulesApi | undefined,
+  rulesApi: undefined as import("@subfuse/ui/product/api-adapter").ProductRulesApi | undefined,
 }));
-vi.mock("@subboost/ui/product/api-adapter", () => ({ useProductApiAdapter: () => ({ rules: mocks.rulesApi }) }));
+vi.mock("@subfuse/ui/product/api-adapter", () => ({ useProductApiAdapter: () => ({ rules: mocks.rulesApi }) }));
 
 const stateMock = vi.hoisted(() => ({
   enabled: false,
@@ -48,13 +48,13 @@ vi.mock("lucide-react", () => ({
   ArrowRight: () => React.createElement("span", null, "arrow-icon"),
   Upload: () => React.createElement("span", null, "upload-icon"),
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.dialogs.push(props);
     return React.createElement("div", null, props.children);
@@ -63,14 +63,14 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogHeader: (props: any) => React.createElement("header", props, props.children),
   DialogTitle: (props: any) => React.createElement("h2", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     mocks.textareas.push(props);
     return React.createElement("textarea", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 
@@ -155,7 +155,7 @@ describe("ProxyGroupsCustomRulesBatchDialog", () => {
 
   it("previews the current rule-set type and dispatches providers instead of domain rules", () => {
     const onImportRuleSets = vi.fn();
-    const { html, props } = renderDialog("https://local.subboost.test/geosite/udemy.mrs", {
+    const { html, props } = renderDialog("https://local.subfuse.test/geosite/udemy.mrs", {
       defaultType: "RULE-SET", onImportRuleSets,
     });
     expect(html).toContain("RULE-SET");
@@ -192,7 +192,7 @@ describe("ProxyGroupsCustomRulesBatchDialog", () => {
   });
 
   it.each([false, true])("commits mixed rules only after all URL detections succeed (failure=%s)", async (fail) => {
-    const url = "https://local.subboost.test/rules";
+    const url = "https://local.subfuse.test/rules";
     let complete!: (value: any) => void;
     let reject!: (reason: unknown) => void;
     const detectRuleSet = vi.fn(() => new Promise<any>((resolve, fail) => { complete = resolve; reject = fail; }));
@@ -223,7 +223,7 @@ describe("ProxyGroupsCustomRulesBatchDialog", () => {
   ])("retains the draft when detection returns invalid metadata: %j", async (metadata) => {
     mocks.rulesApi = { detectRuleSet: vi.fn().mockResolvedValue(metadata) };
     const onImportRuleSets = vi.fn();
-    const { props, setters } = renderDialog("https://local.subboost.test/rules", {
+    const { props, setters } = renderDialog("https://local.subfuse.test/rules", {
       defaultType: "RULE-SET", onImportRuleSets,
     });
     mocks.buttons.at(-1).onClick();

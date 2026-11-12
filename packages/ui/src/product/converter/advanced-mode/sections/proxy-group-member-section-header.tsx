@@ -1,7 +1,7 @@
 import { Plus, RotateCcw, X } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
-import { cn } from "@subboost/ui/lib/utils";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { cn } from "@subfuse/ui/lib/utils";
 
 export function ProxyGroupMemberSectionHeader({
   mode,

@@ -17,7 +17,7 @@ const standalone = requireCjs("./start-standalone.cjs") as StartStandalone;
 let tempRoot: string | null = null;
 
 function makeTempRoot() {
-  tempRoot = mkdtempSync(join(tmpdir(), "subboost-standalone-"));
+  tempRoot = mkdtempSync(join(tmpdir(), "subfuse-standalone-"));
   return tempRoot;
 }
 

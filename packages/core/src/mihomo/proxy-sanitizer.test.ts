@@ -289,7 +289,7 @@ describe("Mihomo proxy sanitizer", () => {
     });
     expect(httpsFingerprint["ws-opts"]).not.toHaveProperty("early-data-header-name");
     expect(httpsFingerprint["ws-opts"]).not.toHaveProperty("max-early-data");
-    expect(invalidDownloadReality).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    expect(invalidDownloadReality).toHaveProperty("_subfuse-invalid-mihomo-node", true);
     expect(nonObjectXhttp).toMatchObject({ encryption: "none" });
     expect(nonObjectXhttp).not.toHaveProperty("xhttp-opts");
   });
@@ -513,7 +513,7 @@ describe("Mihomo proxy sanitizer", () => {
 
     expect(isStandardBase64String("")).toBe(false);
     expect(normalizeMihomoRealityPublicKey(1)).toBeNull();
-    expect(isMihomoSupportedProxyNode({ type: "vless", uuid: "u", "_subboost-invalid-mihomo-node": true })).toBe(false);
+    expect(isMihomoSupportedProxyNode({ type: "vless", uuid: "u", "_subfuse-invalid-mihomo-node": true })).toBe(false);
     expect(
       isMihomoSupportedProxyNode({
         type: "wireguard",

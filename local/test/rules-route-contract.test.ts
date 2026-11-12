@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { RuleIndexUnavailableError } from "@subboost/server-core/rules";
+import { RuleIndexUnavailableError } from "@subfuse/server-core/rules";
 
 import { getCnRuleCandidateDiscovery, searchRules } from "@local/lib/rule-catalog";
 import * as cnCandidatesRoute from "../app/api/rules/cn-candidates/route";

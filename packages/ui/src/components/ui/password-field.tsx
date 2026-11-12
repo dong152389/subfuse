@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Input, type InputProps } from "@subboost/ui/components/ui/input";
-import { cn } from "@subboost/ui/lib/utils";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Input, type InputProps } from "@subfuse/ui/components/ui/input";
+import { cn } from "@subfuse/ui/lib/utils";
 
 interface PasswordControlProps extends Omit<InputProps, "type"> {
   visible: boolean;

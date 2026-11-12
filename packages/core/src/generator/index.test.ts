@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { BaseConfigYamlError, generateClashConfig, generateClashYaml } from "./index";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function ssNode(patch: Partial<ParsedNode> = {}): ParsedNode {
   return {
@@ -155,7 +155,7 @@ describe("generateClashConfig", () => {
         nodes: [ssNode()],
         userConfig: { dnsYaml: "proxies: []" },
       })
-    ).toThrow("这些段由 SubBoost 根据节点、代理组和规则生成");
+    ).toThrow("这些段由 SubFuse 根据节点、代理组和规则生成");
 
     expect(() =>
       generateClashConfig({

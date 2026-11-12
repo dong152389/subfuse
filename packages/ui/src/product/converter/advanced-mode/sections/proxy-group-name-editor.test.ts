@@ -30,14 +30,14 @@ vi.mock("lucide-react", () => ({
   Shuffle: () => null,
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return props.children;
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => props.children,
   DropdownMenuContent: (props: any) => props.children,
   DropdownMenuItem: (props: any) => {
@@ -47,14 +47,14 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuTrigger: (props: any) => props.children,
 }));
 
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.inputs.push(props);
     return null;
   },
 }));
 
-vi.mock("@subboost/ui/lib/utils", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({
   cn: (...parts: unknown[]) => parts.filter(Boolean).join(" "),
 }));
 

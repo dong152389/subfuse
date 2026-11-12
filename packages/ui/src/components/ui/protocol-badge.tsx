@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react";
-import { cn } from "@subboost/ui/lib/utils";
+import { cn } from "@subfuse/ui/lib/utils";
 
 const PROTOCOL_BADGE_COLORS: Record<string, string> = {
   ss: "bg-blue-500/20 text-blue-200 border-blue-500/20",

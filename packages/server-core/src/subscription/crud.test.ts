@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NodeNameFilterConfigError } from "@subboost/core/subscription/node-name-filter";
+import { NodeNameFilterConfigError } from "@subfuse/core/subscription/node-name-filter";
 import {
   areSubscriptionUrlListsEquivalent,
   normalizeSubscriptionConfigForPersistence,
@@ -224,8 +224,8 @@ describe("subscription CRUD shared helpers", () => {
 
     expect(
       serializeSubscriptionSummaryData(subscription, secrets, {
-        subscriptionUrl: "https://subboost.example/s/token-1",
-        yamlUrl: "https://subboost.example/s/token-1.yaml",
+        subscriptionUrl: "https://subfuse.example/s/token-1",
+        yamlUrl: "https://subfuse.example/s/token-1.yaml",
         dateMode: "iso",
         includeCounts: true,
       })
@@ -245,12 +245,12 @@ describe("subscription CRUD shared helpers", () => {
         lastNodeQuotaLimit: 100,
         disabledAt: null,
       },
-      yamlUrl: "https://subboost.example/s/token-1.yaml",
+      yamlUrl: "https://subfuse.example/s/token-1.yaml",
     });
 
     expect(
       serializeSubscriptionDetailData(subscription, secrets, {
-        subscriptionUrl: "https://subboost.example/s/token-1",
+        subscriptionUrl: "https://subfuse.example/s/token-1",
         dateMode: "preserve",
         includeLastAttemptedAt: false,
       })
@@ -263,7 +263,7 @@ describe("subscription CRUD shared helpers", () => {
     });
     expect(
       serializeSubscriptionDetailData(subscription, secrets, {
-        subscriptionUrl: "https://subboost.example/s/token-1",
+        subscriptionUrl: "https://subfuse.example/s/token-1",
         includeLastAttemptedAt: false,
       }).autoUpdateState
     ).not.toHaveProperty("lastAttemptedAt");

@@ -12,8 +12,8 @@
 
 import { decodeBase64 } from "../base64";
 import { tryParseJson } from "../../json";
-import type { VMessNode } from "@subboost/core/types/node";
-import { buildMihomoEchOptsFromShareValue } from "@subboost/core/mihomo/ech";
+import type { VMessNode } from "@subfuse/core/types/node";
+import { buildMihomoEchOptsFromShareValue } from "@subfuse/core/mihomo/ech";
 import { splitWsPathEarlyData } from "../ws-early-data";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 

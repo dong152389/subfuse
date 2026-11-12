@@ -52,21 +52,21 @@ vi.mock("lucide-react", () => ({
   Trash2: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     {
       id: "auto",
@@ -79,7 +79,7 @@ vi.mock("@subboost/core/generator/proxy-groups", () => ({
     ] },
   ],
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   normalizeGroupNameWithDefaultEmoji: (raw: string, emoji: string) => ({ emoji, full: raw.startsWith(emoji) ? raw : `${emoji} ${raw}` }),
   resolveProxyGroupModuleName: (module: { name: string }, override?: string) => override || module.name,
   splitLeadingEmoji: (name: string) => {
@@ -90,16 +90,16 @@ vi.mock("@subboost/core/proxy-group-name", () => ({
     return { hasEmojiPrefix: true, emoji: match[1], label: match[2] };
   },
 }));
-vi.mock("@subboost/core/rules/custom-routing-rule-sets", () => ({
+vi.mock("@subfuse/core/rules/custom-routing-rule-sets", () => ({
   extractRuleSetPathFromUrl: (url: string) => url.replace(/^https?:\/\/rules\.example\//, ""),
 }));
-vi.mock("@subboost/core/types/config", () => ({ DEFAULT_LOAD_BALANCE_STRATEGY: "consistent-hashing" }));
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/core/types/config", () => ({ DEFAULT_LOAD_BALANCE_STRATEGY: "consistent-hashing" }));
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return { useConfigStore };
 });
-vi.mock("@subboost/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
+vi.mock("@subfuse/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
 vi.mock("./proxy-group-rule-targets", () => ({
   buildManualRuleTargets: vi.fn(() => [{ name: "Auto" }]),
   listCustomRulesForTarget: (_rules: any[], target: string) =>

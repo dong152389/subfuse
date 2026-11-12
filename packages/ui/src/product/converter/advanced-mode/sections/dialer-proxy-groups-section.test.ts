@@ -71,20 +71,20 @@ vi.mock("lucide-react", () => ({
   Trash2: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: (props: any) => props.children }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: (props: any) => props.children }));
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/icon-button", () => ({
+vi.mock("@subfuse/ui/components/ui/icon-button", () => ({
   IconButton: (props: any) => {
     mocks.captures.iconButtons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => {
     mocks.captures.dropdownRoots.push(props);
     return props.children;
@@ -107,27 +107,27 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuLabel: (props: any) => props.children,
   DropdownMenuSeparator: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.captures.switches.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "⚡ 自动选择", emoji: "⚡" },
     { id: "adult", name: "🔞 成人内容", emoji: "🔞" },
   ],
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { emoji: string; name: string }, override?: string) =>
     override ? `${module.emoji} ${override}` : module.name,
   splitLeadingEmoji: (name: string) => {
@@ -138,12 +138,12 @@ vi.mock("@subboost/core/proxy-group-name", () => ({
     return { hasEmojiPrefix: true, emoji: match[1], label: match[2] };
   },
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/store/config-store", () => ({
   PRESET_RELAY_NAMES: ["香港中转", "日本中转"],
   useConfigStore: () => mocks.store,
 }));
-vi.mock("@subboost/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
+vi.mock("@subfuse/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
 vi.mock("../section-header", () => ({
   SectionHeader: (props: any) => {
     mocks.captures.header = props;

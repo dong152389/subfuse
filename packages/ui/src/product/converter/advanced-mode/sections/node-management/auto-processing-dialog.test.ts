@@ -1,7 +1,7 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 const mocks = vi.hoisted(() => ({
   buttons: [] as Array<Record<string, any>>,
@@ -11,13 +11,13 @@ const mocks = vi.hoisted(() => ({
   textarea: null as Record<string, any> | null,
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", { disabled: props.disabled }, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.dialog = props;
     return props.children;
@@ -28,7 +28,7 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogHeader: (props: any) => React.createElement("header", null, props.children),
   DialogTitle: (props: any) => React.createElement("h2", null, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/form-field", () => ({
+vi.mock("@subfuse/ui/components/ui/form-field", () => ({
   FormField: (props: any) => {
     mocks.formField = props;
     const label = React.createElement("label", null, props.label);
@@ -47,7 +47,7 @@ vi.mock("@subboost/ui/components/ui/form-field", () => ({
     );
   },
 }));
-vi.mock("@subboost/ui/components/ui/switch-field", () => ({
+vi.mock("@subfuse/ui/components/ui/switch-field", () => ({
   SwitchField: (props: any) => {
     mocks.switchField = props;
     return React.createElement(
@@ -62,7 +62,7 @@ vi.mock("@subboost/ui/components/ui/switch-field", () => ({
     );
   },
 }));
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     mocks.textarea = props;
     return React.createElement("textarea", {

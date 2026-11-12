@@ -2,36 +2,36 @@
 
 import * as React from "react";
 import { ArrowRight, Check, Pencil, Trash2, X } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@subboost/ui/components/ui/select";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { getModuleRuleOrderKey } from "@subboost/core/generator/module-rules";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
+} from "@subfuse/ui/components/ui/select";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { getModuleRuleOrderKey } from "@subfuse/core/generator/module-rules";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
 import {
   collectCustomRoutingRuleSets,
   getRuleSetTargetValue,
   normalizeRuleSetPathInput,
   parseRuleSetTargetValue,
   type CustomRoutingRuleSetItem,
-} from "@subboost/core/rules/custom-routing-rule-sets";
-import { DEFAULT_RULE_PROVIDER_BASE_URL } from "@subboost/core/rules/metadata";
-import { useProductApiAdapter } from "@subboost/ui/product/api-adapter";
+} from "@subfuse/core/rules/custom-routing-rule-sets";
+import { DEFAULT_RULE_PROVIDER_BASE_URL } from "@subfuse/core/rules/metadata";
+import { useProductApiAdapter } from "@subfuse/ui/product/api-adapter";
 import { resolveRuleSetUrl, useRuleSetOperation } from "./use-rule-set-resolution";
-import type { RuleSetMetadata } from "@subboost/core/types/config";
+import type { RuleSetMetadata } from "@subfuse/core/types/config";
 import {
   useConfigStore,
   type RuleSetDraft as StoreRuleSetDraft,
-} from "@subboost/ui/store/config-store";
+} from "@subfuse/ui/store/config-store";
 import {
   RULE_EDIT_ACTIONS_CLASS,
   RULE_EDIT_PRIMARY_FIELD_CLASS,

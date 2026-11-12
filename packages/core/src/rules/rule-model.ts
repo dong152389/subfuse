@@ -1,7 +1,7 @@
-import type { BuiltinRuleEdit, BuiltinRuleEdits, CustomProxyGroup, CustomRuleSet, RuleSetBehavior } from "@subboost/core/types/config";
-import { DEFAULT_LOAD_BALANCE_STRATEGY, isLoadBalanceStrategy } from "@subboost/core/types/config";
-import { normalizeProxyGroupAdvancedConfig } from "@subboost/core/proxy-group-advanced";
-import { normalizeProxyGroupTargetRef } from "@subboost/core/proxy-group-targets";
+import type { BuiltinRuleEdit, BuiltinRuleEdits, CustomProxyGroup, CustomRuleSet, RuleSetBehavior } from "@subfuse/core/types/config";
+import { DEFAULT_LOAD_BALANCE_STRATEGY, isLoadBalanceStrategy } from "@subfuse/core/types/config";
+import { normalizeProxyGroupAdvancedConfig } from "@subfuse/core/proxy-group-advanced";
+import { normalizeProxyGroupTargetRef } from "@subfuse/core/proxy-group-targets";
 
 export const RULE_SET_PATH_RE = /^(geosite|geoip)\/[^/?#\s]+\.mrs$/i;
 

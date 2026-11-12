@@ -36,26 +36,26 @@ vi.mock("lucide-react", () => ({
   Lock: () => React.createElement("span", null, "lock-icon"),
   Upload: () => React.createElement("span", null, "upload-icon"),
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/choice-group", () => ({
+vi.mock("@subfuse/ui/components/ui/choice-group", () => ({
   ChoiceGroup: (props: any) => React.createElement("div", null, props.children),
   ChoiceChip: (props: any) => {
     mocks.choiceChips.push(props);
     return React.createElement("button", { onClick: props.onClick, disabled: props.disabled }, props.label);
   },
 }));
-vi.mock("@subboost/ui/components/ui/switch-field", () => ({
+vi.mock("@subfuse/ui/components/ui/switch-field", () => ({
   SwitchField: (props: any) => {
     mocks.switchFields.push(props);
     return React.createElement("div", null, props.label, props.description);
   },
 }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.dialogs.push(props);
     return React.createElement("div", null, props.children);
@@ -66,19 +66,19 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogHeader: (props: any) => React.createElement("header", props, props.children),
   DialogTitle: (props: any) => React.createElement("h2", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     mocks.textareas.push(props);
     return React.createElement("textarea", props);
   },
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
 
 import { TemplateUploadDialog } from "./template-upload-dialog";
 

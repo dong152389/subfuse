@@ -11,7 +11,7 @@ describe("server-core http helpers", () => {
   });
 
   it("handles absent, empty and invalid-length bodies without trusting Content-Length", async () => {
-    const url = "http://local.subboost.test";
+    const url = "http://local.subfuse.test";
     expect(await readJsonBody(new Request(url), 10)).toEqual({ ok: true, value: {} });
     expect(await readJsonBody(new Request(url, { method: "POST", body: "  " }), 10)).toEqual({ ok: true, value: {} });
     expect(await readJsonBody(new Request(url, { method: "POST", headers: { "Content-Length": "bad" }, body: "{}" }), 10))

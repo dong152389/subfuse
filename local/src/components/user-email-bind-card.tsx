@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { Mail, CheckCircle2, Loader2, KeyRound } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
 import { isValidEmail } from "@local/lib/admin-credentials";
 
 async function readJson<T>(response: Response): Promise<T> {

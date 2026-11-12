@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { load } from "js-yaml";
-import { generateClashConfig } from "@subboost/core/generator";
-import { configToYaml } from "@subboost/core/generator/yaml";
-import { buildGenerateOptionsFromConfig } from "@subboost/core/subscription/config-utils";
-import { validateSubBoostTemplateConfig } from "@subboost/core/templates/config-template";
-import { validConfig } from "@subboost/core/templates/config-template.test-helpers";
+import { generateClashConfig } from "@subfuse/core/generator";
+import { configToYaml } from "@subfuse/core/generator/yaml";
+import { buildGenerateOptionsFromConfig } from "@subfuse/core/subscription/config-utils";
+import { validateSubFuseTemplateConfig } from "@subfuse/core/templates/config-template";
+import { validConfig } from "@subfuse/core/templates/config-template.test-helpers";
 import { normalizeCustomRuleValue, normalizeLogicRulePayload } from "./custom-rule-value";
 
 const TAILSCALE_PAYLOAD = "((PROCESS-NAME,tailscaled),(NETWORK,UDP),(SRC-PORT,41641))";
@@ -67,8 +67,8 @@ describe("logic rules through persisted config and generation", () => {
 
   it("rejects templates carrying an invalid logic payload", () => {
     const template = (value: string) => validConfig({ customRules: [{ id: "logic", type: "AND", value, target: "DIRECT" }] });
-    const accepted = validateSubBoostTemplateConfig(template(" ((PROCESS-NAME,tailscaled),(NETWORK,UDP),(SRC-PORT,41641)) "));
+    const accepted = validateSubFuseTemplateConfig(template(" ((PROCESS-NAME,tailscaled),(NETWORK,UDP),(SRC-PORT,41641)) "));
     expect(accepted.ok && accepted.config.customRules[0]?.value).toBe(TAILSCALE_PAYLOAD);
-    expect(validateSubBoostTemplateConfig(template("(DOMAIN,a.com)"))).toMatchObject({ ok: false });
+    expect(validateSubFuseTemplateConfig(template("(DOMAIN,a.com)"))).toMatchObject({ ok: false });
   });
 });

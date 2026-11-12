@@ -1,14 +1,14 @@
 import { expect } from "vitest";
 import { getModulesForTemplate } from "../generator/proxy-groups";
 import {
-  SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
-  validateSubBoostTemplateConfig,
+  SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
+  validateSubFuseTemplateConfig,
 } from "./config-template";
-import type { SubBoostTemplateConfig } from "@subboost/core/types/template-config";
+import type { SubFuseTemplateConfig } from "@subfuse/core/types/template-config";
 
-export function validConfig(patch: Partial<SubBoostTemplateConfig> & Record<string, unknown> = {}): SubBoostTemplateConfig {
+export function validConfig(patch: Partial<SubFuseTemplateConfig> & Record<string, unknown> = {}): SubFuseTemplateConfig {
   return {
-    schema: SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
+    schema: SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
     template: "minimal",
     enabledProxyGroups: getModulesForTemplate("minimal"),
     hiddenProxyGroups: [],
@@ -29,9 +29,9 @@ export function validConfig(patch: Partial<SubBoostTemplateConfig> & Record<stri
     cnIpNoResolve: true,
     experimentalCnUseCnRuleSet: true,
     ...patch,
-  } as SubBoostTemplateConfig;
+  } as SubFuseTemplateConfig;
 }
 
-export function expectInvalid(patch: Partial<SubBoostTemplateConfig> & Record<string, unknown>, error: string) {
-  expect(validateSubBoostTemplateConfig(validConfig(patch))).toEqual({ ok: false, error });
+export function expectInvalid(patch: Partial<SubFuseTemplateConfig> & Record<string, unknown>, error: string) {
+  expect(validateSubFuseTemplateConfig(validConfig(patch))).toEqual({ ok: false, error });
 }

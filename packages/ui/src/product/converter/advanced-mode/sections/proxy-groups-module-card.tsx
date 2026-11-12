@@ -2,22 +2,22 @@
 
 import * as React from "react";
 import { Check, ChevronDown, ChevronRight, HelpCircle, Pencil, SlidersHorizontal, Trash2, X } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Input } from "@subboost/ui/components/ui/input";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Input } from "@subfuse/ui/components/ui/input";
 import {
   HelpPopover,
-} from "@subboost/ui/components/ui/popover";
-import { Switch } from "@subboost/ui/components/ui/switch";
+} from "@subfuse/ui/components/ui/popover";
+import { Switch } from "@subfuse/ui/components/ui/switch";
 import {
   getEffectiveModuleRuleItems,
   getExcludedModuleRuleIds,
   type HiddenPresetRuleIds,
-} from "@subboost/core/generator/module-rules";
-import type { ProxyGroupModule } from "@subboost/core/generator/proxy-groups";
-import { DEFAULT_LOAD_BALANCE_STRATEGY, type LoadBalanceStrategy } from "@subboost/core/types/config";
-import type { CustomProxyGroup, RuleSetDraft } from "@subboost/ui/store/config-store";
-import { cn } from "@subboost/ui/lib/utils";
+} from "@subfuse/core/generator/module-rules";
+import type { ProxyGroupModule } from "@subfuse/core/generator/proxy-groups";
+import { DEFAULT_LOAD_BALANCE_STRATEGY, type LoadBalanceStrategy } from "@subfuse/core/types/config";
+import type { CustomProxyGroup, RuleSetDraft } from "@subfuse/ui/store/config-store";
+import { cn } from "@subfuse/ui/lib/utils";
 import type {
   CustomRuleListItem,
   ProxyGroupRuleTargetOption,

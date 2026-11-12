@@ -148,7 +148,7 @@ describe("config line tokenizer helpers", () => {
       path: "/x",
       host: "cdn.example.com",
       mode: "packet-up",
-      "xhttp-headers": "User-Agent:SubBoost",
+      "xhttp-headers": "User-Agent:SubFuse",
       "no-grpc-header": "off",
       "sc-max-each-post-bytes": "bad",
       "download-headers": "Accept:yaml",
@@ -161,7 +161,7 @@ describe("config line tokenizer helpers", () => {
         path: "/x",
         host: "cdn.example.com",
         mode: "packet-up",
-        headers: { "User-Agent": "SubBoost" },
+        headers: { "User-Agent": "SubFuse" },
         "no-grpc-header": false,
         "download-settings": {
           headers: { Accept: "yaml" },

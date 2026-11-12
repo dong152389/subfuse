@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@subboost/ui/lib/utils";
+import { cn } from "@subfuse/ui/lib/utils";
 
 export type ProxyGroupSummaryItem = {
   label: string;

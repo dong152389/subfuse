@@ -3,10 +3,10 @@
 import * as React from "react";
 import { LogOut, Network, ServerCog, ShieldCheck } from "lucide-react";
 
-import { Button } from "@subboost/ui/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { useUserStore } from "@subboost/ui/store/user-store";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { useUserStore } from "@subfuse/ui/store/user-store";
 import { UserEmailBindCard } from "@local/components/user-email-bind-card";
 
 export default function SettingsPage() {

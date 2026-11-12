@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Button, type ButtonProps } from "@subboost/ui/components/ui/button";
+import { Button, type ButtonProps } from "@subfuse/ui/components/ui/button";
 
 export interface IconButtonProps extends Omit<ButtonProps, "aria-label" | "size"> {
   label: string;

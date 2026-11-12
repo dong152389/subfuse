@@ -97,7 +97,7 @@ export function resolveGitHubOAuthUrls(
 }
 
 const GITHUB_SETTING_KEY = "github_oauth_config";
-const GITHUB_BIND_TOKEN_ISSUER = "subboost-github-bind";
+const GITHUB_BIND_TOKEN_ISSUER = "subfuse-github-bind";
 
 export type GitHubUserProfile = {
   id: string;
@@ -213,7 +213,7 @@ export async function fetchGitHubUser(code: string, redirectUri: string): Promis
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: "application/vnd.github+json",
-      "User-Agent": "SubBoost-App",
+      "User-Agent": "SubFuse-App",
     },
   });
 
@@ -238,7 +238,7 @@ export async function fetchGitHubUser(code: string, redirectUri: string): Promis
         headers: {
           Authorization: `Bearer ${accessToken}`,
           Accept: "application/vnd.github+json",
-          "User-Agent": "SubBoost-App",
+          "User-Agent": "SubFuse-App",
         },
       });
       if (emailsResponse.ok) {

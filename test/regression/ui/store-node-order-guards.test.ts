@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { ParsedNode } from "@subboost/core/types/node";
-import { createNodeActions } from "@subboost/ui/store/config-store/actions/node-actions";
-import { initialState } from "@subboost/ui/store/config-store/definitions";
-import type { StoreState } from "@subboost/ui/store/config-store/store-types";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { createNodeActions } from "@subfuse/ui/store/config-store/actions/node-actions";
+import { initialState } from "@subfuse/ui/store/config-store/definitions";
+import type { StoreState } from "@subfuse/ui/store/config-store/store-types";
 
 const node = (name: string) =>
   ({

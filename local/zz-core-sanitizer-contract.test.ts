@@ -145,7 +145,7 @@ describe("local shared core sanitizer contract", () => {
       "host-key": ["ssh-ecdsa-nistp256 AAAAC3NzaC1lZDI1NTE5AAAAIA=="],
       "server-fingerprint": SSH_FINGERPRINT,
     });
-    expect(invalidXhttp).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    expect(invalidXhttp).toHaveProperty("_subfuse-invalid-mihomo-node", true);
     expect(isMihomoSupportedProxyNode({ type: "socks4", name: "old" })).toBe(false);
     expect(isMihomoSupportedProxyNode({ type: "ss", cipher: "", password: "secret" })).toBe(false);
     expect(

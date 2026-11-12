@@ -3,7 +3,7 @@ import * as React from "../../../node_modules/react";
 // @ts-expect-error public coverage tests render with the public ReactDOM server runtime.
 import { renderToStaticMarkup } from "../../../node_modules/react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { Subscription } from "@subboost/ui/dashboard/dashboard-types";
+import type { Subscription } from "@subfuse/ui/dashboard/dashboard-types";
 
 const mocks = vi.hoisted(() => ({
   captures: {} as Record<string, any>,
@@ -67,22 +67,22 @@ vi.mock("lucide-react", () => ({
   Shield: () => null,
   Trash2: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", { title: props.title }, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => props.children,
   CardContent: (props: any) => props.children,
   CardHeader: (props: any) => props.children,
   CardTitle: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
-vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
+vi.mock("@subfuse/core/subscription/auto-update-interval", () => ({
   autoUpdateIntervalHoursToSeconds: (hours: number) => Math.round(hours * 3600),
   autoUpdateIntervalSecondsToHours: (seconds: number) => Math.round((seconds / 3600) * 1000) / 1000,
   getAutoUpdateIntervalPolicyMinLabel: (policy: { minHours: number }) => `${policy.minHours} 小时`,
@@ -94,27 +94,27 @@ vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
       typeof override?.requireIntegerHours === "boolean" ? override.requireIntegerHours : true,
   }),
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-stats-cards", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-stats-cards", () => ({
   DashboardStatsCards: (props: any) => {
     mocks.captures.stats = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-format", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-format", () => ({
   formatDashboardDate: (value: string) => `date:${value}`,
   formatIntervalLabel: (seconds: number) => `${seconds / 3600} 小时`,
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-refresh-toast", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-refresh-toast", () => ({
   buildRefreshSubscriptionSuccessToast: mocks.buildRefreshSubscriptionSuccessToast,
 }));
-vi.mock("@subboost/ui/dashboard/subscription-settings-dialog", () => ({
+vi.mock("@subfuse/ui/dashboard/subscription-settings-dialog", () => ({
   SubscriptionSettingsDialog: (props: any) => {
     mocks.captures.settingsDialog = props;
     return null;
   },
 }));
 
-import { SubscriptionDashboardSurface, type DashboardSurfaceAdapter } from "@subboost/ui/dashboard/subscription-dashboard-surface";
+import { SubscriptionDashboardSurface, type DashboardSurfaceAdapter } from "@subfuse/ui/dashboard/subscription-dashboard-surface";
 
 const user = { id: "user-1", isAdmin: false, name: "Alice" };
 

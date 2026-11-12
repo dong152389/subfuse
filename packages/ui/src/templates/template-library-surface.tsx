@@ -3,23 +3,23 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FileCode, Loader2, Plus, Search, Upload } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Input } from "@subboost/ui/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@subboost/ui/components/ui/tabs";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { useUserStore } from "@subboost/ui/store/user-store";
-import { useConfigStore, type SubBoostTemplateConfig } from "@subboost/ui/store/config-store";
-import { builtinIdToType } from "@subboost/core/templates/builtin";
-import { formatDateInBeijing } from "@subboost/core/time/beijing";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@subfuse/ui/components/ui/tabs";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { useUserStore } from "@subfuse/ui/store/user-store";
+import { useConfigStore, type SubFuseTemplateConfig } from "@subfuse/ui/store/config-store";
+import { builtinIdToType } from "@subfuse/core/templates/builtin";
+import { formatDateInBeijing } from "@subfuse/core/time/beijing";
 import {
   ProductInteractionAdapterProvider,
   type ProductInteractionAdapter,
   type ProductTemplateSource,
-} from "@subboost/ui/product/interactions";
-import type { TabValue, Template } from "@subboost/ui/templates/types";
-import { TemplateCard } from "@subboost/ui/templates/template-card";
-import { TemplateUploadDialog } from "@subboost/ui/templates/template-upload-dialog";
+} from "@subfuse/ui/product/interactions";
+import type { TabValue, Template } from "@subfuse/ui/templates/types";
+import { TemplateCard } from "@subfuse/ui/templates/template-card";
+import { TemplateUploadDialog } from "@subfuse/ui/templates/template-upload-dialog";
 
 type TemplateDetail = {
   kind?: string;
@@ -29,7 +29,7 @@ type TemplateDetail = {
 type UploadTemplatePayload = {
   name: string;
   description: string;
-  config: SubBoostTemplateConfig;
+  config: SubFuseTemplateConfig;
   isPublic: boolean;
   isOfficial?: boolean;
 };
@@ -191,7 +191,7 @@ function TemplateLibraryInner({ adapter }: Props) {
 
       if (tpl.kind === "config" && tpl.config && typeof tpl.config === "object") {
         setAppliedTemplateId(templateId);
-        applyTemplateConfig(tpl.config as SubBoostTemplateConfig);
+        applyTemplateConfig(tpl.config as SubFuseTemplateConfig);
         interactions?.templateApplied?.({
           source: getInteractionTemplateSource(activeTab),
           kind: "config",
@@ -297,7 +297,7 @@ function TemplateLibraryInner({ adapter }: Props) {
         name: uploadName,
         description: uploadDescription,
         config: {
-          schema: "subboost-template-config/v1",
+          schema: "subfuse-template-config/v1",
           template,
           enabledProxyGroups,
           hiddenProxyGroups,
@@ -317,7 +317,7 @@ function TemplateLibraryInner({ adapter }: Props) {
           ruleProviderBaseUrl,
           cnIpNoResolve,
           experimentalCnUseCnRuleSet,
-        } satisfies SubBoostTemplateConfig,
+        } satisfies SubFuseTemplateConfig,
         isPublic: allowPublicTemplates ? (uploadAsDefault ? true : uploadIsPublic) : false,
         ...(uploadAsDefault ? { isOfficial: true } : {}),
       });

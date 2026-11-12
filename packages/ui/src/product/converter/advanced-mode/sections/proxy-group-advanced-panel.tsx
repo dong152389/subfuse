@@ -2,29 +2,29 @@
 
 import * as React from "react";
 import { Plus, X } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
-import { ChoiceChip, ChoiceGroup } from "@subboost/ui/components/ui/choice-group";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { cn } from "@subboost/ui/lib/utils";
-import { PROXY_GROUP_MODULES, generateProxyGroups } from "@subboost/core/generator/proxy-groups";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { REGION_PRESETS } from "@subboost/core/proxy-group-advanced";
-import { getProxyGroupMemberKey } from "@subboost/core/proxy-group-targets";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import { getNodeSourceIds } from "@subboost/core/subscription/node-source-state";
-import { isSubscriptionInfoNodeName } from "@subboost/core/subscription/info-node-name";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { ChoiceChip, ChoiceGroup } from "@subfuse/ui/components/ui/choice-group";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { cn } from "@subfuse/ui/lib/utils";
+import { PROXY_GROUP_MODULES, generateProxyGroups } from "@subfuse/core/generator/proxy-groups";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { REGION_PRESETS } from "@subfuse/core/proxy-group-advanced";
+import { getProxyGroupMemberKey } from "@subfuse/core/proxy-group-targets";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import { getNodeSourceIds } from "@subfuse/core/subscription/node-source-state";
+import { isSubscriptionInfoNodeName } from "@subfuse/core/subscription/info-node-name";
 import type {
   CustomProxyGroup,
   NodeRegion,
   ProxyGroupAdvancedConfig,
   ProxyGroupMemberRef,
-} from "@subboost/core/types/config";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+} from "@subfuse/core/types/config";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 import {
   buildAddAllMembersPatch,
   buildRemoveAllMembersPatch,

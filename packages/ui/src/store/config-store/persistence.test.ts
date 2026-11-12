@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_NODE_NAME_FILTER_CONFIG } from "@subboost/core/subscription/node-name-filter";
+import { DEFAULT_NODE_NAME_FILTER_CONFIG } from "@subfuse/core/subscription/node-name-filter";
 import { initialState } from "./definitions";
 import {
   CONFIG_DRAFT_STORAGE_VERSION,
@@ -21,7 +21,7 @@ describe("config store persistence", () => {
       expect(() => storage.setItem("draft", "value")).not.toThrow();
       expect(() => storage.removeItem("draft")).not.toThrow();
       expect(prepareConfigDraftScope(storage, "user-1")).toEqual({
-        storageName: "subboost-config:user:user-1",
+        storageName: "subfuse-config:user:user-1",
         state: {},
       });
     }
@@ -101,7 +101,7 @@ describe("config store persistence", () => {
   });
 
   it("restores the filter only from the current draft envelope", () => {
-    const storageName = "subboost-config:user:user-1";
+    const storageName = "subfuse-config:user:user-1";
     const storage = {
       getItem: (key: string) =>
         key === storageName

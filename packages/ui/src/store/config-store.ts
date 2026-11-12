@@ -39,10 +39,10 @@ export type {
   DialerProxyGroup,
   RuleSetDraft,
   SourceType,
-  SubBoostTemplateConfig,
+  SubFuseTemplateConfig,
   SubscriptionSource,
 } from "./config-store/definitions";
-export type { CustomProxyGroup } from "@subboost/core/types/config";
+export type { CustomProxyGroup } from "@subfuse/core/types/config";
 
 let activeConfigDraftStorageName = CONFIG_DRAFT_GUEST_STORAGE_NAME;
 const configDraftStorage = createSafeConfigDraftStorage();

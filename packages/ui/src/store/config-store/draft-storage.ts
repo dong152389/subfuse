@@ -1,4 +1,4 @@
-export const CONFIG_DRAFT_STORAGE_PREFIX = "subboost-config";
+export const CONFIG_DRAFT_STORAGE_PREFIX = "subfuse-config";
 export const CONFIG_DRAFT_GUEST_STORAGE_NAME = `${CONFIG_DRAFT_STORAGE_PREFIX}:guest`;
 
 export function getConfigDraftStorageNameForUser(userId: string | null | undefined): string {

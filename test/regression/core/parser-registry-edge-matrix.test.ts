@@ -24,7 +24,7 @@ describe("core parser registry edge regressions", () => {
         "- {name: A, type: hysteria2, server: a.example.com, ports: 1000-1002}",
       ].join("\n")),
     ).toBe(true);
-    const missingPort = "# comment\n- {name: A, type: ss, server: local.subboost.test}";
+    const missingPort = "# comment\n- {name: A, type: ss, server: local.subfuse.test}";
     expect(isClashYamlContent(missingPort)).toBe(true);
     expect(parseSubscriptionContentByRegistry(missingPort)).toMatchObject({
       nodes: [], totalFailed: 1, errors: [expect.stringContaining("端口")],

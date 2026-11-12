@@ -46,10 +46,10 @@ vi.mock("react", async (importOriginal) => mockReactModule(await importOriginal<
 vi.mock("../../../node_modules/react/index.js", async (importOriginal) =>
   mockReactModule(await importOriginal<typeof import("react")>())
 );
-vi.mock("@subboost/ui/product/api-adapter", () => ({
+vi.mock("@subfuse/ui/product/api-adapter", () => ({
   useProductApiAdapter: () => mocks.apiAdapter,
 }));
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 
@@ -57,7 +57,7 @@ import {
   getRuleDisplayName,
   replaceRuleProviderBase,
   useRulesLibrarySearch,
-} from "@subboost/ui/product/converter/advanced-mode/sections/proxy-groups-rules-search";
+} from "@subfuse/ui/product/converter/advanced-mode/sections/proxy-groups-rules-search";
 
 function useRunHook(overrides: Record<number, unknown> = {}, options: { runEffects?: boolean; refCurrent?: number } = {}) {
   mocks.state.enabled = true;

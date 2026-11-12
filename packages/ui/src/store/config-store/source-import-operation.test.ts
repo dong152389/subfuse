@@ -5,7 +5,7 @@ import type { SubscriptionSource } from "./definitions";
 it("invalidates imports across editor sessions even when source IDs and content match", () => {
   let revision = 1;
   const guard = new SourceImportOperationGuard(() => revision);
-  const source: SubscriptionSource = { id: "same", type: "url", content: "https://local.subboost.test/sub" };
+  const source: SubscriptionSource = { id: "same", type: "url", content: "https://local.subfuse.test/sub" };
   const single = guard.startSingle(source);
   expect(guard.isSingleCurrent([source], single)).toBe(true);
   revision++;

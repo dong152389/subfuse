@@ -2,7 +2,7 @@
  * DNS 配置生成器
  */
 
-import type { DNSConfig } from "@subboost/core/types/config";
+import type { DNSConfig } from "@subfuse/core/types/config";
 
 export const DEFAULT_DNS_CONFIG: DNSConfig = {
   enable: true,

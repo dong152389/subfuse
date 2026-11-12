@@ -1,5 +1,5 @@
-import type { SubscriptionSource } from "@subboost/ui/store/config-store";
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
+import type { SubscriptionSource } from "@subfuse/ui/store/config-store";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
 
 function normalizeText(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";

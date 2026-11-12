@@ -46,19 +46,19 @@ vi.mock("react/jsx-runtime", async (importOriginal) => {
 });
 
 vi.mock("lucide-react", () => ({ Plus: () => null, X: () => null }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: (props: any) => React.createElement("span", null, props.children) }));
-vi.mock("@subboost/ui/components/ui/button", () => ({ Button: (props: any) => React.createElement("button", null, props.children) }));
-vi.mock("@subboost/ui/components/ui/choice-group", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: (props: any) => React.createElement("span", null, props.children) }));
+vi.mock("@subfuse/ui/components/ui/button", () => ({ Button: (props: any) => React.createElement("button", null, props.children) }));
+vi.mock("@subfuse/ui/components/ui/choice-group", () => ({
   ChoiceChip: (props: any) => React.createElement("button", null, props.children),
   ChoiceGroup: (props: any) => React.createElement("div", null, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: vi.fn() }));
-vi.mock("@subboost/ui/components/ui/form-field", () => ({ FormField: (props: any) => React.createElement("div", null, props.children) }));
-vi.mock("@subboost/ui/components/ui/input", () => ({ Input: () => null }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: vi.fn() }));
+vi.mock("@subfuse/ui/components/ui/form-field", () => ({ FormField: (props: any) => React.createElement("div", null, props.children) }));
+vi.mock("@subfuse/ui/components/ui/input", () => ({ Input: () => null }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "Auto", category: "core", groupType: "url-test", rules: [] },
     { id: "select", name: "Select", category: "core", groupType: "select", rules: [] },

@@ -33,13 +33,13 @@ vi.mock("react", async (importOriginal) => {
   };
 });
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", { className: props.className }, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => props.children,
   DialogContent: (props: any) => {
     mocks.captures.dialogContents.push(props);
@@ -49,19 +49,19 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogTitle: (props: any) => React.createElement("h2", { className: props.className }, props.children),
   DialogFooter: (props: any) => React.createElement("footer", null, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/form-field", () => ({
+vi.mock("@subfuse/ui/components/ui/form-field", () => ({
   FormField: (props: any) => {
     mocks.captures.formFields.push(props);
     return React.createElement("div", null, props.label, props.children, props.error ?? null);
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/switch-field", () => ({
+vi.mock("@subfuse/ui/components/ui/switch-field", () => ({
   SwitchField: (props: any) => {
     mocks.captures.switchFields.push(props);
     return React.createElement("div", null, props.label, props.description ?? null);
@@ -74,8 +74,8 @@ vi.mock("./proxy-group-type-menu", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/store/config-store", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@subboost/ui/store/config-store")>();
+vi.mock("@subfuse/ui/store/config-store", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@subfuse/ui/store/config-store")>();
   return { ...actual, useConfigStore: Object.assign(
     (selector: (state: ReturnType<typeof actual.useConfigStore.getState>) => unknown) => selector(actual.useConfigStore.getState()),
     actual.useConfigStore
@@ -83,7 +83,7 @@ vi.mock("@subboost/ui/store/config-store", async (importOriginal) => {
 });
 
 import { GroupAdvancedSettingsDialog } from "./group-advanced-settings-dialog";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 
 const TARGET = { kind: "module" as const, id: "auto" };
 const CONFLICT_STATE = {
@@ -145,16 +145,16 @@ describe("GroupAdvancedSettingsDialog", () => {
   });
   it("saves the group's test URL and rejects invalid input", () => {
     const onSave = vi.fn();
-    renderDialog({ 0: "url-test", 5: " https://local.subboost.test/204 " }, { onSave });
+    renderDialog({ 0: "url-test", 5: " https://local.subfuse.test/204 " }, { onSave });
     expect(mocks.captures.formFields.some((field) => field.label === "测速地址")).toBe(true);
     mocks.captures.buttons.find((button) => button.children === "保存").onClick();
-    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ testUrl: "https://local.subboost.test/204" }));
-    renderDialog({ 0: "url-test", 5: "ftp://local.subboost.test/204" });
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ testUrl: "https://local.subfuse.test/204" }));
+    renderDialog({ 0: "url-test", 5: "ftp://local.subfuse.test/204" });
     expect(mocks.captures.buttons.find((button) => button.children === "保存").disabled).toBe(true);
-    renderDialog({ 0: "select" }, { testUrl: "https://local.subboost.test/204", onSave });
+    renderDialog({ 0: "select" }, { testUrl: "https://local.subfuse.test/204", onSave });
     expect(mocks.captures.formFields.some((field) => field.label === "测速地址")).toBe(false);
     mocks.captures.buttons.find((button) => button.children === "保存").onClick();
-    expect(onSave).toHaveBeenLastCalledWith(expect.objectContaining({ testUrl: "https://local.subboost.test/204" }));
+    expect(onSave).toHaveBeenLastCalledWith(expect.objectContaining({ testUrl: "https://local.subfuse.test/204" }));
   });
   beforeEach(() => {
     vi.clearAllMocks();

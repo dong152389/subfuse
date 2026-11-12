@@ -50,15 +50,15 @@ vi.mock("lucide-react", () => ({
   Trash2: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: () => null }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: () => null }));
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: vi.fn(async () => true) }));
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: vi.fn(async () => true) }));
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => props.children,
   DropdownMenuContent: (props: any) => props.children,
   DropdownMenuItem: (props: any) => props.children,
@@ -69,22 +69,22 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuSubTrigger: (props: any) => props.children,
   DropdownMenuTrigger: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/icon-button", () => ({ IconButton: () => null }));
-vi.mock("@subboost/ui/components/ui/input", () => ({ Input: () => null }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/icon-button", () => ({ IconButton: () => null }));
+vi.mock("@subfuse/ui/components/ui/input", () => ({ Input: () => null }));
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.captures.switches.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/store/config-store", () => ({
   PRESET_RELAY_NAMES: [],
   useConfigStore: () => mocks.store,
 }));
-vi.mock("@subboost/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [{ id: "auto", name: "Auto" }],
 }));
 vi.mock("../../../packages/ui/src/product/converter/advanced-mode/section-header", () => ({ SectionHeader: () => null }));

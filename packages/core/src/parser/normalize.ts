@@ -1,6 +1,6 @@
-import { buildNodeContentKey } from "@subboost/core/node-identity";
-import { isSubscriptionInfoNodeName } from "@subboost/core/subscription/info-node-name";
-import type { ParsedNode, ParseResult } from "@subboost/core/types/node";
+import { buildNodeContentKey } from "@subfuse/core/node-identity";
+import { isSubscriptionInfoNodeName } from "@subfuse/core/subscription/info-node-name";
+import type { ParsedNode, ParseResult } from "@subfuse/core/types/node";
 import { canonicalizeParsedNode } from "./canonical-fields";
 import {
   CLIENT_UPDATE_PLACEHOLDER_ERROR,

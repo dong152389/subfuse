@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SUBBOOST_THEME_COLOR } from "@subboost/ui/brand";
+import { SUBFUSE_THEME_COLOR } from "@subfuse/ui/brand";
 import {
   applyTheme,
   DEFAULT_THEME,
@@ -147,7 +147,7 @@ describe("theme helpers", () => {
 
     applyTheme("dark");
     expect(root.getAttribute("data-theme")).toBe("dark");
-    expect(meta.getAttribute("content")).toBe(SUBBOOST_THEME_COLOR);
+    expect(meta.getAttribute("content")).toBe(SUBFUSE_THEME_COLOR);
   });
 
   it("applies the theme when the meta tag is missing and falls back to the default theme", () => {

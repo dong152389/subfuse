@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { Layers } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 import { SectionHeader } from "../section-header";
 import { ProxyGroupsCategories } from "./proxy-groups-categories";
 

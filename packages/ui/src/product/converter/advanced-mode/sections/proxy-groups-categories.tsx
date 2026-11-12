@@ -2,32 +2,32 @@
 
 import * as React from "react";
 import { ChevronDown, ChevronRight, RotateCcw } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { Switch } from "@subboost/ui/components/ui/switch";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { Switch } from "@subfuse/ui/components/ui/switch";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@subboost/ui/components/ui/dropdown-menu";
-import { toast } from "@subboost/ui/components/ui/toaster";
+} from "@subfuse/ui/components/ui/dropdown-menu";
+import { toast } from "@subfuse/ui/components/ui/toaster";
 import {
   DEFAULT_LOAD_BALANCE_STRATEGY,
   type ProxyGroupGroupType,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 import {
   CATEGORY_INFO,
   PROXY_GROUP_MODULES,
   generateProxyGroups,
-} from "@subboost/core/generator/proxy-groups";
-import type { EffectiveModuleRuleSource, HiddenPresetRuleIds } from "@subboost/core/generator/module-rules";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
-import { resolveNodeNameFilter } from "@subboost/core/subscription/node-name-filter";
-import { useConfigStore, type RuleSetDraft } from "@subboost/ui/store/config-store";
+} from "@subfuse/core/generator/proxy-groups";
+import type { EffectiveModuleRuleSource, HiddenPresetRuleIds } from "@subfuse/core/generator/module-rules";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
+import { resolveNodeNameFilter } from "@subfuse/core/subscription/node-name-filter";
+import { useConfigStore, type RuleSetDraft } from "@subfuse/ui/store/config-store";
 import {
   buildManualRuleTargets,
   listCustomRulesForTarget,

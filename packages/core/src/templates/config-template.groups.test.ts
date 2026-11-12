@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { validateSubBoostTemplateConfig } from "./config-template";
+import { validateSubFuseTemplateConfig } from "./config-template";
 import { expectInvalid, validConfig } from "./config-template.test-helpers";
 
-describe("validateSubBoostTemplateConfig custom groups", () => {
+describe("validateSubFuseTemplateConfig custom groups", () => {
   it("rejects invalid custom group fields", () => {
     expectInvalid({ customRules: "bad" as never }, "customRules 必须是数组");
     expectInvalid({ customRules: [1 as never] }, "customRules 只能包含对象");
@@ -60,7 +60,7 @@ describe("validateSubBoostTemplateConfig custom groups", () => {
       "customRules.noResolve 必须是布尔值"
     );
 
-    const generatedRuleId = validateSubBoostTemplateConfig(
+    const generatedRuleId = validateSubFuseTemplateConfig(
       validConfig({
         customRules: [
           {
@@ -143,7 +143,7 @@ describe("validateSubBoostTemplateConfig custom groups", () => {
     );
 
     expect(
-      validateSubBoostTemplateConfig(
+      validateSubFuseTemplateConfig(
         validConfig({
           customProxyGroups: [
             {
@@ -203,7 +203,7 @@ describe("validateSubBoostTemplateConfig custom groups", () => {
       "模板配置包含已移除字段: customProxyGroups[0].rules"
     );
 
-    const validCustomGroup = validateSubBoostTemplateConfig(
+    const validCustomGroup = validateSubFuseTemplateConfig(
       validConfig({
         customProxyGroups: [
           {
@@ -227,7 +227,7 @@ describe("validateSubBoostTemplateConfig custom groups", () => {
       strategy: "consistent-hashing",
     });
 
-    const validSelectGroup = validateSubBoostTemplateConfig(
+    const validSelectGroup = validateSubFuseTemplateConfig(
       validConfig({
         customProxyGroups: [
           {

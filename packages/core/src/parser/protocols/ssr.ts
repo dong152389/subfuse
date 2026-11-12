@@ -8,7 +8,7 @@
  */
 
 import { decodeBase64 } from "../base64";
-import type { SSRNode } from "@subboost/core/types/node";
+import type { SSRNode } from "@subfuse/core/types/node";
 import { safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 
 function safeDecodeSsrBase64(value: string): string {

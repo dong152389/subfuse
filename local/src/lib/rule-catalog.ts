@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createRuleCatalogService } from "@subboost/server-core/rules";
+import { createRuleCatalogService } from "@subfuse/server-core/rules";
 
 export const localRuleCatalogService = createRuleCatalogService({
   getGitHubToken: () => process.env.GITHUB_TOKEN,

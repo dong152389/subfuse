@@ -60,7 +60,7 @@ vi.mock("react-remove-scroll-bar", () => ({
   zeroRightClassName: "zero-right",
 }));
 
-vi.mock("@subboost/ui/store/user-store", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({
   useUserStore: () => mocks.userState,
 }));
 

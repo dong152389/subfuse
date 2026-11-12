@@ -3,8 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { useUserStore } from "@subboost/ui/store/user-store";
-import { SUBBOOST_FOOTER_DESCRIPTION } from "@subboost/ui/brand";
+import { useUserStore } from "@subfuse/ui/store/user-store";
+import { SUBFUSE_FOOTER_DESCRIPTION } from "@subfuse/ui/brand";
 
 export type FooterMode = "default" | "local";
 
@@ -27,7 +27,7 @@ type FooterProps = {
   resourceLinks?: FooterLink[];
 };
 
-const sourceRepositoryUrl = "https://github.com/SubBoost/subboost";
+const sourceRepositoryUrl = "https://github.com/dong152389/subfuse";
 
 const defaultBrandLinks: FooterLink[] = [
   {
@@ -123,13 +123,13 @@ function buildDefaultHelpLinks(mode: FooterMode): FooterLink[] {
     return [
       { href: sourceRepositoryUrl, label: "开源仓库", external: true },
       { href: "https://ryanvan.com/t/topic/59?u=ryan", label: "配置教程", external: true },
-      { href: "https://subboost.org/faq", label: "常见问题", external: true },
+      { href: "https://subfuse.org/faq", label: "常见问题", external: true },
     ];
   }
   return [
     { href: sourceRepositoryUrl, label: "开源仓库", external: true },
     { href: "https://ryanvan.com/t/topic/59?u=ryan", label: "配置教程", external: true },
-    { href: "https://subboost.org/terms", label: "服务条款", external: true },
+    { href: "https://subfuse.org/terms", label: "服务条款", external: true },
   ];
 }
 
@@ -161,14 +161,14 @@ export function Footer({
             <div className="flex items-center gap-2">
               <Image
                 src="/logo.png"
-                alt="SubBoost"
+                alt="SubFuse"
                 width={32}
                 height={32}
                 className="rounded-xl shadow-lg shadow-blue-500/25"
               />
-              <span className="font-semibold text-fg">SubBoost</span>
+              <span className="font-semibold text-fg">SubFuse</span>
             </div>
-            <p className="text-sm leading-relaxed text-fg-50">{SUBBOOST_FOOTER_DESCRIPTION}</p>
+            <p className="text-sm leading-relaxed text-fg-50">{SUBFUSE_FOOTER_DESCRIPTION}</p>
             {brandLinks.length > 0 && (
               <div className="flex items-center gap-4">
                 {brandLinks.map((link) => (
@@ -224,7 +224,7 @@ export function Footer({
 
         <div className="mt-8 border-t border-ink/5 pt-6">
           <p className="text-center text-xs text-fg-40">
-            Powered by SubBoost{buildVersion ? ` | v ${buildVersion}` : ""}
+            Powered by SubFuse{buildVersion ? ` | v ${buildVersion}` : ""}
           </p>
         </div>
       </div>

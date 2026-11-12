@@ -1,7 +1,7 @@
 import {
   resolveClientProfileUpdateIntervalSeconds,
   type SubscriptionResponseInfo,
-} from "@subboost/core/subscription/subscription-response-info";
+} from "@subfuse/core/subscription/subscription-response-info";
 
 type BuildSubscriptionResponseHeadersOptions = {
   cacheControl?: string;

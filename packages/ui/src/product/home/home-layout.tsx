@@ -12,20 +12,20 @@ import {
   Upload,
   Zap,
 } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@subboost/ui/components/ui/tabs";
-import { QuickMode } from "@subboost/ui/product/converter/quick-mode";
-import { AdvancedMode } from "@subboost/ui/product/converter/advanced-mode";
-import { UnsavedPrompt } from "@subboost/ui/product/home/unsaved-prompt";
-import { VisualGraph } from "@subboost/ui/product/preview/visual-graph";
-import { YamlHighlight } from "@subboost/ui/product/preview/diff-highlight";
-import { SubscriptionLinkDialog } from "@subboost/ui/product/home/subscription-link-dialog";
-import { artisticTabsIconClassName, artisticTabsListClassName, artisticTabsTriggerClassName } from "@subboost/ui/components/ui/artistic-nav";
-import { useProductInteractionAdapter, type ProductMode } from "@subboost/ui/product/interactions";
-import { cn } from "@subboost/ui/lib/utils";
-import type { User } from "@subboost/ui/store/user-store";
-import type { AutoUpdateIntervalPolicy } from "@subboost/core/subscription/auto-update-interval";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@subfuse/ui/components/ui/tabs";
+import { QuickMode } from "@subfuse/ui/product/converter/quick-mode";
+import { AdvancedMode } from "@subfuse/ui/product/converter/advanced-mode";
+import { UnsavedPrompt } from "@subfuse/ui/product/home/unsaved-prompt";
+import { VisualGraph } from "@subfuse/ui/product/preview/visual-graph";
+import { YamlHighlight } from "@subfuse/ui/product/preview/diff-highlight";
+import { SubscriptionLinkDialog } from "@subfuse/ui/product/home/subscription-link-dialog";
+import { artisticTabsIconClassName, artisticTabsListClassName, artisticTabsTriggerClassName } from "@subfuse/ui/components/ui/artistic-nav";
+import { useProductInteractionAdapter, type ProductMode } from "@subfuse/ui/product/interactions";
+import { cn } from "@subfuse/ui/lib/utils";
+import type { User } from "@subfuse/ui/store/user-store";
+import type { AutoUpdateIntervalPolicy } from "@subfuse/core/subscription/auto-update-interval";
 
 type EditingSubscription = {
   id: string;
@@ -137,7 +137,7 @@ export function HomeLayout({
       <div className="text-center mb-2 lg:mb-3 [@media(max-height:1000px)]:mb-1.5">
         <h1 className="font-bold leading-[1.08] mb-1 text-[clamp(1.25rem,2vw,2rem)] [@media(max-height:1000px)]:text-[clamp(1.25rem,1.7vw,1.75rem)]">
           <span className="bg-gradient-to-r from-heading-from via-heading-from to-heading-to bg-clip-text text-transparent">
-            SubBoost
+            SubFuse
           </span>
         </h1>
         <p className="text-fg-50 max-w-2xl mx-auto leading-snug text-[clamp(0.75rem,1vw,0.95rem)] [@media(max-height:1000px)]:text-[0.875rem]">

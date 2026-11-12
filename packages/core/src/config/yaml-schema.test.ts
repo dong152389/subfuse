@@ -87,8 +87,8 @@ describe("Mihomo YAML schema", () => {
   });
 
   it.each<[string, unknown]>([
-    ["dns:\n  nameserver: [local.subboost.test\n, 127.0.0.1\n]\n", { dns: { nameserver: ["local.subboost.test", "127.0.0.1"] } }],
-    ["dns:\n  nameserver: [\n    local.subboost.test,\n    127.0.0.1\n  ]\n", { dns: { nameserver: ["local.subboost.test", "127.0.0.1"] } }],
+    ["dns:\n  nameserver: [local.subfuse.test\n, 127.0.0.1\n]\n", { dns: { nameserver: ["local.subfuse.test", "127.0.0.1"] } }],
+    ["dns:\n  nameserver: [\n    local.subfuse.test,\n    127.0.0.1\n  ]\n", { dns: { nameserver: ["local.subfuse.test", "127.0.0.1"] } }],
     ["sniffer:\n  sniff:\n    TLS: {ports: [443, 8443],\noverride-destination: true}\n", { sniffer: { sniff: { TLS: { ports: [443, 8443], "override-destination": true } } } }],
   ])("preserves previously accepted multiline flow indentation: %j", (source, expected) => {
     expect(loadMihomoYaml(source)).toEqual(expected);
@@ -100,13 +100,13 @@ describe("Mihomo YAML schema", () => {
     expect(loadMihomoYaml([
       'double: "a \\"quote\\" [#], b"',
       "single: 'don''t [change], # text'",
-      'plain: https://local.subboost.test/a[b#c',
+      'plain: https://local.subfuse.test/a[b#c',
       'quoted-key: {"list": [one, # ] } must remain a comment',
       'two]}',
       flowRepair,
     ].join("\n"))).toEqual({
       double: 'a "quote" [#], b', single: "don't [change], # text",
-      plain: "https://local.subboost.test/a[b#c", "quoted-key": { list: ["one", "two"] },
+      plain: "https://local.subfuse.test/a[b#c", "quoted-key": { list: ["one", "two"] },
       dns: { nameserver: ["one", "two"] },
     });
   });

@@ -1,4 +1,4 @@
-import type { AutoUpdateIntervalPolicyOverride } from "@subboost/core/subscription/auto-update-interval";
+import type { AutoUpdateIntervalPolicyOverride } from "@subfuse/core/subscription/auto-update-interval";
 
 export const LOCAL_AUTO_UPDATE_DEFAULT_HOURS = 12;
 export const LOCAL_AUTO_UPDATE_MIN_HOURS = 0.1;

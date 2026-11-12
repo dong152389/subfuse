@@ -10,7 +10,7 @@ const uuid = "11111111-1111-4111-8111-111111111111";
 const publicKey = "A".repeat(43);
 const defaultReuse = { "max-connections": "3", "h-max-request-times": "600-900", "h-max-reusable-secs": "1800-3000" };
 const uri = (extra: unknown, query = "security=tls") =>
-  `vless://${uuid}@local.subboost.test:443?type=xhttp&${query}&extra=${encodeURIComponent(JSON.stringify(extra))}`;
+  `vless://${uuid}@local.subfuse.test:443?type=xhttp&${query}&extra=${encodeURIComponent(JSON.stringify(extra))}`;
 function output(node: VLESSNode): VLESSNode {
   return (yaml.load(generateClashYaml({ nodes: [node], userConfig: { dnsYaml: "" } })) as { proxies: VLESSNode[] }).proxies[0];
 }
@@ -29,10 +29,10 @@ describe("XHTTP share-link extra", () => {
       xmux: { maxConcurrency: 0, maxConnections: "2-4", cMaxReuseTimes: 0, hMaxRequestTimes: "600-900", hMaxReusableSecs: "1800-3000", hKeepAlivePeriod: -1 },
       noSSEHeader: true,
     };
-    const parsed = parseVLESS(uri(extra, "security=tls&path=/upload&host=local.subboost.test&mode=packet-up"));
+    const parsed = parseVLESS(uri(extra, "security=tls&path=/upload&host=local.subfuse.test&mode=packet-up"));
     const opts = output(parsed)["xhttp-opts"]!;
     expect(opts).toEqual({
-      path: "/upload", host: "local.subboost.test", mode: "packet-up",
+      path: "/upload", host: "local.subfuse.test", mode: "packet-up",
       headers: { "X-Test": "a%2Fb+value" }, "no-grpc-header": false,
       "x-padding-bytes": "100-200", "x-padding-obfs-mode": true, "x-padding-key": "padding",
       "x-padding-header": "X-Pad", "x-padding-placement": "header", "x-padding-method": "tokenish",
@@ -50,7 +50,7 @@ describe("XHTTP share-link extra", () => {
     expect(output(node)["xhttp-opts"]).toMatchObject({ "no-grpc-header": false,
       "sc-max-each-post-bytes": "200-300", "reuse-settings": { "max-connections": "0", "h-keep-alive-period": -1 } });
     expect(parseVLESS(uri({}))["xhttp-opts"]).toMatchObject({ path: "/", "session-table": "uuid", "reuse-settings": defaultReuse });
-    expect(parseVLESS(`vless://${uuid}@local.subboost.test:443?type=xhttp`)["xhttp-opts"]).toEqual({ path: "/" });
+    expect(parseVLESS(`vless://${uuid}@local.subfuse.test:443?type=xhttp`)["xhttp-opts"]).toEqual({ path: "/" });
   });
 
   it.each([null, [], "text", 1])("rejects non-object extra %j", extra => {
@@ -92,11 +92,11 @@ describe("XHTTP share-link extra", () => {
     expect(output(parseVLESS(uri({ uplinkDataKey: "custom" }, "mode=packet-up&uplinkDataPlacement=cookie")))["xhttp-opts"]!["uplink-data-key"]).toBe("custom");
   });
   it("rejects broken JSON, invalid mode, and non-string extra headers", () => {
-    const base = `vless://${uuid}@local.subboost.test:443?type=xhttp&extra=`;
+    const base = `vless://${uuid}@local.subfuse.test:443?type=xhttp&extra=`;
     expect(() => parseVLESS(base + "%7B")).toThrow(/JSON/);
     expect(() => parseVLESS(uri({}, "mode=broken"))).toThrow(/mode/);
     expect(() => parseVLESS(uri({ headers: { nested: {} } }))).toThrow(/headers/);
-    expect(() => parseVLESS(uri({ headers: { hOsT: "local.subboost.test" } }))).toThrow(/Host/);
+    expect(() => parseVLESS(uri({ headers: { hOsT: "local.subfuse.test" } }))).toThrow(/Host/);
     expect(() => parseVLESS(uri({ xPaddingBytes: "1".repeat(100000) }))).toThrow(/范围/);
   });
   it.each([
@@ -122,7 +122,7 @@ describe("XHTTP share-link extra", () => {
   ])("does not emit invalid canonical YAML options %j", options => {
     const node = parseVLESS(uri({}));
     node["xhttp-opts"] = options as unknown as VLESSNode["xhttp-opts"];
-    expect(sanitizeMihomoProxyNode(node)).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    expect(sanitizeMihomoProxyNode(node)).toHaveProperty("_subfuse-invalid-mihomo-node", true);
     expect((yaml.load(generateClashYaml({ nodes: [node] })) as { proxies: unknown[] | null }).proxies ?? []).toEqual([]);
   });
 });
@@ -132,7 +132,7 @@ describe("XHTTP independent download settings", () => {
   it.each(["tls", "none"])("does not inherit uplink Reality, SNI, ALPN or headers for %s", security => {
     const main = parseVLESS(uri({ headers: { "X-Up": "up" }, xmux: { maxConnections: 3 },
       downloadSettings: { ...download, security } },
-      `security=reality&pbk=${publicKey}&sni=local.subboost.test&fp=firefox&alpn=h2&path=/upload&host=local.subboost.test&allowInsecure=1`));
+      `security=reality&pbk=${publicKey}&sni=local.subfuse.test&fp=firefox&alpn=h2&path=/upload&host=local.subfuse.test&allowInsecure=1`));
     const down = output(main)["xhttp-opts"]!["download-settings"]!;
     expect(down).toEqual({ server: "203.0.113.2", port: 8443, tls: security === "tls",
       servername: "", "client-fingerprint": "", "skip-cert-verify": false, alpn: [],
@@ -140,17 +140,17 @@ describe("XHTTP independent download settings", () => {
   });
   it("maps independent TLS settings and nested extra headers/reuse", () => {
     const main = parseVLESS(uri({ downloadSettings: { ...download, security: "tls",
-      tlsSettings: { serverName: "local.subboost.test", fingerprint: "firefox", alpn: ["h2"], allowInsecure: false },
+      tlsSettings: { serverName: "local.subfuse.test", fingerprint: "firefox", alpn: ["h2"], allowInsecure: false },
       xhttpSettings: { path: "/down", headers: { Ignored: "outer" }, extra: { headers: { "X-Down": "value" }, xmux: { maxConnections: 2 } } } } }));
     expect(output(main)["xhttp-opts"]!["download-settings"]).toMatchObject({ server: "203.0.113.2", port: 8443,
-      tls: true, servername: "local.subboost.test", "client-fingerprint": "firefox", alpn: ["h2"],
+      tls: true, servername: "local.subfuse.test", "client-fingerprint": "firefox", alpn: ["h2"],
       "skip-cert-verify": false, path: "/down", headers: { "X-Down": "value" }, "reuse-settings": { "max-connections": "2" } });
   });
   it("maps independent Reality from its own security object and preserves false", () => {
     const main = parseVLESS(uri({ downloadSettings: { ...download, security: "reality",
-      realitySettings: { password: publicKey, publicKey: "invalid-unused-key", shortId: "01ab", serverName: "local.subboost.test", fingerprint: "chrome", "support-x25519mlkem768": false },
+      realitySettings: { password: publicKey, publicKey: "invalid-unused-key", shortId: "01ab", serverName: "local.subfuse.test", fingerprint: "chrome", "support-x25519mlkem768": false },
       tlsSettings: { serverName: "ignored" } } }));
-    expect(output(main)["xhttp-opts"]!["download-settings"]).toMatchObject({ tls: true, servername: "local.subboost.test", "client-fingerprint": "chrome",
+    expect(output(main)["xhttp-opts"]!["download-settings"]).toMatchObject({ tls: true, servername: "local.subfuse.test", "client-fingerprint": "chrome",
       "reality-opts": { "public-key": publicKey, "short-id": "01ab", "support-x25519mlkem768": false } });
   });
   it("preserves canonical YAML inheritance, explicit clearing, and independent Reality", () => {
@@ -177,10 +177,10 @@ describe("XHTTP independent download settings", () => {
     for (const value of bad) expect(() => parseVLESS(uri({ downloadSettings: value }))).toThrow(/XHTTP/);
     expect(() => parseVLESS(uri({ downloadSettings: download }, "mode=stream-one"))).toThrow(/stream-one/);
     expect(() => parseVLESS(uri({ xPaddingBytes: "100-200", downloadSettings: download }))).toThrow(/下行独立/);
-    expect(sanitizeMihomoProxyNode({ type: "vless", network: "xhttp", "xhttp-opts": { mode: "bad" } })).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    expect(sanitizeMihomoProxyNode({ type: "vless", network: "xhttp", "xhttp-opts": { mode: "bad" } })).toHaveProperty("_subfuse-invalid-mihomo-node", true);
   });
   it.each(["pinnedPeerCertSha256", "verifyPeerCertByName", "minVersion", "maxVersion", "cipherSuites", "curvePreferences", "echSockopt", "useSystemCA"])("does not drop independent TLS constraint %s", key => {
-    const values: Record<string, unknown> = { pinnedPeerCertSha256: "ab".repeat(32), verifyPeerCertByName: "local.subboost.test", curvePreferences: ["X25519"], echSockopt: {}, useSystemCA: true };
+    const values: Record<string, unknown> = { pinnedPeerCertSha256: "ab".repeat(32), verifyPeerCertByName: "local.subfuse.test", curvePreferences: ["X25519"], echSockopt: {}, useSystemCA: true };
     expect(() => parseVLESS(uri({ downloadSettings: { ...download, security: "tls", tlsSettings: { [key]: values[key] ?? "1.3" } } }))).toThrow(key);
   });
   it("accepts a decimal string port and equivalent scalar/range defaults", () => {
@@ -211,7 +211,7 @@ describe("XHTTP independent download settings", () => {
   });
   it("supports the standalone downloadSettings query and equivalent cookie session keys", () => {
     const source = { ...download, network: "splithttp", security: "", splithttpSettings: { path: "", sessionIDPlacement: "cookie", sessionIDKey: "x_session" } };
-    const node = parseVLESS(`vless://${uuid}@local.subboost.test:443?type=xhttp&sessionIDPlacement=cookie&downloadSettings=${encodeURIComponent(JSON.stringify(source))}`);
+    const node = parseVLESS(`vless://${uuid}@local.subfuse.test:443?type=xhttp&sessionIDPlacement=cookie&downloadSettings=${encodeURIComponent(JSON.stringify(source))}`);
     expect(output(node)["xhttp-opts"]!["download-settings"]).toMatchObject({ path: "/", tls: false, server: "203.0.113.2" });
   });
 });

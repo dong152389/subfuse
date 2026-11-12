@@ -1,17 +1,17 @@
 import * as React from "react";
 import { Globe, Heart, Loader2 } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Input } from "@subboost/ui/components/ui/input";
-import { Card } from "@subboost/ui/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@subboost/ui/components/ui/dialog";
-import { cn } from "@subboost/ui/lib/utils";
-import { useConfigStore, type SubBoostTemplateConfig } from "@subboost/ui/store/config-store";
-import type { TemplateType } from "@subboost/core/types/config";
-import { useUserStore } from "@subboost/ui/store/user-store";
-import { BUILTIN_TEMPLATE_IDS } from "@subboost/core/templates/builtin";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { useProductApiAdapter } from "@subboost/ui/product/api-adapter";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { Card } from "@subfuse/ui/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@subfuse/ui/components/ui/dialog";
+import { cn } from "@subfuse/ui/lib/utils";
+import { useConfigStore, type SubFuseTemplateConfig } from "@subfuse/ui/store/config-store";
+import type { TemplateType } from "@subfuse/core/types/config";
+import { useUserStore } from "@subfuse/ui/store/user-store";
+import { BUILTIN_TEMPLATE_IDS } from "@subfuse/core/templates/builtin";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { useProductApiAdapter } from "@subfuse/ui/product/api-adapter";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
 import { templates } from "./constants";
 
 export function TemplatesSection() {
@@ -155,7 +155,7 @@ export function TemplatesSection() {
 
       if (tpl.kind === "config" && tpl.config && typeof tpl.config === "object") {
         setAppliedTemplateId(id);
-        applyTemplateConfig(tpl.config as SubBoostTemplateConfig);
+        applyTemplateConfig(tpl.config as SubFuseTemplateConfig);
         setCatalogOpen(false);
         setCatalogSearch("");
         interactions.templateApplied?.({

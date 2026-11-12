@@ -9,7 +9,7 @@ import { parseSubscriptionContentByRegistry } from "./content-parsers";
 import { normalizeParseResult } from "./normalize";
 import { preprocessSubscriptionContent } from "./preprocess";
 import { parseNodeLink } from "./parse-node-link";
-import type { ParseResult } from "@subboost/core/types/node";
+import type { ParseResult } from "@subfuse/core/types/node";
 
 function finalizeParseResult(result: ParseResult, priorErrors: string[] = []): ParseResult {
   return normalizeParseResult(result, priorErrors);

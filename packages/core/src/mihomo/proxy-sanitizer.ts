@@ -1,5 +1,5 @@
-import type { ParsedNode } from "@subboost/core/types/node";
-import { splitWsPathEarlyData } from "@subboost/core/parser/ws-early-data";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { splitWsPathEarlyData } from "@subfuse/core/parser/ws-early-data";
 import { isMihomoEchQueryServerName, isStandardBase64String } from "./ech";
 import { isRealityPublicKey, normalizeRealityShortId } from "./reality";
 import { isVlessMlkemEncryption } from "./vless-encryption";
@@ -28,7 +28,7 @@ const BOOLEAN_PROXY_FIELDS = new Set([
 const CLIENT_FINGERPRINT_PROXY_TYPES = new Set(["vmess", "vless", "trojan", "anytls", "trusttunnel"]);
 const CLIENT_FINGERPRINT_ALIASES = new Set(["chrome", "firefox", "safari", "ios", "android", "edge", "random", "none"]);
 const UNSUPPORTED_MIHOMO_PROXY_TYPES = new Set(["socks4", "h2-connect", "trust-tunnel", "external"]);
-const INVALID_MIHOMO_NODE_FLAG = "_subboost-invalid-mihomo-node";
+const INVALID_MIHOMO_NODE_FLAG = "_subfuse-invalid-mihomo-node";
 const REQUIRED_STRING_FIELDS_BY_TYPE: Record<string, string[]> = {
   ss: ["cipher", "password"],
   ssr: ["cipher", "password", "protocol", "obfs"],

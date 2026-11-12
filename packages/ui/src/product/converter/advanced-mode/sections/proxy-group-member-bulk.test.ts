@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ProxyGroupMemberRef } from "@subboost/core/types/config";
+import type { ProxyGroupMemberRef } from "@subfuse/core/types/config";
 import {
   buildAddAllMembersPatch,
   buildRemoveAllMembersPatch,

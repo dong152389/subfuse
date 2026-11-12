@@ -1,5 +1,5 @@
-import { detectRuleContent } from "@subboost/core/rules/rule-content-detection";
-import { parseRuleSetUrl } from "@subboost/core/rules/rule-model";
+import { detectRuleContent } from "@subfuse/core/rules/rule-content-detection";
+import { parseRuleSetUrl } from "@subfuse/core/rules/rule-model";
 import { readJsonBody } from "../http";
 
 /** Shells authenticate/rate-limit first and supply their existing guarded transport. */

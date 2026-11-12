@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import { compareSubscriptionSnapshots, createSubscriptionRequestBudget, hasUsableSubscriptionSnapshot } from "./snapshot-comparison";
 
 const node = (extra: Record<string, unknown> = {}): ParsedNode => ({
-  name: "demo", type: "anytls", server: "local.subboost.test", port: 443, password: "secret", ...extra,
+  name: "demo", type: "anytls", server: "local.subfuse.test", port: 443, password: "secret", ...extra,
 } as ParsedNode);
 const snapshot = (nodes: ParsedNode[], errors: string[] = []) => ({ nodes, errors });
 
@@ -26,7 +26,7 @@ describe("subscription snapshot comparison", () => {
   it("diagnoses credential conflicts without exposing values or combining snapshots", () => {
     const result = compareSubscriptionSnapshots(snapshot([node()]), snapshot([node({ password: "different-secret" })]));
     expect(result).toMatchObject({ relation: "field-conflict", conflictingNodeCount: 1, selected: "current" });
-    expect(JSON.stringify(result)).not.toMatch(/secret|local\.subboost|demo/);
+    expect(JSON.stringify(result)).not.toMatch(/secret|local\.subfuse|demo/);
   });
 
   it("diagnoses disjoint sets with deterministic snapshot selection", () => {
@@ -35,8 +35,8 @@ describe("subscription snapshot comparison", () => {
   });
 
   it("does not use one enriched node as proof for two distinct nodes", () => {
-    const separate = snapshot([node({ sni: "local.subboost.test" }), node({ alpn: ["h2"] })]);
-    const combined = snapshot([node({ sni: "local.subboost.test", alpn: ["h2"] })]);
+    const separate = snapshot([node({ sni: "local.subfuse.test" }), node({ alpn: ["h2"] })]);
+    const combined = snapshot([node({ sni: "local.subfuse.test", alpn: ["h2"] })]);
     expect(compareSubscriptionSnapshots(separate, combined).relation).toBe("divergent");
   });
 
@@ -47,7 +47,7 @@ describe("subscription snapshot comparison", () => {
   it("compares nested peer fields and preserves header names as runtime information", () => {
     const key = "A".repeat(43) + "=";
     const wg = (allowed = false) => node({ type: "wireguard", server: undefined, port: undefined,
-      "private-key": key, peers: [{ server: "local.subboost.test", port: 443, "public-key": key,
+      "private-key": key, peers: [{ server: "local.subfuse.test", port: 443, "public-key": key,
         ...(allowed ? { "allowed-ips": ["0.0.0.0/0"] } : {}) }] });
     expect(compareSubscriptionSnapshots(snapshot([wg()]), snapshot([wg(true)]))).toMatchObject({ relation: "next-superset", selected: "next" });
     expect(compareSubscriptionSnapshots(snapshot([node({ headers: { name: "one" } })]), snapshot([node({ headers: { name: "two" } })]))).toMatchObject({ relation: "field-conflict" });

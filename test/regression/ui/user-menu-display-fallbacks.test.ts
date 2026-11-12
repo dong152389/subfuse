@@ -31,10 +31,10 @@ vi.mock("lucide-react", () => ({
   Shield: () => null,
   User: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: ({ asChild: _asChild, ...props }: any) => React.createElement("button", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => React.createElement("div", null, props.children),
   DropdownMenuContent: ({ align: _align, ...props }: any) => React.createElement("div", props, props.children),
   DropdownMenuItem: ({ asChild: _asChild, ...props }: any) => React.createElement("div", props, props.children),
@@ -42,17 +42,17 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuSeparator: (props: any) => React.createElement("hr", props),
   DropdownMenuTrigger: ({ asChild: _asChild, ...props }: any) => React.createElement("div", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/safe-image", () => ({
+vi.mock("@subfuse/ui/components/ui/safe-image", () => ({
   SafeImage: (props: any) => {
     mocks.images.push(props);
     return React.createElement("span", null, props.alt, props.fallback);
   },
 }));
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({ captureAuthConfigHandoff: vi.fn() }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({ captureAuthConfigHandoff: vi.fn() }));
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: Object.assign(vi.fn(), { getState: vi.fn(() => ({})) }),
 }));
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.userState }));
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.userState }));
 
 import { UserMenu } from "../../../packages/ui/src/components/auth/user-menu";
 

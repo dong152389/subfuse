@@ -64,33 +64,33 @@ vi.mock("next/link", () => ({
 vi.mock("lucide-react", () => ({
   Loader2: () => React.createElement("span", null, "loading"),
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: Record<string, any>) => {
     harness.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/form-field", () => ({
+vi.mock("@subfuse/ui/components/ui/form-field", () => ({
   FormField: ({ children }: React.PropsWithChildren) => React.createElement("label", null, children),
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: Record<string, any>) => {
     harness.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/password-field", () => ({
+vi.mock("@subfuse/ui/components/ui/password-field", () => ({
   PasswordField: ({ label: _label, description: _description, ...props }: Record<string, any>) => {
     harness.inputs.push(props);
     return React.createElement("input", { ...props, type: "password" });
   },
 }));
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({
   hasAuthConfigHandoff: vi.fn(() => false),
 }));
 
 import { LocalLogin } from "../../../local/src/components/local-login";
-import { hasAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
+import { hasAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
 
 function response(body: unknown, ok = true) {
   return {

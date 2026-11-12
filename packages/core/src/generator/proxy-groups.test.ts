@@ -7,8 +7,8 @@ import {
   getGroupTarget,
   getModulesForTemplate,
 } from "./proxy-groups";
-import type { CustomProxyGroup } from "@subboost/core/types/config";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { CustomProxyGroup } from "@subfuse/core/types/config";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function node(name: string): ParsedNode {
   return {
@@ -35,18 +35,18 @@ describe("proxy group generator", () => {
   it("uses per-group test URLs only for automatic testing", () => {
     const groups = generateProxyGroups({
       nodes: [node("A")], enabledModules: ["select", "auto", "ai"],
-      ruleProviderBaseUrl: "https://local.subboost.test/rules", testUrl: "https://local.subboost.test/default", testInterval: 60,
-      proxyGroupAdvanced: { auto: { testUrl: "https://local.subboost.test/auto" }, ai: { testUrl: "https://local.subboost.test/ignored" } },
+      ruleProviderBaseUrl: "https://local.subfuse.test/rules", testUrl: "https://local.subfuse.test/default", testInterval: 60,
+      proxyGroupAdvanced: { auto: { testUrl: "https://local.subfuse.test/auto" }, ai: { testUrl: "https://local.subfuse.test/ignored" } },
       customProxyGroups: [
-        { ...customGroup("url", "url-test"), advanced: { testUrl: "https://local.subboost.test/custom" } },
-        { ...customGroup("filtered", "url-test"), memberSource: "filtered-nodes", advanced: { testUrl: "https://local.subboost.test/filtered" } },
-        { ...customGroup("fallback", "fallback"), advanced: { testUrl: "https://local.subboost.test/ignored" } },
+        { ...customGroup("url", "url-test"), advanced: { testUrl: "https://local.subfuse.test/custom" } },
+        { ...customGroup("filtered", "url-test"), memberSource: "filtered-nodes", advanced: { testUrl: "https://local.subfuse.test/filtered" } },
+        { ...customGroup("fallback", "fallback"), advanced: { testUrl: "https://local.subfuse.test/ignored" } },
       ],
     });
-    expect(groups.find((group) => group.name === "⚡ 自动选择")?.url).toBe("https://local.subboost.test/auto");
-    expect(groups.find((group) => group.name === "Custom url")?.url).toBe("https://local.subboost.test/custom");
-    expect(groups.find((group) => group.name === "Custom filtered")?.url).toBe("https://local.subboost.test/filtered");
-    expect(groups.find((group) => group.name === "Custom fallback")?.url).toBe("https://local.subboost.test/default");
+    expect(groups.find((group) => group.name === "⚡ 自动选择")?.url).toBe("https://local.subfuse.test/auto");
+    expect(groups.find((group) => group.name === "Custom url")?.url).toBe("https://local.subfuse.test/custom");
+    expect(groups.find((group) => group.name === "Custom filtered")?.url).toBe("https://local.subfuse.test/filtered");
+    expect(groups.find((group) => group.name === "Custom fallback")?.url).toBe("https://local.subfuse.test/default");
     expect(groups.filter((group) => group.type === "select").every((group) => group.url === undefined)).toBe(true);
   });
   it("generates module, custom, advanced-filtered, and provider-backed groups", () => {

@@ -1,6 +1,6 @@
-# Contributing to SubBoost
+# Contributing to SubFuse
 
-Thanks for helping improve SubBoost.
+Thanks for helping improve SubFuse.
 
 ## Issues and Pull Requests
 
@@ -20,7 +20,7 @@ Do not add secrets, personal configuration, deployment credentials, private keys
 
 By submitting a pull request, you confirm that you have the right to submit the contribution.
 
-Your contribution is licensed to the public under the repository license, AGPL-3.0-only. In addition, you grant SubBoost maintainers a perpetual, worldwide, non-exclusive, royalty-free, irrevocable, sublicensable license to use, reproduce, modify, distribute, publicly perform, publicly display, and create derivative works from your contribution for proprietary distributions, hosted services, and other SubBoost services.
+Your contribution is licensed to the public under the repository license, AGPL-3.0-only. In addition, you grant SubFuse maintainers a perpetual, worldwide, non-exclusive, royalty-free, irrevocable, sublicensable license to use, reproduce, modify, distribute, publicly perform, publicly display, and create derivative works from your contribution for proprietary distributions, hosted services, and other SubFuse services.
 
 ## Local Checks
 

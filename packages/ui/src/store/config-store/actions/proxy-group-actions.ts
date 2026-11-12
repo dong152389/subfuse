@@ -2,11 +2,11 @@ import {
   type CustomProxyGroup,
   type CustomRuleSet,
   type ProxyGroupTargetRef,
-} from "@subboost/core/types/config";
-import { normalizeProxyGroupAdvancedConfig } from "@subboost/core/proxy-group-advanced";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { getModuleRuleOrderKey, isPresetModuleRule } from "@subboost/core/generator/module-rules";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
+} from "@subfuse/core/types/config";
+import { normalizeProxyGroupAdvancedConfig } from "@subfuse/core/proxy-group-advanced";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { getModuleRuleOrderKey, isPresetModuleRule } from "@subfuse/core/generator/module-rules";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
 import type { ConfigActions, RuleSetDraft } from "../definitions";
 import type { GetState, SetAndGenerateConfig, SetState } from "../store-types";
 import {

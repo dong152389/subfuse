@@ -4,10 +4,10 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@subboost/core": ["../core/src/index.ts"],
-      "@subboost/core/*": ["../core/src/*"],
-      "@subboost/ui": ["./src/index.ts"],
-      "@subboost/ui/*": ["./src/*"]
+      "@subfuse/core": ["../core/src/index.ts"],
+      "@subfuse/core/*": ["../core/src/*"],
+      "@subfuse/ui": ["./src/index.ts"],
+      "@subfuse/ui/*": ["./src/*"]
     },
     "noEmit": true
   },

@@ -3,7 +3,7 @@ import type {
   ProxyGroupMemberRef,
   ProxyGroupRuleTarget,
   ProxyGroupTargetRef,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 
 export function isProxyGroupTargetRef(value: unknown): value is ProxyGroupTargetRef {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;

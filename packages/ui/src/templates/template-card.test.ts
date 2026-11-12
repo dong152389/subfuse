@@ -38,17 +38,17 @@ vi.mock("lucide-react", () => ({
   Lock: () => React.createElement("span", null, "lock-icon"),
   Trash2: () => React.createElement("span", null, "trash-icon"),
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => React.createElement("section", props, props.children),
   CardContent: (props: any) => React.createElement("div", props, props.children),
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({
   cn: (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" "),
 }));
 

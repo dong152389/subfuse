@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import { initialState } from "../definitions";
 import { createNodeActions } from "./node-actions";
 

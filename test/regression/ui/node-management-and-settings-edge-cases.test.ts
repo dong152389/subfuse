@@ -48,42 +48,42 @@ vi.mock("react", async (importOriginal) => {
 });
 
 vi.mock("lucide-react", () => ({ List: () => null, Search: () => null }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({ Badge: () => null }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({ Badge: () => null }));
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     (mocks.captures.buttons ||= []).push(props);
     return React.createElement("button", { disabled: props.disabled, onClick: props.onClick }, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => props.children,
   DialogContent: (props: any) => React.createElement("section", null, props.children),
   DialogFooter: (props: any) => React.createElement("footer", null, props.children),
   DialogHeader: (props: any) => React.createElement("header", null, props.children),
   DialogTitle: (props: any) => React.createElement("h2", null, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/form-field", () => ({
+vi.mock("@subfuse/ui/components/ui/form-field", () => ({
   FormField: (props: any) => React.createElement("div", null, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     (mocks.captures.inputs ||= []).push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/switch-field", () => ({
+vi.mock("@subfuse/ui/components/ui/switch-field", () => ({
   SwitchField: (props: any) => {
     (mocks.captures.switches ||= []).push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/node-name-template", () => ({ DEFAULT_NODE_NAME_TEMPLATE: "[{tag}] {name}" }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/node-name-template", () => ({ DEFAULT_NODE_NAME_TEMPLATE: "[{tag}] {name}" }));
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: Object.assign(() => mocks.store, { getState: () => mocks.store }),
 }));
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 vi.mock("../../../packages/ui/src/product/converter/advanced-mode/section-header", () => ({

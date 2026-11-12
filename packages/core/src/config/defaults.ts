@@ -1,11 +1,11 @@
-import { DEFAULT_DNS_CONFIG } from "@subboost/core/generator/dns";
-import { DEFAULT_RULE_PROVIDER_BASE_URL } from "@subboost/core/rules/metadata";
-import { TEMPLATES } from "@subboost/core/templates";
-import { SUBBOOST_TEMPLATE_CONFIG_SCHEMA } from "@subboost/core/templates/config-template";
-import type { ClashConfig, TemplateType, UserConfig } from "@subboost/core/types/config";
-import type { SubBoostTemplateConfig } from "@subboost/core/types/template-config";
+import { DEFAULT_DNS_CONFIG } from "@subfuse/core/generator/dns";
+import { DEFAULT_RULE_PROVIDER_BASE_URL } from "@subfuse/core/rules/metadata";
+import { TEMPLATES } from "@subfuse/core/templates";
+import { SUBFUSE_TEMPLATE_CONFIG_SCHEMA } from "@subfuse/core/templates/config-template";
+import type { ClashConfig, TemplateType, UserConfig } from "@subfuse/core/types/config";
+import type { SubFuseTemplateConfig } from "@subfuse/core/types/template-config";
 
-export const DEFAULT_SUBBOOST_CONFIG = {
+export const DEFAULT_SUBFUSE_CONFIG = {
   autoSelectStrategy: "url-test",
   testUrl: "https://www.gstatic.com/generate_204",
   testInterval: 300,
@@ -25,18 +25,18 @@ export function buildDefaultUserConfig(template: TemplateType): UserConfig {
   return {
     enabledGroups: templateConfig.groups,
     enabledRules: templateConfig.rules,
-    autoSelectStrategy: DEFAULT_SUBBOOST_CONFIG.autoSelectStrategy,
-    testUrl: DEFAULT_SUBBOOST_CONFIG.testUrl,
-    testInterval: DEFAULT_SUBBOOST_CONFIG.testInterval,
-    sharedHealthChecks: DEFAULT_SUBBOOST_CONFIG.sharedHealthChecks,
-    ruleProviderBaseUrl: DEFAULT_SUBBOOST_CONFIG.ruleProviderBaseUrl,
-    customRules: [...DEFAULT_SUBBOOST_CONFIG.customRules],
-    ruleOrder: [...DEFAULT_SUBBOOST_CONFIG.ruleOrder],
-    cnIpNoResolve: DEFAULT_SUBBOOST_CONFIG.cnIpNoResolve,
-    experimentalCnUseCnRuleSet: DEFAULT_SUBBOOST_CONFIG.experimentalCnUseCnRuleSet,
-    dnsYaml: DEFAULT_SUBBOOST_CONFIG.dnsYaml,
-    mixedPort: DEFAULT_SUBBOOST_CONFIG.mixedPort,
-    allowLan: DEFAULT_SUBBOOST_CONFIG.allowLan,
+    autoSelectStrategy: DEFAULT_SUBFUSE_CONFIG.autoSelectStrategy,
+    testUrl: DEFAULT_SUBFUSE_CONFIG.testUrl,
+    testInterval: DEFAULT_SUBFUSE_CONFIG.testInterval,
+    sharedHealthChecks: DEFAULT_SUBFUSE_CONFIG.sharedHealthChecks,
+    ruleProviderBaseUrl: DEFAULT_SUBFUSE_CONFIG.ruleProviderBaseUrl,
+    customRules: [...DEFAULT_SUBFUSE_CONFIG.customRules],
+    ruleOrder: [...DEFAULT_SUBFUSE_CONFIG.ruleOrder],
+    cnIpNoResolve: DEFAULT_SUBFUSE_CONFIG.cnIpNoResolve,
+    experimentalCnUseCnRuleSet: DEFAULT_SUBFUSE_CONFIG.experimentalCnUseCnRuleSet,
+    dnsYaml: DEFAULT_SUBFUSE_CONFIG.dnsYaml,
+    mixedPort: DEFAULT_SUBFUSE_CONFIG.mixedPort,
+    allowLan: DEFAULT_SUBFUSE_CONFIG.allowLan,
   };
 }
 
@@ -45,8 +45,8 @@ export function buildDefaultBaseConfigPatch(options: {
   allowLan?: boolean;
 } = {}): ClashConfig {
   return {
-    "mixed-port": options.mixedPort ?? DEFAULT_SUBBOOST_CONFIG.mixedPort,
-    "allow-lan": options.allowLan ?? DEFAULT_SUBBOOST_CONFIG.allowLan,
+    "mixed-port": options.mixedPort ?? DEFAULT_SUBFUSE_CONFIG.mixedPort,
+    "allow-lan": options.allowLan ?? DEFAULT_SUBFUSE_CONFIG.allowLan,
     mode: "rule",
     "log-level": "info",
     "unified-delay": true,
@@ -79,10 +79,10 @@ export function buildDefaultBaseConfigPatch(options: {
   };
 }
 
-export function buildDefaultSubBoostTemplateConfig(type: TemplateType): SubBoostTemplateConfig {
+export function buildDefaultSubFuseTemplateConfig(type: TemplateType): SubFuseTemplateConfig {
   const template = TEMPLATES[type];
   return {
-    schema: SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
+    schema: SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
     template: type,
     enabledProxyGroups: template.groups,
     hiddenProxyGroups: [],
@@ -93,23 +93,23 @@ export function buildDefaultSubBoostTemplateConfig(type: TemplateType): SubBoost
     builtinRuleEdits: {},
     customRules: [],
     ruleOrder: [],
-    cnIpNoResolve: DEFAULT_SUBBOOST_CONFIG.cnIpNoResolve,
-    experimentalCnUseCnRuleSet: DEFAULT_SUBBOOST_CONFIG.experimentalCnUseCnRuleSet,
+    cnIpNoResolve: DEFAULT_SUBFUSE_CONFIG.cnIpNoResolve,
+    experimentalCnUseCnRuleSet: DEFAULT_SUBFUSE_CONFIG.experimentalCnUseCnRuleSet,
     dialerProxyGroups: [],
     proxyGroupNameOverrides: {},
-    dnsYaml: DEFAULT_SUBBOOST_CONFIG.dnsYaml,
-    mixedPort: DEFAULT_SUBBOOST_CONFIG.mixedPort,
-    allowLan: DEFAULT_SUBBOOST_CONFIG.allowLan,
-    testUrl: DEFAULT_SUBBOOST_CONFIG.testUrl,
-    testInterval: DEFAULT_SUBBOOST_CONFIG.testInterval,
-    ruleProviderBaseUrl: DEFAULT_SUBBOOST_CONFIG.ruleProviderBaseUrl,
-    sharedHealthChecks: DEFAULT_SUBBOOST_CONFIG.sharedHealthChecks,
+    dnsYaml: DEFAULT_SUBFUSE_CONFIG.dnsYaml,
+    mixedPort: DEFAULT_SUBFUSE_CONFIG.mixedPort,
+    allowLan: DEFAULT_SUBFUSE_CONFIG.allowLan,
+    testUrl: DEFAULT_SUBFUSE_CONFIG.testUrl,
+    testInterval: DEFAULT_SUBFUSE_CONFIG.testInterval,
+    ruleProviderBaseUrl: DEFAULT_SUBFUSE_CONFIG.ruleProviderBaseUrl,
+    sharedHealthChecks: DEFAULT_SUBFUSE_CONFIG.sharedHealthChecks,
   };
 }
 
 export const DEFAULT_BASE_CONFIG_YAML = `# 基础配置
-mixed-port: ${DEFAULT_SUBBOOST_CONFIG.mixedPort}
-allow-lan: ${DEFAULT_SUBBOOST_CONFIG.allowLan}
+mixed-port: ${DEFAULT_SUBFUSE_CONFIG.mixedPort}
+allow-lan: ${DEFAULT_SUBFUSE_CONFIG.allowLan}
 mode: rule
 log-level: info
 unified-delay: true

@@ -26,7 +26,7 @@ function runCheck(args: string[] = []): void {
 
 describe("public UI consistency checker", () => {
   beforeEach(() => {
-    tempRoot = mkdtempSync(join(tmpdir(), "subboost-public-ui-check-"));
+    tempRoot = mkdtempSync(join(tmpdir(), "subfuse-public-ui-check-"));
     process.chdir(tempRoot);
   });
 

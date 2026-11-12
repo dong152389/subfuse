@@ -17,7 +17,7 @@ export function makeAdapter(overrides: Partial<HomeSubscriptionAdapter> = {}): H
       response(200, {
         subscription: {
           token: "token-1",
-          subscriptionUrl: "https://subboost.test/s/token-1",
+          subscriptionUrl: "https://subfuse.test/s/token-1",
         },
       })
     ),

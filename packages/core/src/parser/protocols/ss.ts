@@ -8,7 +8,7 @@
  */
 
 import { decodeBase64, safeDecodeBase64 } from "../base64";
-import type { SSNode } from "@subboost/core/types/node";
+import type { SSNode } from "@subfuse/core/types/node";
 import { safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 import { parseJsonObject } from "../json-utils";
 

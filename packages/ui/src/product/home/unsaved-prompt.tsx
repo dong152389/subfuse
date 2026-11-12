@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { useShallow } from "zustand/react/shallow";
-import { isSourcePendingImport } from "@subboost/ui/product/subscription/source-import-state";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+import { isSourcePendingImport } from "@subfuse/ui/product/subscription/source-import-state";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 
 /** Warns before a browser refresh or close would discard imported work. */
 export function UnsavedPrompt() {

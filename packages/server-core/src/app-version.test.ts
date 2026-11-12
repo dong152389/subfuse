@@ -2,9 +2,9 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { resolveAppVersionInfo } from "./app-version";
 
-const rootPackage = JSON.stringify({ name: "subboost", version: "2.2.4" });
-const appPackage = JSON.stringify({ name: "@subboost/app", version: "0.1.0" });
-const localPackage = JSON.stringify({ name: "@subboost/local", version: "0.1.0" });
+const rootPackage = JSON.stringify({ name: "subfuse", version: "2.2.4" });
+const appPackage = JSON.stringify({ name: "@subfuse/app", version: "0.1.0" });
+const localPackage = JSON.stringify({ name: "@subfuse/local", version: "0.1.0" });
 
 function createReadFile(files: Record<string, string>) {
   return (filePath: string) => {
@@ -164,7 +164,7 @@ describe("app version resolution", () => {
       [join("/repo/app", "package.json").replace(/\\/g, "/")]: "{not json",
       [join("/repo/app", "..", "package.json").replace(/\\/g, "/")]: JSON.stringify([]),
       [join("/repo/app", "..", "..", "package.json").replace(/\\/g, "/")]: JSON.stringify({
-        name: "@subboost/fallback",
+        name: "@subfuse/fallback",
         version: "2.4.0",
       }),
     });
@@ -175,15 +175,15 @@ describe("app version resolution", () => {
   it("uses 0.0.0 when neither env nor package metadata has a release version", () => {
     const readFile = createReadFile({
       [join("/repo/app", "package.json").replace(/\\/g, "/")]: JSON.stringify({
-        name: "@subboost/app",
+        name: "@subfuse/app",
         version: "next",
       }),
       [join("/repo/app", "..", "package.json").replace(/\\/g, "/")]: JSON.stringify({
-        name: "@subboost/root",
+        name: "@subfuse/root",
         version: "",
       }),
       [join("/repo/app", "..", "..", "package.json").replace(/\\/g, "/")]: JSON.stringify({
-        name: "@subboost/parent",
+        name: "@subfuse/parent",
         version: "01.0.0",
       }),
     });

@@ -31,7 +31,7 @@ vi.mock("lucide-react", async () => {
   };
 });
 
-vi.mock("@subboost/ui/components/ui/icon-button", async () => {
+vi.mock("@subfuse/ui/components/ui/icon-button", async () => {
   const ReactModule = await import("react");
   return {
     IconButton: ({ label, title, children, ...props }: any) => {
@@ -45,8 +45,8 @@ vi.mock("@subboost/ui/components/ui/icon-button", async () => {
   };
 });
 
-vi.mock("@subboost/ui/theme/theme", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@subboost/ui/theme/theme")>();
+vi.mock("@subfuse/ui/theme/theme", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@subfuse/ui/theme/theme")>();
   return {
     ...actual,
     applyTheme: mocks.applyTheme,
@@ -74,7 +74,7 @@ function installBrowser({
   api?: "modern" | "legacy" | "missing" | "throws";
   storageFailure?: "getter" | "read" | "write";
 } = {}) {
-  const values = new Map(stored ? [["subboost-theme", stored]] : []);
+  const values = new Map(stored ? [["subfuse-theme", stored]] : []);
   const localStorage = {
     getItem: vi.fn((key: string) => {
       if (storageFailure === "read") throw new Error("blocked read");
@@ -203,7 +203,7 @@ describe("ThemeToggle", () => {
     mount();
     mocks.buttonProps.onClick();
     expect(mocks.currentTheme).toBe("dark");
-    expect(browser.localStorage.getItem("subboost-theme")).toBe("dark");
+    expect(browser.localStorage.getItem("subfuse-theme")).toBe("dark");
     browser.systemChange("dark");
     browser.systemChange("light");
     expect(mocks.currentTheme).toBe("dark");
@@ -223,7 +223,7 @@ describe("ThemeToggle", () => {
   it("syncs other tabs' manual choices and ignores later system changes", () => {
     const browser = installBrowser({ system: "light" });
     mount();
-    browser.storageEvent({ key: "subboost-theme", newValue: "dark", storageArea: browser.localStorage });
+    browser.storageEvent({ key: "subfuse-theme", newValue: "dark", storageArea: browser.localStorage });
     expect(mocks.applyTheme).toHaveBeenLastCalledWith("dark");
     expect(mocks.setTheme).toHaveBeenLastCalledWith("dark");
     browser.systemChange("dark");
@@ -232,8 +232,8 @@ describe("ThemeToggle", () => {
   });
 
   it.each([
-    { key: "subboost-theme", newValue: null },
-    { key: "subboost-theme", newValue: "invalid" },
+    { key: "subfuse-theme", newValue: null },
+    { key: "subfuse-theme", newValue: "invalid" },
     { key: null, newValue: null },
   ])("resumes system-following after another tab clears or invalidates the choice: %j", (event) => {
     const browser = installBrowser({ system: "light", stored: "dark" });
@@ -249,12 +249,12 @@ describe("ThemeToggle", () => {
     const browser = installBrowser({ system: "light" });
     mount();
     browser.storageEvent({ key: "other-key", newValue: "dark" });
-    browser.storageEvent({ key: "subboost-theme", newValue: "dark", storageArea: {} });
+    browser.storageEvent({ key: "subfuse-theme", newValue: "dark", storageArea: {} });
     expect(mocks.currentTheme).toBe("light");
 
     const blocked = installBrowser({ system: "light", storageFailure: "getter" });
     mount();
-    blocked.storageEvent({ key: "subboost-theme", newValue: "dark", storageArea: blocked.localStorage });
+    blocked.storageEvent({ key: "subfuse-theme", newValue: "dark", storageArea: blocked.localStorage });
     expect(mocks.currentTheme).toBe("light");
   });
 

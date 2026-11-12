@@ -1,8 +1,8 @@
-import type { ParseResult, ParsedNode } from "@subboost/core/types/node";
-import { isSubscriptionInfoNodeName } from "@subboost/core/subscription/info-node-name";
-import { stableJsonStringify } from "@subboost/core/node-identity";
-import { isMihomoSupportedProxyNode, sanitizeMihomoProxyNode } from "@subboost/core/mihomo/proxy-sanitizer";
-import { looksLikeClientUpdatePlaceholderNodes } from "@subboost/core/parser/placeholder";
+import type { ParseResult, ParsedNode } from "@subfuse/core/types/node";
+import { isSubscriptionInfoNodeName } from "@subfuse/core/subscription/info-node-name";
+import { stableJsonStringify } from "@subfuse/core/node-identity";
+import { isMihomoSupportedProxyNode, sanitizeMihomoProxyNode } from "@subfuse/core/mihomo/proxy-sanitizer";
+import { looksLikeClientUpdatePlaceholderNodes } from "@subfuse/core/parser/placeholder";
 
 export type SnapshotRelation = "equivalent" | "next-superset" | "current-superset" | "divergent" | "field-conflict";
 export type SubscriptionSnapshotComparison = {

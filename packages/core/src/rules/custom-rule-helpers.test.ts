@@ -16,7 +16,7 @@ import {
   isCustomRuleType,
   listEditableRuleOrderKeys,
 } from "./custom-rule-utils";
-import type { CustomProxyGroup, CustomRule, CustomRuleSet } from "@subboost/core/types/config";
+import type { CustomProxyGroup, CustomRule, CustomRuleSet } from "@subfuse/core/types/config";
 
 describe("custom routing rule set helpers", () => {
   it("parses, normalizes, and builds rule-set targets and paths", () => {

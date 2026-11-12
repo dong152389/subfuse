@@ -33,51 +33,51 @@ vi.mock("lucide-react", () => ({
   ShieldCheck: () => React.createElement("span", null, "ShieldCheck"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => React.createElement("section", props, props.children),
   CardContent: (props: any) => React.createElement("div", props, props.children),
   CardHeader: (props: any) => React.createElement("header", props, props.children),
   CardTitle: (props: any) => React.createElement("h2", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.switches.push(props);
     return React.createElement("button", { disabled: props.disabled, role: "switch" });
   },
 }));
 
-vi.mock("@subboost/ui/dashboard/subscription-dashboard-surface", () => ({
+vi.mock("@subfuse/ui/dashboard/subscription-dashboard-surface", () => ({
   SubscriptionDashboardSurface: (props: any) => {
     mocks.dashboardAdapter = props.adapter;
     return React.createElement("main", null, "DashboardSurface");
   },
 }));
 
-vi.mock("@subboost/ui/product/client-response", () => ({
+vi.mock("@subfuse/ui/product/client-response", () => ({
   readJsonResponse: mocks.readJsonResponse,
   readSourceImportResponse: mocks.readSourceImportResponse,
 }));
 
-vi.mock("@subboost/ui/product/home/home-surface", () => ({
+vi.mock("@subfuse/ui/product/home/home-surface", () => ({
   HomeSurface: (props: any) => {
     mocks.homeAdapter = props.adapter;
     return React.createElement("main", null, "HomeSurface");
   },
 }));
 
-vi.mock("@subboost/ui/store/user-store", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({
   useUserStore: () => mocks.userState,
 }));
 
-vi.mock("@subboost/ui/templates/template-library-surface", () => ({
+vi.mock("@subfuse/ui/templates/template-library-surface", () => ({
   TemplateLibrarySurface: (props: any) => {
     mocks.templateAdapter = props.adapter;
     return React.createElement("main", null, "TemplateLibrarySurface");
@@ -122,7 +122,7 @@ describe("local app pages and adapters", () => {
 
   it("builds the local web app manifest", () => {
     expect(manifest()).toMatchObject({
-      short_name: "SubBoost",
+      short_name: "SubFuse",
       start_url: "/",
       display: "standalone",
       lang: "zh-CN",
@@ -191,8 +191,8 @@ describe("local app pages and adapters", () => {
     const adapter = mocks.dashboardAdapter;
     vi.stubGlobal("window", {
       location: {
-        href: "http://local.subboost.test:31401/dashboard",
-        origin: "http://local.subboost.test:31401",
+        href: "http://local.subfuse.test:31401/dashboard",
+        origin: "http://local.subfuse.test:31401",
       },
     });
 
@@ -204,7 +204,7 @@ describe("local app pages and adapters", () => {
       adapter.resolveDownloadUrl({
         subscriptionUrl: "http://localhost:3001/api/subscriptions/token-1/config.yaml",
       })
-    ).toBe("http://local.subboost.test:31401/api/subscriptions/token-1/config.yaml");
+    ).toBe("http://local.subfuse.test:31401/api/subscriptions/token-1/config.yaml");
     expect(adapter.autoUpdateIntervalPolicy).toEqual({
       defaultHours: 12,
       minHours: 0.1,
@@ -246,7 +246,7 @@ describe("local app pages and adapters", () => {
     const fetchMock = vi.fn(async () => Response.json({}));
     vi.stubGlobal("fetch", fetchMock);
     renderToStaticMarkup(React.createElement(DashboardPage));
-    const link = { id: "sub 1", token: "rotated", subscriptionUrl: "https://local.subboost.test/sub/rotated" };
+    const link = { id: "sub 1", token: "rotated", subscriptionUrl: "https://local.subfuse.test/sub/rotated" };
     mocks.readJsonResponse.mockResolvedValueOnce({ subscription: link });
     await expect(mocks.dashboardAdapter.resetSubscriptionLink("sub 1", "old")).resolves.toEqual(link);
     expect(fetchMock).toHaveBeenCalledWith("/api/subscriptions/sub%201/reset-link", {

@@ -17,30 +17,30 @@ vi.mock("lucide-react", () => ({
   Loader2: () => React.createElement("span", null, "loading-icon"),
 }));
 
-vi.mock("@subboost/ui/components/subscription/smart-node-matching-help", () => ({
+vi.mock("@subfuse/ui/components/subscription/smart-node-matching-help", () => ({
   SmartNodeMatchingHelp: ({ enabled }: { enabled: boolean }) =>
     React.createElement("span", null, enabled ? "smart-on" : "smart-off"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     captures.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/label", () => ({
+vi.mock("@subfuse/ui/components/ui/label", () => ({
   Label: (props: any) => React.createElement("label", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     captures.switches.push(props);
     return React.createElement("button", {
@@ -51,7 +51,7 @@ vi.mock("@subboost/ui/components/ui/switch", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => React.createElement("div", { "data-open": String(props.open) }, props.children),
   DialogContent: (props: any) => React.createElement("div", props, props.children),
   DialogDescription: (props: any) => React.createElement("p", props, props.children),
@@ -60,7 +60,7 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogTitle: (props: any) => React.createElement("h2", props, props.children),
 }));
 
-import { SubscriptionLinkDialog } from "@subboost/ui/product/home/subscription-link-dialog";
+import { SubscriptionLinkDialog } from "@subfuse/ui/product/home/subscription-link-dialog";
 
 const baseProps = {
   open: true,

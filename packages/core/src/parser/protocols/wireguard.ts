@@ -1,4 +1,4 @@
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 import { normalizeProtocolFields, normalizeWireGuardReserved } from "../../mihomo/protocol-fields";
 

@@ -1,4 +1,4 @@
-import type { CustomRule, CustomRuleSet } from "@subboost/core/types/config";
+import type { CustomRule, CustomRuleSet } from "@subfuse/core/types/config";
 
 export { CUSTOM_RULE_TYPES, isCustomRuleType } from "./custom-rule-types";
 

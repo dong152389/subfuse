@@ -7,7 +7,7 @@ import {
   parseSubscriptionUserInfo,
   resolveSubscriptionUserInfo,
 } from "./subscription-userinfo";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function infoNode(name: string): ParsedNode {
   return {

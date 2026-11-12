@@ -26,13 +26,13 @@ const baseNode: ParsedNode = {
 describe("public server-core rules extra branch coverage", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.doUnmock("@subboost/core/rules-database");
-    vi.doUnmock("@subboost/core/generator/proxy-group-modules");
+    vi.doUnmock("@subfuse/core/rules-database");
+    vi.doUnmock("@subfuse/core/generator/proxy-group-modules");
     vi.resetModules();
   });
 
   it("builds catalog diffs with unusual curated and module rule records", async () => {
-    vi.doMock("@subboost/core/rules-database", () => ({
+    vi.doMock("@subfuse/core/rules-database", () => ({
       ALL_RULES: [
         {
           id: "dup",
@@ -54,7 +54,7 @@ describe("public server-core rules extra branch coverage", () => {
         },
       ],
     }));
-    vi.doMock("@subboost/core/generator/proxy-group-modules", () => ({
+    vi.doMock("@subfuse/core/generator/proxy-group-modules", () => ({
       PROXY_GROUP_MODULES: [
         {
           id: "module-a",
@@ -86,8 +86,8 @@ describe("public server-core rules extra branch coverage", () => {
   });
 
   it("uses global fetch fallback and reports non-Error unavailable failures", async () => {
-    vi.doUnmock("@subboost/core/rules-database");
-    vi.doUnmock("@subboost/core/generator/proxy-group-modules");
+    vi.doUnmock("@subfuse/core/rules-database");
+    vi.doUnmock("@subfuse/core/generator/proxy-group-modules");
     vi.resetModules();
 
     let now = 1_000;
@@ -117,8 +117,8 @@ describe("public server-core rules extra branch coverage", () => {
   });
 
   it("returns non-Error stale refresh messages and fails CN discovery without stale cache", async () => {
-    vi.doUnmock("@subboost/core/rules-database");
-    vi.doUnmock("@subboost/core/generator/proxy-group-modules");
+    vi.doUnmock("@subfuse/core/rules-database");
+    vi.doUnmock("@subfuse/core/generator/proxy-group-modules");
     vi.resetModules();
 
     let fail = false;
@@ -196,7 +196,7 @@ describe("public refreshNodeSnapshot extra branch coverage", () => {
             type: "url",
             content: "https://provider.example.com/sub",
             useProxyProviders: true,
-            userinfoUserAgent: "SubBoost Test",
+            userinfoUserAgent: "SubFuse Test",
           },
         ],
       },
@@ -281,7 +281,7 @@ describe("public refreshNodeSnapshot extra branch coverage", () => {
             type: "url",
             content: "https://provider.example.com/sub",
             useProxyProviders: true,
-            userinfoUserAgent: "SubBoost Test",
+            userinfoUserAgent: "SubFuse Test",
           },
           { id: "url-d", type: "url", content: "https://d.example.com/sub" },
           {

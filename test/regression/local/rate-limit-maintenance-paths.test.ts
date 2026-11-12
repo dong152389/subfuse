@@ -55,7 +55,7 @@ describe("local rate-limit maintenance behavior", () => {
     vi.stubEnv("TRUST_PROXY_HEADERS", "true");
 
     expect(getTrustedClientRateLimitKey(
-      new Request("http://local.subboost.test/api/auth/login"),
+      new Request("http://local.subfuse.test/api/auth/login"),
     )).toBeNull();
   });
 

@@ -2,23 +2,23 @@
 
 import * as React from "react";
 import { AlertTriangle, ArrowRight, Upload } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
+import { Button } from "@subfuse/ui/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@subboost/ui/components/ui/dialog";
-import { Textarea } from "@subboost/ui/components/ui/textarea";
-import { toast } from "@subboost/ui/components/ui/toaster";
+} from "@subfuse/ui/components/ui/dialog";
+import { Textarea } from "@subfuse/ui/components/ui/textarea";
+import { toast } from "@subfuse/ui/components/ui/toaster";
 import {
   parseCustomRuleBatchImport,
   type CustomRuleBatchImportPreviewItem,
   type ParseCustomRuleBatchImportOptions,
-} from "@subboost/core/rules/custom-rule-batch-import";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
-import type { CustomRule, CustomRuleSet, RuleSetMetadata } from "@subboost/core/types/config";
-import { useProductApiAdapter } from "@subboost/ui/product/api-adapter";
+} from "@subfuse/core/rules/custom-rule-batch-import";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
+import type { CustomRule, CustomRuleSet, RuleSetMetadata } from "@subfuse/core/types/config";
+import { useProductApiAdapter } from "@subfuse/ui/product/api-adapter";
 import { resolveRuleSetUrl, useRuleSetOperation } from "./use-rule-set-resolution";
 
 function getStatusClass(item: CustomRuleBatchImportPreviewItem): string {
@@ -214,7 +214,7 @@ export function ProxyGroupsCustomRulesBatchDialog({
             <div className="text-[10px] leading-4 text-fg-40">
               每行一条；缺少目标时使用当前目标，纯值行使用当前类型、目标和 no-resolve 设置。
               正则与逻辑规则有目标时放在最后一列；no-resolve 仅对目标 IP 规则及规则集生效。
-              {'正则含歧义的字面逗号时，类型和值分别用双引号包裹，如："DOMAIN-REGEX","^local,subboost$"；只写这两列会使用当前目标。'}
+              {'正则含歧义的字面逗号时，类型和值分别用双引号包裹，如："DOMAIN-REGEX","^local,subfuse$"；只写这两列会使用当前目标。'}
             </div>
           </div>
 

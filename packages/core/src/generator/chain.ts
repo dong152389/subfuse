@@ -6,10 +6,10 @@
  * 2. 给目标节点添加 dialer-proxy 属性，指向中转代理组
  */
 
-import type { ParsedNode } from "@subboost/core/types/node";
-import type { DialerProxyGroup } from "@subboost/core/types/template-config";
-import { DEFAULT_LOAD_BALANCE_STRATEGY, type ProxyGroupGroupType } from "@subboost/core/types/config";
-import { DEFAULT_SUBBOOST_CONFIG } from "@subboost/core/config/defaults";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import type { DialerProxyGroup } from "@subfuse/core/types/template-config";
+import { DEFAULT_LOAD_BALANCE_STRATEGY, type ProxyGroupGroupType } from "@subfuse/core/types/config";
+import { DEFAULT_SUBFUSE_CONFIG } from "@subfuse/core/config/defaults";
 import { buildTypedProxyGroup, uniqueProxyNames } from "./proxy-group-type";
 
 export interface DialerProxyGroupConfig {
@@ -31,8 +31,8 @@ function resolveDialerGroupProxies(group: DialerProxyGroup): string[] {
  */
 export function generateDialerProxyGroups(
   groups: DialerProxyGroup[],
-  testUrl: string = DEFAULT_SUBBOOST_CONFIG.testUrl,
-  testInterval: number = DEFAULT_SUBBOOST_CONFIG.testInterval,
+  testUrl: string = DEFAULT_SUBFUSE_CONFIG.testUrl,
+  testInterval: number = DEFAULT_SUBFUSE_CONFIG.testInterval,
   proxyProviderNames: string[] = []
 ): Array<Record<string, unknown>> {
   const providerUse = proxyProviderNames.length > 0 ? { use: proxyProviderNames } : {};

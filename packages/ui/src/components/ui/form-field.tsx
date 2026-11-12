@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Label } from "@subboost/ui/components/ui/label";
-import { cn } from "@subboost/ui/lib/utils";
+import { Label } from "@subfuse/ui/components/ui/label";
+import { cn } from "@subfuse/ui/lib/utils";
 
 type FormFieldControlProps = {
   id?: string;

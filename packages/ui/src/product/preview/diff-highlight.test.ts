@@ -62,7 +62,7 @@ describe("YamlHighlight", () => {
     const rendered = YamlHighlight({
       content: [
         "# comment",
-        "name: \"SubBoost\"",
+        "name: \"SubFuse\"",
         "port: 7890",
         "enabled: true",
         "missing: null",

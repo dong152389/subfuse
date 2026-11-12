@@ -30,7 +30,7 @@ const mocks = vi.hoisted(() => ({
   resolveSubscriptionAutoUpdateState: vi.fn(),
 }));
 
-vi.mock("@subboost/server-core/subscription", () => ({
+vi.mock("@subfuse/server-core/subscription", () => ({
   applyCronUpdateOutcome: mocks.applyCronUpdateOutcome,
   createCronUpdateAccumulator: mocks.createCronUpdateAccumulator,
   extractHostsFromSubscriptionUrls: mocks.extractHostsFromSubscriptionUrls,

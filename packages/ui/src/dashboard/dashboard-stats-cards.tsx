@@ -1,5 +1,5 @@
 import { Database, FileCode, Link2, Server } from "lucide-react";
-import { Card, CardContent } from "@subboost/ui/components/ui/card";
+import { Card, CardContent } from "@subfuse/ui/components/ui/card";
 
 type DashboardStatsUser = {
   isAdmin?: boolean;

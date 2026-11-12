@@ -17,15 +17,15 @@ vi.mock("lucide-react", () => ({
   Globe: () => React.createElement("span", null, "globe-icon"),
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: () => captures.store,
 }));
 
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     captures.textareas.push(props);
     return React.createElement("textarea", props);

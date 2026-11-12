@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildGeneratedRuleEntries } from "@subboost/core/generator/rules";
-import { initialState } from "@subboost/ui/store/config-store/definitions";
-import { createProxyGroupActions } from "@subboost/ui/store/config-store/actions/proxy-group-actions";
-import { createCustomActions } from "@subboost/ui/store/config-store/actions/custom-actions";
-import type { SetAndGenerateConfig, StoreState } from "@subboost/ui/store/config-store/store-types";
+import { buildGeneratedRuleEntries } from "@subfuse/core/generator/rules";
+import { initialState } from "@subfuse/ui/store/config-store/definitions";
+import { createProxyGroupActions } from "@subfuse/ui/store/config-store/actions/proxy-group-actions";
+import { createCustomActions } from "@subfuse/ui/store/config-store/actions/custom-actions";
+import type { SetAndGenerateConfig, StoreState } from "@subfuse/ui/store/config-store/store-types";
 
 describe("builtin rule move lifecycle", () => {
   it("keeps one rule through custom and builtin targets, rename, removal and recovery", () => {

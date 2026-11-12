@@ -132,14 +132,14 @@ describe("rule catalog service", () => {
     const diff = buildRuleCatalogDiff({
       fetchedAt: 123,
       expiresAt: 456,
-      geosite: ["subboost-extra-test-rule"],
-      geoip: ["subboost-extra-test-ip"],
+      geosite: ["subfuse-extra-test-rule"],
+      geoip: ["subfuse-extra-test-ip"],
       source: "remote",
     });
 
     expect(diff.fetchedAt).toBe(123);
     expect(diff.totalRemoteRules).toBe(2);
-    expect(diff.remoteOnlySample).toEqual(["geoip/subboost-extra-test-ip.mrs", "geosite/subboost-extra-test-rule.mrs"]);
+    expect(diff.remoteOnlySample).toEqual(["geoip/subfuse-extra-test-ip.mrs", "geosite/subfuse-extra-test-rule.mrs"]);
     expect(diff.missingCuratedRules.length).toBeGreaterThan(0);
     expect(diff.missingModuleRuleRefs.length).toBeGreaterThan(0);
   });
@@ -275,22 +275,22 @@ describe("rule catalog service", () => {
 
   it("builds fallback metadata for remote rules that are not in the featured catalog", async () => {
     const service = createRuleCatalogService({
-      fetchImpl: createTreeFetch(["geosite/subboost-remote-only.mrs", "geoip/subboost-remote-only.mrs"]),
+      fetchImpl: createTreeFetch(["geosite/subfuse-remote-only.mrs", "geoip/subfuse-remote-only.mrs"]),
     });
 
-    const domain = await service.searchRules({ keyword: "subboost", type: "geosite", page: 1, size: 10 });
+    const domain = await service.searchRules({ keyword: "subfuse", type: "geosite", page: 1, size: 10 });
     expect(domain.items).toEqual([
       expect.objectContaining({
-        id: "subboost-remote-only",
+        id: "subfuse-remote-only",
         behavior: "domain",
         category: "other",
       }),
     ]);
 
-    const ip = await service.searchRules({ keyword: "subboost", type: "geoip", page: 1, size: 10 });
+    const ip = await service.searchRules({ keyword: "subfuse", type: "geoip", page: 1, size: 10 });
     expect(ip.items).toEqual([
       expect.objectContaining({
-        id: "subboost-remote-only-ip",
+        id: "subfuse-remote-only-ip",
         behavior: "ipcidr",
         category: "other",
       }),
@@ -337,7 +337,7 @@ describe("rule catalog service", () => {
     const service = createRuleCatalogService({
       fetchImpl,
       getGitHubToken: () => "token-1",
-      userAgent: "SubBoost Test",
+      userAgent: "SubFuse Test",
     });
 
     const [first, second] = await Promise.all([service.getRemoteRuleIndex(), service.getRemoteRuleIndex()]);
@@ -347,7 +347,7 @@ describe("rule catalog service", () => {
     expect(fetchImpl).toHaveBeenCalledTimes(2);
     expect(seenHeaders[0]).toMatchObject({
       Authorization: "Bearer token-1",
-      "User-Agent": "SubBoost Test",
+      "User-Agent": "SubFuse Test",
     });
   });
 

@@ -194,7 +194,7 @@ describe("public rule and SSRF edge branch coverage", () => {
 
   it("formats local CN candidates with controlled rule metadata and stable sort order", async () => {
     vi.resetModules();
-    vi.doMock("@subboost/core/generator/proxy-group-modules", () => ({
+    vi.doMock("@subfuse/core/generator/proxy-group-modules", () => ({
       PROXY_GROUP_MODULES: [
         {
           id: "beta",
@@ -219,7 +219,7 @@ describe("public rule and SSRF edge branch coverage", () => {
         },
       ],
     }));
-    vi.doMock("@subboost/core/rules-database", () => ({
+    vi.doMock("@subfuse/core/rules-database", () => ({
       ALL_RULES: [
         { id: "same-cn", name: "Same", nameZh: "同名", behavior: "domain" },
         { id: "same@cn", name: "Same At", nameZh: "Same At", behavior: "domain" },
@@ -260,8 +260,8 @@ describe("public rule and SSRF edge branch coverage", () => {
         "same-cn@cn（Alias）",
       ]);
     } finally {
-      vi.doUnmock("@subboost/core/generator/proxy-group-modules");
-      vi.doUnmock("@subboost/core/rules-database");
+      vi.doUnmock("@subfuse/core/generator/proxy-group-modules");
+      vi.doUnmock("@subfuse/core/rules-database");
       vi.resetModules();
     }
   });

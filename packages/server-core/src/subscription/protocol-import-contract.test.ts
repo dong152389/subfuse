@@ -1,25 +1,25 @@
 import { describe, expect, it } from "vitest";
 import * as yaml from "js-yaml";
-import { parseClashYaml, parseSubscription } from "@subboost/core/parser";
-import { generateClashYaml } from "@subboost/core/generator";
+import { parseClashYaml, parseSubscription } from "@subfuse/core/parser";
+import { generateClashYaml } from "@subfuse/core/generator";
 import { validateSubscriptionNodeList } from "./crud";
-import { parsePlatformConfigContent } from "@subboost/core/parser/platform/parse-platform-config";
+import { parsePlatformConfigContent } from "@subfuse/core/parser/platform/parse-platform-config";
 import { generateKeyPairSync } from "node:crypto";
 
-const endpoint = "server: local.subboost.test, port: '443'";
+const endpoint = "server: local.subfuse.test, port: '443'";
 const key = "A".repeat(43) + "=";
 const protocols = [
   ["ss", "cipher: aes-128-gcm"],
   ["ssr", "cipher: aes-256-cfb, protocol: origin, obfs: plain"],
   ["anytls", "client-fingerprint: chrome"],
-  ["trojan", "sni: local.subboost.test"],
-  ["hysteria2", "sni: local.subboost.test"],
+  ["trojan", "sni: local.subfuse.test"],
+  ["hysteria2", "sni: local.subfuse.test"],
   ["ssh", "username: user"],
 ] as const;
 const documentPrefixes = [
   "", "\n# subscription\n\n", "# subscription\n---\n",
-  "%YAML 1.2\n---\n", "%TAG !e! tag:local.subboost.test,2026:\n---\n",
-  "# subscription\n%YAML 1.2\n%TAG !e! tag:local.subboost.test,2026:\n---\t# document\n\n",
+  "%YAML 1.2\n---\n", "%TAG !e! tag:local.subfuse.test,2026:\n---\n",
+  "# subscription\n%YAML 1.2\n%TAG !e! tag:local.subfuse.test,2026:\n---\t# document\n\n",
 ];
 const mappingKeys = ["type:", "type :", '"type" :', "'type':"];
 const documentShapes = ["flow mapping", "block sequence", "flow sequence", "block mapping", "block node sequence"] as const;
@@ -27,7 +27,7 @@ const documentCases = documentShapes.flatMap((shape) => documentPrefixes.flatMap
   mappingKeys.map((typeKey) => ({ shape, prefix, prefixIndex, typeKey }))));
 
 function nodeDocument(shape: typeof documentShapes[number], typeKey: string): string {
-  const fields = ["name: document", `${typeKey} anytls`, '"server" : local.subboost.test', "'port': '443'", "password: 000123", "sni: local.subboost.test", "alpn: [h2, http/1.1]", "client-fingerprint: chrome"];
+  const fields = ["name: document", `${typeKey} anytls`, '"server" : local.subfuse.test', "'port': '443'", "password: 000123", "sni: local.subfuse.test", "alpn: [h2, http/1.1]", "client-fingerprint: chrome"];
   const flow = `{${fields.join(", ")}}`;
   if (shape === "flow mapping") return flow;
   if (shape === "block sequence") return `- ${flow}`;
@@ -45,7 +45,7 @@ function generated(content: string) {
 
 describe("protocol import through persistence and generation", () => {
   it.each(protocols)("detects single %s mappings with quoted ports", (type, fields) => {
-    const content = `name: demo\ntype: ${type}\nserver: local.subboost.test\nport: '443'\npassword: secret\n${fields.split(", ").join("\n")}`;
+    const content = `name: demo\ntype: ${type}\nserver: local.subfuse.test\nport: '443'\npassword: secret\n${fields.split(", ").join("\n")}`;
     expect(generated(content).proxies).toHaveLength(1);
     expect(generated(`{name: demo, type: ${type}, ${endpoint}, password: secret, ${fields}}`).proxies).toHaveLength(1);
   });
@@ -70,21 +70,21 @@ describe("protocol import through persistence and generation", () => {
     ["", "type :"], ["", '"type":'], ["# subscription\n---\n", "'type' :"],
   ])("detects flow mappings after %j with key %s", (prefix, typeKey) => {
     expect(generated(`${prefix}{name: flow, ${typeKey} anytls, ${endpoint}, password: 000123}`).proxies)
-      .toEqual([{ name: "flow", type: "anytls", server: "local.subboost.test", port: 443, password: "000123", udp: true }]);
+      .toEqual([{ name: "flow", type: "anytls", server: "local.subfuse.test", port: 443, password: "000123", udp: true }]);
   });
 
   it.each(documentCases)("preserves $shape fields with prefix $prefixIndex and $typeKey", ({ shape, prefix, typeKey }) => {
     const content = prefix + nodeDocument(shape, typeKey);
     expect(parseClashYaml(content)).toMatchObject({ totalParsed: 1, totalFailed: 0 });
     expect(generated(content).proxies).toEqual([{
-      name: "document", type: "anytls", server: "local.subboost.test", port: 443,
-      password: "000123", sni: "local.subboost.test", alpn: ["h2", "http/1.1"],
+      name: "document", type: "anytls", server: "local.subfuse.test", port: 443,
+      password: "000123", sni: "local.subfuse.test", alpn: ["h2", "http/1.1"],
       "client-fingerprint": "chrome", udp: true,
     }]);
   });
 
   it("preserves JSON node arrays and mixed YAML sequence entries", () => {
-    const proxy = { name: "json", type: "anytls", server: "local.subboost.test", port: "443", password: "000123", alpn: ["h2"] };
+    const proxy = { name: "json", type: "anytls", server: "local.subfuse.test", port: "443", password: "000123", alpn: ["h2"] };
     expect(generated(JSON.stringify([proxy])).proxies).toEqual([{ ...proxy, port: 443, udp: true }]);
     expect(generated(`---\n- ignored\n- 123\n- ${JSON.stringify(proxy)}\n- {name: blocked, 'type' : reject}`).proxies)
       .toEqual([{ ...proxy, port: 443, udp: true }, { name: "blocked", type: "reject" }]);
@@ -102,32 +102,32 @@ describe("protocol import through persistence and generation", () => {
   });
 
   it.each(["Proxy", "Server_Local", "Server_Remote", " Proxy ", " Server_Local ", " Server_Remote "])("preserves platform sections after comments and general settings: %s", (section) => {
-    const content = `# subscription\n; settings\n[General]\nloglevel = notify\n[${section}]\nNode = ss, local.subboost.test, 443, encrypt-method=aes-128-gcm, password=secret\n[Rule]\nMATCH,DIRECT`;
-    expect(generated(content).proxies).toMatchObject([{ name: "Node", type: "ss", server: "local.subboost.test", port: 443, cipher: "aes-128-gcm", password: "secret" }]);
+    const content = `# subscription\n; settings\n[General]\nloglevel = notify\n[${section}]\nNode = ss, local.subfuse.test, 443, encrypt-method=aes-128-gcm, password=secret\n[Rule]\nMATCH,DIRECT`;
+    expect(generated(content).proxies).toMatchObject([{ name: "Node", type: "ss", server: "local.subfuse.test", port: 443, cipher: "aes-128-gcm", password: "secret" }]);
   });
 
   it.each(["; Profile: generated", "  ; Profile: generated", "# Profile: generated", "; Profile = generated"])("preserves platform comments containing punctuation: %s", (comment) => {
-    const content = `${comment}\n[General]\nloglevel = notify\n[Proxy]\nDemo = ss, local.subboost.test, 443, encrypt-method=aes-128-gcm, password=demo`;
+    const content = `${comment}\n[General]\nloglevel = notify\n[Proxy]\nDemo = ss, local.subfuse.test, 443, encrypt-method=aes-128-gcm, password=demo`;
     expect(parsePlatformConfigContent(content)).toMatchObject({ totalParsed: 1, totalFailed: 0 });
-    expect(generated(content).proxies).toMatchObject([{ name: "Demo", type: "ss", server: "local.subboost.test", port: 443, cipher: "aes-128-gcm", password: "demo" }]);
+    expect(generated(content).proxies).toMatchObject([{ name: "Demo", type: "ss", server: "local.subfuse.test", port: 443, cipher: "aes-128-gcm", password: "demo" }]);
   });
 
   it.each(["wg", "wg{hk}", "wg[hk]", "wg{hk}[edge]", "wg: hk", "wg;hk"])("preserves referenced WireGuard section names without restricting punctuation: %s", (section) => {
-    const content = `[WireGuard ${section}]\nprivate-key = ${key}\nself-ip = 203.0.113.2\npeer = (public-key = ${key}, endpoint = "local.subboost.test:443")\n[Proxy]\nWG = wireguard, section-name=${section}`;
+    const content = `[WireGuard ${section}]\nprivate-key = ${key}\nself-ip = 203.0.113.2\npeer = (public-key = ${key}, endpoint = "local.subfuse.test:443")\n[Proxy]\nWG = wireguard, section-name=${section}`;
     expect(parsePlatformConfigContent(content)).toMatchObject({ totalParsed: 1, totalFailed: 0 });
     expect(generated(content).proxies).toMatchObject([{
-      name: "WG", type: "wireguard", server: "local.subboost.test", port: 443,
+      name: "WG", type: "wireguard", server: "local.subfuse.test", port: 443,
       ip: "203.0.113.2", "private-key": key, "public-key": key,
-      peers: [{ server: "local.subboost.test", port: 443, "public-key": key }],
+      peers: [{ server: "local.subfuse.test", port: 443, "public-key": key }],
     }]);
   });
 
   it("preserves peers-only WireGuard and Mieru ranges without inventing endpoints", () => {
     const result = generated(`proxies:
-  - {name: wg, type: wireguard, ip: 203.0.113.2, private-key: ${key}, peers: [{server: local.subboost.test, port: '443', public-key: ${key}, allowed-ips: ['0.0.0.0/0']}]}
-  - {name: mieru, type: mieru, server: local.subboost.test, port-range: 4000-4010, username: user, password: pass, transport: TCP}
+  - {name: wg, type: wireguard, ip: 203.0.113.2, private-key: ${key}, peers: [{server: local.subfuse.test, port: '443', public-key: ${key}, allowed-ips: ['0.0.0.0/0']}]}
+  - {name: mieru, type: mieru, server: local.subfuse.test, port-range: 4000-4010, username: user, password: pass, transport: TCP}
   - {name: block, type: reject}
-  - {name: tunnel, type: trusttunnel, server: local.subboost.test, port: 443, username: user, password: pass, quic: true, health-check: true, sni: local.subboost.test, alpn: [h2], max-connections: 8}`);
+  - {name: tunnel, type: trusttunnel, server: local.subfuse.test, port: 443, username: user, password: pass, quic: true, health-check: true, sni: local.subfuse.test, alpn: [h2], max-connections: 8}`);
     expect(result.proxies).toHaveLength(4);
     expect(result.proxies[0]).not.toHaveProperty("server");
     expect(result.proxies[0]).not.toHaveProperty("port");
@@ -139,27 +139,27 @@ describe("protocol import through persistence and generation", () => {
 
   it("detects top-level flow sequences containing only alternative endpoints", () => {
     expect(generated("- {name: blocked, type: reject}").proxies).toEqual([{ name: "blocked", type: "reject" }]);
-    expect(generated(`- {name: wg, type: wireguard, ip: 203.0.113.2, private-key: ${key}, peers: [{server: local.subboost.test, port: 443, public-key: ${key}}]}`).proxies).toHaveLength(1);
+    expect(generated(`- {name: wg, type: wireguard, ip: 203.0.113.2, private-key: ${key}, peers: [{server: local.subfuse.test, port: 443, public-key: ${key}}]}`).proxies).toHaveLength(1);
   });
 
   it("keeps ordinary numeric mapping keys while preserving scalar credentials", () => {
-    const result = generated("{name: header, type: http, server: local.subboost.test, port: 443, password: 123456, headers: {123: token}}");
+    const result = generated("{name: header, type: http, server: local.subfuse.test, port: 443, password: 123456, headers: {123: token}}");
     expect(result.proxies[0]).toMatchObject({ password: "123456", headers: { "123": "token" } });
   });
 
   it("normalizes safe integer credentials from saved JSON before generation", () => {
-    const nodes = validateSubscriptionNodeList([{ name: "saved", type: "anytls", server: "local.subboost.test", port: 443, password: 123456 }]);
+    const nodes = validateSubscriptionNodeList([{ name: "saved", type: "anytls", server: "local.subfuse.test", port: 443, password: 123456 }]);
     const result = yaml.load(generateClashYaml({ nodes, userConfig: { dnsYaml: "" } })) as { proxies: Record<string, unknown>[] };
     expect(result.proxies).toHaveLength(1);
     expect(result.proxies[0].password).toBe("123456");
   });
 
   it.each([
-    { type: "mieru", server: "local.subboost.test", port: 443, "port-range": "4000-4010" },
-    { type: "mieru", server: "local.subboost.test", "port-range": "5000-4000" },
-    { type: "wireguard", peers: [{ server: "local.subboost.test", port: 0, "public-key": key }] },
-    { type: "anytls", server: "local.subboost.test", port: 443, password: {} },
-    { type: "anytls", server: "local.subboost.test", port: 443, password: 9007199254740992 },
+    { type: "mieru", server: "local.subfuse.test", port: 443, "port-range": "4000-4010" },
+    { type: "mieru", server: "local.subfuse.test", "port-range": "5000-4000" },
+    { type: "wireguard", peers: [{ server: "local.subfuse.test", port: 0, "public-key": key }] },
+    { type: "anytls", server: "local.subfuse.test", port: 443, password: {} },
+    { type: "anytls", server: "local.subfuse.test", port: 443, password: 9007199254740992 },
   ])("rejects invalid nodes with an index before any persistence", (bad) => {
     expect(() => validateSubscriptionNodeList([{ name: "good", type: "reject" }, { name: "bad", ...bad }])).toThrow(/#2/);
   });
@@ -167,7 +167,7 @@ describe("protocol import through persistence and generation", () => {
   it("preserves Reality flags and independent XHTTP settings through save/load", () => {
     const uuid = "11111111-1111-4111-8111-111111111111";
     const extra = { noGRPCHeader: false, scMaxEachPostBytes: "100000-200000", xmux: { maxConnections: "2-4" } };
-    const link = `vless://${uuid}@local.subboost.test:443?security=reality&pbk=${"A".repeat(43)}&support-x25519mlkem768=false&type=xhttp&extra=${encodeURIComponent(JSON.stringify(extra))}`;
+    const link = `vless://${uuid}@local.subfuse.test:443?security=reality&pbk=${"A".repeat(43)}&support-x25519mlkem768=false&type=xhttp&extra=${encodeURIComponent(JSON.stringify(extra))}`;
     expect(generated(link).proxies[0]).toMatchObject({
       "reality-opts": { "support-x25519mlkem768": false },
       "xhttp-opts": { "no-grpc-header": false, "sc-max-each-post-bytes": "100000-200000", "reuse-settings": { "max-connections": "2-4" } },
@@ -181,7 +181,7 @@ describe("protocol import through persistence and generation", () => {
 
   it.each(["plain", "base64", "base64url"] as const)("retains automatic Reality compatibility through %s import and persistence", (format) => {
     const encryption = "mlkem768x25519plus.native.0rtt.valid_token";
-    const link = `vless://11111111-1111-4111-8111-111111111111@local.subboost.test:443?security=reality&pbk=${"A".repeat(43)}&encryption=${encryption}&fp=firefox`;
+    const link = `vless://11111111-1111-4111-8111-111111111111@local.subfuse.test:443?security=reality&pbk=${"A".repeat(43)}&encryption=${encryption}&fp=firefox`;
     const content = format === "plain" ? link : Buffer.from(link).toString(format);
     const parsed = parseSubscription(content);
     expect(parsed.errors).toEqual([]);
@@ -196,16 +196,16 @@ describe("protocol import through persistence and generation", () => {
   });
 
   it("retains Gecko, ECH and packet sizes for Hysteria2", () => {
-    expect(generated("hy2://demo@local.subboost.test:443?obfs=gecko&obfs-password=padding&obfs-min-packet-size=100&obfs-max-packet-size=200&ech=QUJDRA%3D%3D").proxies[0])
+    expect(generated("hy2://demo@local.subfuse.test:443?obfs=gecko&obfs-password=padding&obfs-min-packet-size=100&obfs-max-packet-size=200&ech=QUJDRA%3D%3D").proxies[0])
       .toMatchObject({ obfs: "gecko", "obfs-password": "padding", "obfs-min-packet-size": 100,
         "obfs-max-packet-size": 200, "ech-opts": { enable: true, config: "QUJDRA==" } });
     for (const query of ["obfs=gecko", "obfs=unknown&obfs-password=demo", "obfs=gecko&obfs-password=demo&obfs-min-packet-size=12bad"]) {
-      expect(parseSubscription(`hy2://demo@local.subboost.test?${query}`).totalFailed).toBe(1);
+      expect(parseSubscription(`hy2://demo@local.subfuse.test?${query}`).totalFailed).toBe(1);
     }
   });
 
   it.each(["tuic://token", "hysteria://"])("separates protocol fast-open from TCP tfo: %s", prefix => {
-    const authority = prefix.endsWith("//") ? "local.subboost.test" : `${prefix.split("://")[1]}@local.subboost.test`;
+    const authority = prefix.endsWith("//") ? "local.subfuse.test" : `${prefix.split("://")[1]}@local.subfuse.test`;
     const scheme = prefix.split("://")[0];
     for (const flag of [true, false]) {
       const node = generated(`${scheme}://${authority}:443?auth=demo&fast-open=${flag}&tfo=${!flag}`).proxies[0];
@@ -215,12 +215,12 @@ describe("protocol import through persistence and generation", () => {
   });
 
   it("normalizes WireGuard URI, platform and saved aliases without replacing canonical zero", () => {
-    const uri = `wg://${encodeURIComponent(key)}@local.subboost.test:51820?publickey=${encodeURIComponent(key)}&reserved=U4An&keepalive=25`;
+    const uri = `wg://${encodeURIComponent(key)}@local.subfuse.test:51820?publickey=${encodeURIComponent(key)}&reserved=U4An&keepalive=25`;
     expect(generated(uri).proxies[0]).toMatchObject({ reserved: [83, 128, 39], "persistent-keepalive": 25 });
-    const platform = `[WireGuard test]\nprivate-key = ${key}\nself-ip = 203.0.113.2\nkeepalive = 25\npeer = (public-key = ${key}, endpoint = "local.subboost.test:443")\n[Proxy]\nWG = wireguard, section-name=test`;
+    const platform = `[WireGuard test]\nprivate-key = ${key}\nself-ip = 203.0.113.2\nkeepalive = 25\npeer = (public-key = ${key}, endpoint = "local.subfuse.test:443")\n[Proxy]\nWG = wireguard, section-name=test`;
     expect(generated(platform).proxies[0]).toMatchObject({ "persistent-keepalive": 25 });
     const saved = [{ name: "wg", type: "wireguard", "private-key": key, ip: "203.0.113.2", keepalive: 25,
-      "persistent-keepalive": 0, peers: [{ server: "local.subboost.test", port: 443, "public-key": key, reserved: "U4An" }] }];
+      "persistent-keepalive": 0, peers: [{ server: "local.subfuse.test", port: 443, "public-key": key, reserved: "U4An" }] }];
     const nodes = validateSubscriptionNodeList(saved);
     const result = yaml.load(generateClashYaml({ nodes, userConfig: { dnsYaml: "" } })) as { proxies: Record<string, unknown>[] };
     expect(result.proxies[0]).toMatchObject({ "persistent-keepalive": 0, peers: [{ reserved: [83, 128, 39] }] });
@@ -228,9 +228,9 @@ describe("protocol import through persistence and generation", () => {
   });
 
   it("maps Snell ShadowTLS aliases and preserves an explicit standard structure", () => {
-    expect(generated("snell://demo@local.subboost.test:443?version=3&shadow-tls-version=3&shadow-tls-sni=local.subboost.test&shadow-tls-password=padding").proxies[0])
-      .toMatchObject({ "obfs-opts": { mode: "shadow-tls", version: 3, host: "local.subboost.test", password: "padding" } });
-    const source = { name: "snell", type: "snell", server: "local.subboost.test", port: 443, psk: "demo",
+    expect(generated("snell://demo@local.subfuse.test:443?version=3&shadow-tls-version=3&shadow-tls-sni=local.subfuse.test&shadow-tls-password=padding").proxies[0])
+      .toMatchObject({ "obfs-opts": { mode: "shadow-tls", version: 3, host: "local.subfuse.test", password: "padding" } });
+    const source = { name: "snell", type: "snell", server: "local.subfuse.test", port: 443, psk: "demo",
       "shadow-tls-password": "legacy", "obfs-opts": { mode: "shadow-tls", version: 3, password: "canonical" } };
     const final = generated(yaml.dump({ proxies: [source] })).proxies[0];
     expect(final["obfs-opts"]).toEqual(source["obfs-opts"]);
@@ -248,12 +248,12 @@ describe("protocol import through persistence and generation", () => {
     const kind = `ecdsa-sha2-${curve}`;
     const point = Buffer.concat([Buffer.from([4]), Buffer.from(jwk.x!, "base64url"), Buffer.from(jwk.y!, "base64url")]);
     const hostKey = `${kind} ${Buffer.concat([sshString(kind), sshString(curve), sshString(point)]).toString("base64")}`;
-    const source = { name: "ssh", type: "ssh", server: "local.subboost.test", port: 22, username: "demo", password: "demo", "host-key": [hostKey] };
+    const source = { name: "ssh", type: "ssh", server: "local.subfuse.test", port: 22, username: "demo", password: "demo", "host-key": [hostKey] };
     expect(generated(yaml.dump({ proxies: [source] })).proxies[0]["host-key"]).toEqual([hostKey]);
   });
 
   it("does not downgrade malformed explicit SSH host-key input to unchecked SSH", () => {
-    const source = { name: "ssh", type: "ssh", server: "local.subboost.test", port: 22, password: "demo", "host-key": ["invalid"] };
+    const source = { name: "ssh", type: "ssh", server: "local.subfuse.test", port: 22, password: "demo", "host-key": ["invalid"] };
     expect(generated(yaml.dump({ proxies: [source] })).proxies ?? []).toEqual([]);
   });
 });

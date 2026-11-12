@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { initialState } from "@subboost/ui/store/config-store/definitions";
+import { initialState } from "@subfuse/ui/store/config-store/definitions";
 import {
   AUTH_CONFIG_HANDOFF_STORAGE_NAME,
   captureAuthConfigHandoff,
   consumeAuthConfigHandoff,
   hasAuthConfigHandoff,
-} from "@subboost/ui/store/config-store/auth-handoff";
+} from "@subfuse/ui/store/config-store/auth-handoff";
 
 function createStorage(initial: Record<string, string> = {}) {
   const values = new Map(Object.entries(initial));

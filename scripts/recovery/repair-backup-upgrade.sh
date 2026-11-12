@@ -6,7 +6,7 @@ umask 077
 # This file is not part of the normal installer, manager, or asset generator.
 OLD_SHA256=e2bdcb22d5b0a086b9560535e2d9194a41d583b22cbf84ed37347a0181c4d79c
 FIXED_SHA256=ba721c4ea90fbe391fb0ba8b620087454bdd654e1fde774215365fda001eb623
-MANAGER_URL=https://raw.githubusercontent.com/SubBoost/subboost/6a1fff10eb6d5c7a48e0ae4bf76786d594a47675/local/scripts/subboost.sh
+MANAGER_URL=https://raw.githubusercontent.com/SubFuse/subfuse/6a1fff10eb6d5c7a48e0ae4bf76786d594a47675/local/scripts/subfuse.sh
 work=""
 staged=""
 backup_partial=""
@@ -28,8 +28,8 @@ main() {
   for command in curl sha256sum cut bash install mktemp cp mv date mkdir rmdir; do
     command -v "$command" >/dev/null || fail "Required command missing: $command"
   done
-  bin="${SUBBOOST_BIN:-/usr/local/bin/subboost}"
-  [[ "$bin" = /* ]] || fail "SUBBOOST_BIN must be an absolute path."
+  bin="${SUBFUSE_BIN:-/usr/local/bin/subfuse}"
+  [[ "$bin" = /* ]] || fail "SUBFUSE_BIN must be an absolute path."
   [ -f "$bin" ] && [ ! -L "$bin" ] || fail "Expected a regular installed manager at $bin."
   mkdir -- "${bin}.repair.lock" 2>/dev/null || fail "Another recovery is active or its lock remains. Inspect ${bin}.repair.lock before retrying."
   lock="${bin}.repair.lock"

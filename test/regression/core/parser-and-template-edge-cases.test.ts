@@ -4,12 +4,12 @@ import {
   parseSimpleProxy,
   parseSocks,
   parseTelegramProxyLink,
-} from "@subboost/core/parser/protocols/simple-proxy";
-import { parsePlatformProxyLine } from "@subboost/core/parser/platform/parse-platform-proxy-line";
+} from "@subfuse/core/parser/protocols/simple-proxy";
+import { parsePlatformProxyLine } from "@subfuse/core/parser/platform/parse-platform-proxy-line";
 import {
-  SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
-  validateSubBoostTemplateConfig,
-} from "@subboost/core/templates/config-template";
+  SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
+  validateSubFuseTemplateConfig,
+} from "@subfuse/core/templates/config-template";
 
 function b64url(value: string): string {
   return Buffer.from(value).toString("base64url");
@@ -17,7 +17,7 @@ function b64url(value: string): string {
 
 function validTemplateConfig(): Record<string, unknown> {
   return {
-    schema: SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
+    schema: SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
     template: "standard",
     enabledProxyGroups: ["select"],
     hiddenProxyGroups: [],
@@ -116,13 +116,13 @@ describe("public core extra branch coverage", () => {
   });
 
   it("normalizes optional template config success branches", () => {
-    expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), hiddenProxyGroups: undefined })).toMatchObject({
+    expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), hiddenProxyGroups: undefined })).toMatchObject({
       ok: true,
       config: expect.objectContaining({ hiddenProxyGroups: [] }),
     });
 
     expect(
-      validateSubBoostTemplateConfig({
+      validateSubFuseTemplateConfig({
         ...validTemplateConfig(),
         customRuleSets: [
           {
@@ -178,7 +178,7 @@ describe("public core extra branch coverage", () => {
       }),
     });
 
-    expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), enabledProxyGroups: undefined })).toMatchObject({
+    expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), enabledProxyGroups: undefined })).toMatchObject({
       ok: false,
       error: "enabledProxyGroups 必须是数组",
     });
@@ -186,25 +186,25 @@ describe("public core extra branch coverage", () => {
 
   it("rejects malformed nested template config fields", () => {
     const expectInvalid = (patch: Record<string, unknown>, error: string) => {
-      expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), ...patch })).toMatchObject({
+      expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), ...patch })).toMatchObject({
         ok: false,
         error,
       });
     };
 
-    expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), proxyGroupNameOverrides: undefined })).toMatchObject({
+    expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), proxyGroupNameOverrides: undefined })).toMatchObject({
       ok: true,
       config: expect.objectContaining({ proxyGroupNameOverrides: {} }),
     });
-    expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), proxyGroupAdvanced: undefined })).toMatchObject({
+    expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), proxyGroupAdvanced: undefined })).toMatchObject({
       ok: true,
       config: expect.objectContaining({ proxyGroupAdvanced: {} }),
     });
-    expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), customRuleSets: undefined })).toMatchObject({
+    expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), customRuleSets: undefined })).toMatchObject({
       ok: true,
       config: expect.objectContaining({ customRuleSets: [] }),
     });
-    expect(validateSubBoostTemplateConfig({ ...validTemplateConfig(), builtinRuleEdits: undefined })).toMatchObject({
+    expect(validateSubFuseTemplateConfig({ ...validTemplateConfig(), builtinRuleEdits: undefined })).toMatchObject({
       ok: true,
       config: expect.objectContaining({ builtinRuleEdits: {} }),
     });

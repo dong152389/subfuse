@@ -98,10 +98,10 @@ export async function testSmtpConnection(
       await transporter.sendMail({
         from: config.from,
         to: testRecipient,
-        subject: "【SubBoost】SMTP 邮件发送测试",
+        subject: "【SubFuse】SMTP 邮件发送测试",
         html: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb;">
-            <h2 style="margin-top: 0; color: #111827; font-size: 20px;">SubBoost 邮件服务测试成功</h2>
+            <h2 style="margin-top: 0; color: #111827; font-size: 20px;">SubFuse 邮件服务测试成功</h2>
             <p style="color: #4b5563; font-size: 14px; line-height: 1.6;">
               您好！这是一封测试邮件，代表您的 SMTP 邮件发送配置已成功建立并能正常通信。
             </p>
@@ -148,12 +148,12 @@ export async function sendVerificationCodeEmail(
     await transporter.sendMail({
       from: config.from,
       to,
-      subject: `【SubBoost】${code} 是您的${actionText}验证码`,
+      subject: `【SubFuse】${code} 是您的${actionText}验证码`,
       html: `
         <div style="background-color: #f8fafc; padding: 40px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
           <div style="max-width: 540px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9;">
             <div style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); padding: 32px 28px; text-align: center;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.02em;">SubBoost</h1>
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.02em;">SubFuse</h1>
               <p style="color: rgba(255, 255, 255, 0.9); margin: 6px 0 0 0; font-size: 14px;">高性能多平台订阅转换与管理系统</p>
             </div>
 

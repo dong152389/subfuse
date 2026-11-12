@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import * as yamlParser from "js-yaml";
 import { collectDnsPolicyEntries, configToYaml } from "./yaml";
-import type { ClashConfig } from "@subboost/core/types/config";
+import type { ClashConfig } from "@subfuse/core/types/config";
 
 const REALITY_PUBLIC_KEY = "A".repeat(43);
 

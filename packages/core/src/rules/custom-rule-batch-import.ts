@@ -1,4 +1,4 @@
-import type { CustomRule, CustomRuleSet, RuleSetMetadata } from "@subboost/core/types/config";
+import type { CustomRule, CustomRuleSet, RuleSetMetadata } from "@subfuse/core/types/config";
 import { isCustomRuleType } from "./custom-rule-utils";
 import { isLogicRuleType, normalizeCustomRuleValue } from "./custom-rule-value";
 import { getSourceIpRuleType, hasCommaPayload, supportsNoResolve } from "./custom-rule-types";

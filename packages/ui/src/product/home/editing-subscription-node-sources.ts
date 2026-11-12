@@ -1,7 +1,7 @@
-import type { SubscriptionSource } from "@subboost/ui/store/config-store";
-import { parseSubscription } from "@subboost/core/parser";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { buildNodeEndpointKey } from "@subboost/core/node-endpoint";
+import type { SubscriptionSource } from "@subfuse/ui/store/config-store";
+import { parseSubscription } from "@subfuse/core/parser";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { buildNodeEndpointKey } from "@subfuse/core/node-endpoint";
 
 const ORIGIN_NAME_KEY = "_originName";
 const SOURCE_IDS_KEY = "_sourceIds";

@@ -25,10 +25,10 @@ vi.mock("@local/lib/rule-catalog", () => ({
   refreshRuleIndex: mocks.refreshRuleIndex,
   searchRules: mocks.searchRules,
 }));
-vi.mock("@subboost/core/api/pagination", () => ({
+vi.mock("@subfuse/core/api/pagination", () => ({
   parsePagePagination: mocks.parsePagePagination,
 }));
-vi.mock("@subboost/server-core/rules", () => ({
+vi.mock("@subfuse/server-core/rules", () => ({
   buildCnRuleCandidateResponse: mocks.buildCnRuleCandidateResponse,
   buildCnRuleCandidateUnavailableResponse: mocks.buildCnRuleCandidateUnavailableResponse,
   normalizeRuleSearchType: mocks.normalizeRuleSearchType,
@@ -60,7 +60,7 @@ describe("local rule route failure behavior", () => {
     mocks.requireLocalCronAuth.mockReturnValue(authError);
 
     const response = await updateRuleIndex(
-      new Request("http://local.subboost.test/api/cron/update-rule-index?force=1") as never,
+      new Request("http://local.subfuse.test/api/cron/update-rule-index?force=1") as never,
     );
 
     expect(response).toBe(authError);
@@ -74,7 +74,7 @@ describe("local rule route failure behavior", () => {
     });
 
     const response = await updateRuleIndex(
-      new Request("http://local.subboost.test/api/cron/update-rule-index?force=1") as never,
+      new Request("http://local.subfuse.test/api/cron/update-rule-index?force=1") as never,
     );
 
     expect(response.status).toBe(503);
@@ -96,7 +96,7 @@ describe("local rule route failure behavior", () => {
     });
 
     const response = await updateRuleIndex(
-      new Request("http://local.subboost.test/api/cron/update-rule-index") as never,
+      new Request("http://local.subfuse.test/api/cron/update-rule-index") as never,
     );
 
     expect(response.status).toBe(200);
@@ -112,7 +112,7 @@ describe("local rule route failure behavior", () => {
     mocks.getCnRuleCandidateDiscovery.mockRejectedValue(failure);
 
     await expect(getCnCandidates(
-      new Request("http://local.subboost.test/api/rules/cn-candidates") as never,
+      new Request("http://local.subfuse.test/api/rules/cn-candidates") as never,
     )).rejects.toBe(failure);
   });
 
@@ -121,7 +121,7 @@ describe("local rule route failure behavior", () => {
     mocks.searchRules.mockRejectedValue(failure);
 
     await expect(searchRuleIndex(
-      new Request("http://local.subboost.test/api/rules/search") as never,
+      new Request("http://local.subfuse.test/api/rules/search") as never,
     )).rejects.toBe(failure);
 
     expect(mocks.searchRules).toHaveBeenCalledWith({

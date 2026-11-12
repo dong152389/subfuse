@@ -1,8 +1,8 @@
-import { getProxyGroupMemberKey } from "@subboost/core/proxy-group-targets";
+import { getProxyGroupMemberKey } from "@subfuse/core/proxy-group-targets";
 import type {
   ProxyGroupAdvancedConfig,
   ProxyGroupMemberRef,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 
 export type ResolvedMember = {
   key: string;

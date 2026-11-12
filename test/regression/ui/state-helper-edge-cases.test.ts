@@ -1,20 +1,20 @@
 import { describe, expect, it, vi } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import {
   readJsonResponse,
   readSourceImportResponse,
-} from "@subboost/ui/product/client-response";
-import { buildSourceDisplayLabel } from "@subboost/ui/product/converter/source-display-label";
+} from "@subfuse/ui/product/client-response";
+import { buildSourceDisplayLabel } from "@subfuse/ui/product/converter/source-display-label";
 import {
   ensureNodesHaveValidSourceIds,
   getNodeSourceIds,
-} from "@subboost/ui/product/home/editing-subscription-node-sources";
-import { isCleanNewSubscriptionIntent } from "@subboost/ui/product/subscription/home-url-intent";
+} from "@subfuse/ui/product/home/editing-subscription-node-sources";
+import { isCleanNewSubscriptionIntent } from "@subfuse/ui/product/subscription/home-url-intent";
 import {
   isSourcePendingImport,
   markSourceAsPendingImport,
-} from "@subboost/ui/product/subscription/source-import-state";
-import { getSubscriptionUserInfoDisplay } from "@subboost/ui/product/subscription/subscription-userinfo-display";
+} from "@subfuse/ui/product/subscription/source-import-state";
+import { getSubscriptionUserInfoDisplay } from "@subfuse/ui/product/subscription/subscription-userinfo-display";
 
 function node(name: string): ParsedNode {
   return {

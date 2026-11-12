@@ -10,7 +10,7 @@ import type {
   TuicNode,
   VLESSNode,
   VMessNode,
-} from "@subboost/core/types/node";
+} from "@subfuse/core/types/node";
 import { canonicalizeParsedNode } from "./canonical-fields";
 
 import {

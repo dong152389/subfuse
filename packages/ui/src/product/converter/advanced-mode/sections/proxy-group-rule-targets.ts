@@ -1,7 +1,7 @@
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
-import type { CustomProxyGroup, CustomRule } from "@subboost/core/types/config";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
+import type { CustomProxyGroup, CustomRule } from "@subfuse/core/types/config";
 
 export type ProxyGroupRuleTargetKind = "module" | "custom";
 

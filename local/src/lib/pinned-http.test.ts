@@ -33,7 +33,7 @@ describe("pinned local HTTP transport", () => {
       url: `http://example.test:${port}/ok`,
       addresses: ["127.0.0.1"],
       method: "GET",
-      userAgent: "SubBoost Test",
+      userAgent: "SubFuse Test",
       maxBytes: 1024,
       signal: new AbortController().signal,
     });
@@ -47,7 +47,7 @@ describe("pinned local HTTP transport", () => {
       url: `http://example.test:${port}/large`,
       addresses: ["127.0.0.1"],
       method: "GET",
-      userAgent: "SubBoost Test",
+      userAgent: "SubFuse Test",
       maxBytes: 128,
       signal: new AbortController().signal,
     })).rejects.toBeInstanceOf(ResponseTooLargeError);

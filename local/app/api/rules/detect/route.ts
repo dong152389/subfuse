@@ -1,4 +1,4 @@
-import { handleRuleDetection } from "@subboost/server-core/rules/detect";
+import { handleRuleDetection } from "@subfuse/server-core/rules/detect";
 import { withCurrentAdmin } from "@local/lib/api-auth";
 import { consumeLocalRateLimit, localRateLimitResponse } from "@local/lib/rate-limit";
 import { fetchRuleContentDirect } from "@local/lib/source-import";

@@ -78,11 +78,11 @@ vi.mock("lucide-react", () => ({
   Pencil: () => null,
   RotateCcw: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => React.createElement("div", props, props.children),
   DropdownMenuContent: (props: any) => React.createElement("div", props, props.children),
   DropdownMenuItem: (props: any) => {
@@ -92,15 +92,15 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuLabel: (props: any) => React.createElement("span", props, props.children),
   DropdownMenuTrigger: (props: any) => React.createElement("span", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/proxy-groups-custom-groups-panel", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/config-store", () => ({ useConfigStore: () => mocks.store }));
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/proxy-groups-custom-groups-panel", () => ({
   ProxyGroupsCustomGroupsPanel: () => React.createElement("div", { "data-panel": "custom-groups" }),
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/proxy-groups-custom-routing-rules", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/proxy-groups-custom-routing-rules", () => ({
   ProxyGroupsCustomRoutingRules: () => React.createElement("div", { "data-panel": "custom-routing" }),
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/proxy-groups-module-card", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/proxy-groups-module-card", () => ({
   ProxyGroupsModuleCard: (props: any) => {
     mocks.moduleCards.push(props);
     return React.createElement("section", { "data-module": props.module.id }, props.display.full);

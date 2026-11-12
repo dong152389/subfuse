@@ -1,7 +1,7 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { SubscriptionImportErrorInfo } from "@subboost/core/subscription/import-error";
+import type { SubscriptionImportErrorInfo } from "@subfuse/core/subscription/import-error";
 
 const mocks = vi.hoisted(() => ({
   buttons: [] as any[],
@@ -28,7 +28,7 @@ vi.mock("lucide-react", () => ({
   Menu: () => React.createElement("span", null, "menu"),
 }));
 
-vi.mock("@subboost/ui/components/ui/dialog", async () => {
+vi.mock("@subfuse/ui/components/ui/dialog", async () => {
   const ReactModule = await import("react");
   return {
     Dialog: (props: any) => ReactModule.createElement("div", null, props.children),
@@ -42,22 +42,22 @@ vi.mock("@subboost/ui/components/ui/dialog", async () => {
   };
 });
 
-vi.mock("@subboost/ui/lib/utils", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({
   cn: (...parts: Array<string | false | null | undefined>) => parts.filter(Boolean).join(" "),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     if (typeof props.onClick === "function") mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({
   toast: mocks.toast,
 }));
 
-vi.mock("@subboost/core/time/beijing", () => ({
+vi.mock("@subfuse/core/time/beijing", () => ({
   formatInBeijing: mocks.formatInBeijing,
 }));
 

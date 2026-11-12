@@ -42,21 +42,21 @@ const mocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@subboost/core/generator", () => ({
+vi.mock("@subfuse/core/generator", () => ({
   generateClashYaml: mocks.generateClashYaml,
 }));
 
-vi.mock("@subboost/core/subscription/config-utils", () => ({
+vi.mock("@subfuse/core/subscription/config-utils", () => ({
   buildGenerateOptionsFromConfig: mocks.buildGenerateOptionsFromConfig,
   getEffectiveTestOptions: mocks.getEffectiveTestOptions,
 }));
 
-vi.mock("@subboost/core/subscription/proxy-providers", () => ({
+vi.mock("@subfuse/core/subscription/proxy-providers", () => ({
   buildProxyProvidersFromConfig: mocks.buildProxyProvidersFromConfig,
 }));
 
-vi.mock("@subboost/server-core/subscription", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@subboost/server-core/subscription")>();
+vi.mock("@subfuse/server-core/subscription", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@subfuse/server-core/subscription")>();
   return {
     ...actual,
     buildManualRefreshFailureResponse: mocks.buildManualRefreshFailureResponse,
@@ -102,7 +102,7 @@ vi.mock("./source-import", () => ({
 
 describe("subscription link rotation", () => {
   it("uses an atomic owner and old-token comparison and updates no other fields", async () => {
-    mocks.getAppUrl.mockReturnValue("https://local.subboost.test");
+    mocks.getAppUrl.mockReturnValue("https://local.subfuse.test");
     mocks.prisma.subscription.updateMany.mockResolvedValueOnce({ count: 1 });
     const result = await resetSubscriptionLink("owner-1", "sub-1", "old");
     expect(result.status).toBe("updated");

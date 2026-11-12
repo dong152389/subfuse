@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Header, type HeaderBrandBadge } from "@subboost/ui/components/layout/header";
+import { Header, type HeaderBrandBadge } from "@subfuse/ui/components/layout/header";
 
 type LatestReleaseStatus = {
   hasUpdate?: unknown;
@@ -25,8 +25,8 @@ function buildNewReleaseBadge(status: LatestReleaseStatus | null): HeaderBrandBa
     label: "new",
     href: releaseUrl,
     external: true,
-    title: latestTag ? `SubBoost ${latestTag} 已发布` : "SubBoost 有新版本",
-    ariaLabel: latestTag ? `SubBoost ${latestTag} 已发布` : "SubBoost 有新版本",
+    title: latestTag ? `SubFuse ${latestTag} 已发布` : "SubFuse 有新版本",
+    ariaLabel: latestTag ? `SubFuse ${latestTag} 已发布` : "SubFuse 有新版本",
   };
 }
 

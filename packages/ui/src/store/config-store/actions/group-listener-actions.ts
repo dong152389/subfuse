@@ -1,4 +1,4 @@
-import type { GroupListenerTarget } from "@subboost/core/types/config";
+import type { GroupListenerTarget } from "@subfuse/core/types/config";
 import type { ConfigActions } from "../definitions";
 import type { GetState, SetAndGenerateConfig, SetState } from "../store-types";
 

@@ -1,5 +1,5 @@
-import type { ParsedNode } from "@subboost/core/types/node";
-import { formatNodeNameFromTemplate } from "@subboost/core/node-name-template";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { formatNodeNameFromTemplate } from "@subfuse/core/node-name-template";
 import type { ConfigActions } from "../definitions";
 import { makeUniqueName } from "../definitions";
 import type { GetState, SetAndGenerateConfig, SetState } from "../store-types";

@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import type { ParsedNode, ParseResult } from "@subboost/core/types/node";
+import type { ParsedNode, ParseResult } from "@subfuse/core/types/node";
 import { initialState, type SubscriptionSource } from "./definitions";
 import { createSourceActions } from "./source-actions";
 
@@ -10,7 +10,7 @@ const sourceActionMocks = vi.hoisted(() => ({
 
 export const PROXY_PROVIDER_HINT = "若错误多次出现，且确信订阅链接正确，可尝试在高级编辑中开启「proxy-providers模式」。";
 
-vi.mock("@subboost/core/parser", () => ({
+vi.mock("@subfuse/core/parser", () => ({
   parseSubscription: sourceActionMocks.parseSubscription,
 }));
 

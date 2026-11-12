@@ -82,12 +82,12 @@ vi.mock("lucide-react", () => ({
   Loader2: () => React.createElement("span", null, "loader-icon"),
   Mail: () => React.createElement("span", null, "mail-icon"),
 }));
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({
   hasAuthConfigHandoff: vi.fn(() => false),
 }));
 
 import { LocalLogin } from "./local-login";
-import { hasAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
+import { hasAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
 
 function response(body: unknown, ok = true) {
   return {
@@ -146,7 +146,7 @@ describe("local login component", () => {
   it("renders the initial loading card without requiring browser fetch", () => {
     const { html } = renderLogin();
 
-    expect(html).toContain("欢迎使用 SubBoost");
+    expect(html).toContain("欢迎使用 SubFuse");
     expect(html).toContain("href=\"/\"");
     expect(html).toContain("src=\"/logo.png\"");
     expect(html).toContain("animate-pulse");
@@ -257,7 +257,7 @@ describe("local login component", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-SubBoost-Setup-Token": "setup-secret",
+          "X-SubFuse-Setup-Token": "setup-secret",
         },
         body: JSON.stringify({ username: "admin", password: "long-secret", passwordConfirm: "long-secret" }),
       }),

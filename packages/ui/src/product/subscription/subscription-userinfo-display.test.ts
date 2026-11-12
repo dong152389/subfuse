@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import { getSubscriptionUserInfoDisplay } from "./subscription-userinfo-display";
 
 function infoNode(name: string): ParsedNode {

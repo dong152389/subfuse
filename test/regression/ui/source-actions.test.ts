@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
   createSubscriptionImportErrorInfo,
   SubscriptionImportError,
-} from "@subboost/core/subscription/import-error";
-import type { ParsedNode } from "@subboost/core/types/node";
+} from "@subfuse/core/subscription/import-error";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import {
   createHarness,
   getSourceActionMocks,

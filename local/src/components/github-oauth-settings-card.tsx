@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import { Check, Copy, Loader2 } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
-import { copyTextToClipboard } from "@subboost/ui/lib/clipboard";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { copyTextToClipboard } from "@subfuse/ui/lib/clipboard";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (

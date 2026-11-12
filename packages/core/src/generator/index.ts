@@ -6,7 +6,7 @@ import { loadMihomoYaml } from "../config/yaml-schema";
 import {
   buildDefaultBaseConfigPatch,
   buildDefaultUserConfig,
-} from "@subboost/core/config/defaults";
+} from "@subfuse/core/config/defaults";
 import {
   generateProxyGroups,
   generateRules,
@@ -19,8 +19,8 @@ import {
   applyDialerProxy 
 } from "./chain";
 import { DEFAULT_DNS_CONFIG } from "./dns";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import type {
   BuiltinRuleEdits,
   ClashConfig,
@@ -31,8 +31,8 @@ import type {
   ProxyGroupAdvancedConfig,
   TemplateType,
   UserConfig,
-} from "@subboost/core/types/config";
-import type { DialerProxyGroup } from "@subboost/core/types/template-config";
+} from "@subfuse/core/types/config";
+import type { DialerProxyGroup } from "@subfuse/core/types/template-config";
 import { collectDnsPolicyEntries, configToYaml } from "./yaml";
 import { shareHealthChecks } from "./shared-health-checks";
 import { isMihomoSupportedProxyNode, normalizeMihomoVlessForGeneration } from "../mihomo/proxy-sanitizer";
@@ -109,7 +109,7 @@ function assertNoGeneratedSectionsInBaseConfig(baseConfig: Record<string, unknow
   const conflicts = [...GENERATED_CONFIG_SECTION_KEYS].filter((key) => baseConfig[key] !== undefined);
   if (conflicts.length === 0) return;
   throw new BaseConfigYamlError(
-    `基础和 DNS 配置不能包含 ${conflicts.join(", ")}；这些段由 SubBoost 根据节点、代理组和规则生成。`
+    `基础和 DNS 配置不能包含 ${conflicts.join(", ")}；这些段由 SubFuse 根据节点、代理组和规则生成。`
   );
 }
 

@@ -41,7 +41,7 @@ export function deriveSessionRevocationIdentity(options: {
   const kind = jti ? "jti" : "legacy";
   const stableIdentity = jti || compactHeaderAndPayload(options.token);
   const key = createHash("sha256")
-    .update(`subboost-session-revocation:v1:${namespace}:${kind}:${stableIdentity}`, "utf8")
+    .update(`subfuse-session-revocation:v1:${namespace}:${kind}:${stableIdentity}`, "utf8")
     .digest("hex");
 
   return {

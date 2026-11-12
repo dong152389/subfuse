@@ -1,24 +1,24 @@
 "use client";
 
 import { HelpCircle, Menu, Plus } from "lucide-react";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { Button } from "@subboost/ui/components/ui/button";
-import { ChoiceChip, ChoiceGroup } from "@subboost/ui/components/ui/choice-group";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { ChoiceChip, ChoiceGroup } from "@subfuse/ui/components/ui/choice-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@subboost/ui/components/ui/dropdown-menu";
+} from "@subfuse/ui/components/ui/dropdown-menu";
 import {
   Popover,
   PopoverArrow,
   PopoverContent,
   PopoverTrigger,
-} from "@subboost/ui/components/ui/popover";
-import { cn } from "@subboost/ui/lib/utils";
-import { getSubscriptionUserInfoDisplay } from "@subboost/ui/product/subscription/subscription-userinfo-display";
-import type { SourceType, SubscriptionSource } from "@subboost/ui/store/config-store";
+} from "@subfuse/ui/components/ui/popover";
+import { cn } from "@subfuse/ui/lib/utils";
+import { getSubscriptionUserInfoDisplay } from "@subfuse/ui/product/subscription/subscription-userinfo-display";
+import type { SourceType, SubscriptionSource } from "@subfuse/ui/store/config-store";
 import { sourceTypeInfo } from "./source-type-info";
 
 const sourceTypes = Object.keys(sourceTypeInfo) as SourceType[];

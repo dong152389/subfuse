@@ -1,9 +1,9 @@
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
 import {
   hasSubscriptionUserInfo,
   normalizeSubscriptionUserInfo,
   type SubscriptionUserInfo,
-} from "@subboost/core/subscription/subscription-userinfo";
+} from "@subfuse/core/subscription/subscription-userinfo";
 
 export type SavedSourceType = "url" | "yaml" | "nodes";
 

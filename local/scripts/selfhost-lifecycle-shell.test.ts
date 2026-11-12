@@ -17,25 +17,25 @@ JSON
     printf 'services:\n  app: {}\n  db: {}\n  cron: {}\n' > "$home/release/compose.yml"
     printf '#!/usr/bin/env bash\nexit 0\n' > "$home/release/manager"
     cat > "$home/.env" <<ENV
-SUBBOOST_RELEASE_URL=file://$home/release/release.json
-SUBBOOST_IMAGE=old-image
-POSTGRES_DB=subboost
-POSTGRES_USER=subboost
+SUBFUSE_RELEASE_URL=file://$home/release/release.json
+SUBFUSE_IMAGE=old-image
+POSTGRES_DB=subfuse
+POSTGRES_USER=subfuse
 POSTGRES_PASSWORD=password
-DATABASE_URL=postgresql://subboost:password@db:5432/subboost?schema=public
+DATABASE_URL=postgresql://subfuse:password@db:5432/subfuse?schema=public
 ENCRYPTION_KEY=key
 JWT_SECRET=jwt
 CRON_SECRET=cron
 APP_URL=http://127.0.0.1:31000
-SUBBOOST_PORT=31000
+SUBFUSE_PORT=31000
 ENV
     : > "$home/docker-compose.yml"
-    export SUBBOOST_SCRIPT_SOURCE_ONLY=1
-    export SUBBOOST_HOME="$home"
-    export SUBBOOST_BIN="$home/bin/subboost"
-    export SUBBOOST_DOCTOR_HEALTH_ATTEMPTS=1
-    export SUBBOOST_DOCTOR_HEALTH_INTERVAL_SECONDS=0
-    source local/scripts/subboost.sh
+    export SUBFUSE_SCRIPT_SOURCE_ONLY=1
+    export SUBFUSE_HOME="$home"
+    export SUBFUSE_BIN="$home/bin/subfuse"
+    export SUBFUSE_DOCTOR_HEALTH_ATTEMPTS=1
+    export SUBFUSE_DOCTOR_HEALTH_INTERVAL_SECONDS=0
+    source local/scripts/subfuse.sh
     sudo_do() { "$@"; }
     read_env_file() { cat "$ENV_FILE"; }
     log="$home/docker.log"
@@ -84,7 +84,7 @@ describe("self-host update rollback lifecycle", () => {
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("Candidate update failed: candidate health check failed");
     expect(result.stdout).toContain("pg_restore --clean --if-exists --exit-on-error");
-    expect(result.stdout).toContain("tag subboost-rollback:update-");
+    expect(result.stdout).toContain("tag subfuse-rollback:update-");
     expect(result.stdout).toContain("old-image");
     expect(result.stdout).toContain("Previous version restored successfully.");
   });
@@ -109,7 +109,7 @@ describe("self-host update rollback lifecycle", () => {
         : > "$home/env"
         : > "$home/compose.yml"
         printf 'existing-volume\n' > "$home/volumes.before"
-        export SUBBOOST_SCRIPT_SOURCE_ONLY=1 SUBBOOST_HOME="$home"
+        export SUBFUSE_SCRIPT_SOURCE_ONLY=1 SUBFUSE_HOME="$home"
         source local/scripts/install.sh
         ENV_FILE="$home/env" COMPOSE_FILE="$home/compose.yml" DOCKER_RUNNER=docker
         docker() {
@@ -132,8 +132,8 @@ describe("self-host update rollback lifecycle", () => {
   it("persists a setup token and prints only the fragment bootstrap link", () => {
     const installer = readFileSync(path.join(publicRoot, "local/scripts/install.sh"), "utf8");
     expect(installer).toContain('ensure_env_value LOCAL_SETUP_TOKEN "$(random_hex 32)"');
-    expect(installer).toContain('prepare_private_directory "$SUBBOOST_HOME"');
-    expect(installer).toContain('prepare_private_directory "$SUBBOOST_HOME/backups"');
+    expect(installer).toContain('prepare_private_directory "$SUBFUSE_HOME"');
+    expect(installer).toContain('prepare_private_directory "$SUBFUSE_HOME/backups"');
     expect(installer).toContain("/login#setup-token=$(env_value LOCAL_SETUP_TOKEN)");
     expect(installer).not.toContain("?setup-token=");
   });

@@ -40,12 +40,12 @@ describe("server-core failure boundary behavior", () => {
   it("treats an unrelated numeric HTTP status as a non-stable failure", () => {
     const result = updateAutoUpdateFailureSourceState({
       previousStateRaw: null,
-      sources: [{ id: "source-a", type: "url", content: "https://local.subboost.test/a" }],
+      sources: [{ id: "source-a", type: "url", content: "https://local.subfuse.test/a" }],
       failedSources: [
         {
           id: "source-a",
           type: "url",
-          content: "https://local.subboost.test/a",
+          content: "https://local.subfuse.test/a",
           responseStatus: 200,
           errorMessage: "unexpected response",
         },
@@ -60,8 +60,8 @@ describe("server-core failure boundary behavior", () => {
 
   it("selects a disable source from multiple threshold-reaching failures", () => {
     const sources = [
-      { id: "source-a", type: "url", content: "https://local.subboost.test/a" },
-      { id: "source-b", type: "url", content: "https://local.subboost.test/b" },
+      { id: "source-a", type: "url", content: "https://local.subfuse.test/a" },
+      { id: "source-b", type: "url", content: "https://local.subfuse.test/b" },
     ];
     const failedSources = sources.map((source) => ({ ...source, errorMessage: "HTTP 403", httpStatus: 403 }));
     const first = updateAutoUpdateFailureSourceState({
@@ -128,7 +128,7 @@ describe("server-core failure boundary behavior", () => {
           {
             name: "AnyTLS",
             type: "anytls",
-            server: "local.subboost.test",
+            server: "local.subfuse.test",
             port: 443,
             password: "secret",
             alpn: "h2",
@@ -172,8 +172,8 @@ describe("server-core failure boundary behavior", () => {
         })
     );
 
-    const pending = resolveHostnameByDoh("local.subboost.test", {
-      endpoints: ["https://local.subboost.test/dns-query"],
+    const pending = resolveHostnameByDoh("local.subfuse.test", {
+      endpoints: ["https://local.subfuse.test/dns-query"],
       timeoutMs: 5,
     });
     await vi.advanceTimersByTimeAsync(5);

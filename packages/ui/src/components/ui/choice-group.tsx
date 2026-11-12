@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@subboost/ui/lib/utils";
+import { cn } from "@subfuse/ui/lib/utils";
 
 export interface ChoiceGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;

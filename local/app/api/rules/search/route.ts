@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parsePagePagination } from "@subboost/core/api/pagination";
-import { RuleIndexUnavailableError, normalizeRuleSearchType } from "@subboost/server-core/rules";
+import { parsePagePagination } from "@subfuse/core/api/pagination";
+import { RuleIndexUnavailableError, normalizeRuleSearchType } from "@subfuse/server-core/rules";
 import { searchRules } from "@local/lib/rule-catalog";
 
 export async function GET(request: NextRequest) {

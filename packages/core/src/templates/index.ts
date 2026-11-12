@@ -2,7 +2,7 @@
  * 预设模板配置
  */
 
-import type { TemplateConfig, TemplateType } from "@subboost/core/types/config";
+import type { TemplateConfig, TemplateType } from "@subfuse/core/types/config";
 import { PROXY_GROUP_MODULES, getModulesForTemplate } from "../generator/proxy-groups";
 
 /**

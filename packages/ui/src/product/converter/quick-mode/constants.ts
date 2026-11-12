@@ -1,6 +1,6 @@
-import type { TemplateType } from "@subboost/core/types/config";
-import { getTemplateList } from "@subboost/core/templates";
-export { sourceTypeInfo } from "@subboost/ui/product/converter/source-type-info";
+import type { TemplateType } from "@subfuse/core/types/config";
+import { getTemplateList } from "@subfuse/core/templates";
+export { sourceTypeInfo } from "@subfuse/ui/product/converter/source-type-info";
 
 const templateCounts = new Map(
   getTemplateList().map((template) => [template.id, { groups: template.groupCount, rules: template.ruleCount }])

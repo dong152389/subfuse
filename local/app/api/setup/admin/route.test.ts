@@ -35,7 +35,7 @@ vi.mock("@local/lib/prisma", () => ({
   },
 }));
 vi.mock("@local/lib/session", () => ({
-  SESSION_COOKIE: "subboost_local_session",
+  SESSION_COOKIE: "subfuse_local_session",
   signSession: mocks.signSession,
   sessionCookieOptions: mocks.sessionCookieOptions,
 }));
@@ -49,7 +49,7 @@ async function readJson(response: Response) {
 
 function setupRequest(token = "setup-secret") {
   return new Request("https://local.test/api/setup/admin", {
-    headers: token ? { "X-SubBoost-Setup-Token": token } : {},
+    headers: token ? { "X-SubFuse-Setup-Token": token } : {},
   });
 }
 
@@ -119,7 +119,7 @@ describe("local setup admin route", () => {
       select: { id: true, username: true },
     });
     expect(mocks.signSession).toHaveBeenCalledWith({ adminId: "admin-1", username: "ry" });
-    expect(result.headers.get("set-cookie")).toContain("subboost_local_session=signed-session");
+    expect(result.headers.get("set-cookie")).toContain("subfuse_local_session=signed-session");
   });
 
   it("rechecks setup state under a database lock", async () => {

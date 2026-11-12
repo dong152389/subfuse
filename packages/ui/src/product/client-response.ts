@@ -1,8 +1,8 @@
 import {
   normalizeSubscriptionImportErrorInfo,
   SubscriptionImportError,
-} from "@subboost/core/subscription/import-error";
-import type { ParseResult } from "@subboost/core/types/node";
+} from "@subfuse/core/subscription/import-error";
+import type { ParseResult } from "@subfuse/core/types/node";
 
 export type ClientApiErrorResponse = {
   error?: string;

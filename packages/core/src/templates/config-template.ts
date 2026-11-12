@@ -1,17 +1,17 @@
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { normalizePersistedRuleOrder } from "@subboost/core/generator/rules";
-import { ensureCustomRuleId, isCustomRuleType } from "@subboost/core/rules/custom-rule-utils";
-import { normalizeCustomRuleValue } from "@subboost/core/rules/custom-rule-value";
-import { supportsNoResolve } from "@subboost/core/rules/custom-rule-types";
-import { resolveProxyGroupAdvancedModeEnabled } from "@subboost/core/proxy-group-advanced-mode";
-import { normalizeProxyGroupAdvancedConfig } from "@subboost/core/proxy-group-advanced";
-import { normalizeProxyGroupTargetRef } from "@subboost/core/proxy-group-targets";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { normalizePersistedRuleOrder } from "@subfuse/core/generator/rules";
+import { ensureCustomRuleId, isCustomRuleType } from "@subfuse/core/rules/custom-rule-utils";
+import { normalizeCustomRuleValue } from "@subfuse/core/rules/custom-rule-value";
+import { supportsNoResolve } from "@subfuse/core/rules/custom-rule-types";
+import { resolveProxyGroupAdvancedModeEnabled } from "@subfuse/core/proxy-group-advanced-mode";
+import { normalizeProxyGroupAdvancedConfig } from "@subfuse/core/proxy-group-advanced";
+import { normalizeProxyGroupTargetRef } from "@subfuse/core/proxy-group-targets";
 import {
   isValidRuleSetPathOrUrl,
   isValidRuleSetFormatBehavior,
   normalizeRuleModelFromConfig,
   normalizeRuleSetPathInput,
-} from "@subboost/core/rules/rule-model";
+} from "@subfuse/core/rules/rule-model";
 import {
   DEFAULT_LOAD_BALANCE_STRATEGY,
   isProxyGroupGroupType,
@@ -22,13 +22,13 @@ import {
   type ProxyGroupRuleTarget,
   type ProxyGroupGroupType,
   type TemplateType,
-} from "@subboost/core/types/config";
-import type { DialerProxyGroup, SubBoostTemplateConfig } from "@subboost/core/types/template-config";
+} from "@subfuse/core/types/config";
+import type { DialerProxyGroup, SubFuseTemplateConfig } from "@subfuse/core/types/template-config";
 
-export const SUBBOOST_TEMPLATE_CONFIG_SCHEMA = "subboost-template-config/v1";
+export const SUBFUSE_TEMPLATE_CONFIG_SCHEMA = "subfuse-template-config/v1";
 
 type ValidationResult =
-  | { ok: true; config: SubBoostTemplateConfig }
+  | { ok: true; config: SubFuseTemplateConfig }
   | { ok: false; error: string };
 
 const BUILTIN_MODULE_IDS = new Set(PROXY_GROUP_MODULES.map((module) => module.id));
@@ -42,9 +42,9 @@ const REMOVED_TEMPLATE_FIELDS = new Set([
   "filteredProxyGroups",
 ]);
 
-export function validateSubBoostTemplateConfig(value: unknown): ValidationResult {
+export function validateSubFuseTemplateConfig(value: unknown): ValidationResult {
   if (!isRecord(value)) return invalid("模板配置必须是对象");
-  if (value.schema !== SUBBOOST_TEMPLATE_CONFIG_SCHEMA) {
+  if (value.schema !== SUBFUSE_TEMPLATE_CONFIG_SCHEMA) {
     return invalid("模板配置 schema 无效");
   }
   const removedField = findRemovedTemplateField(value);
@@ -124,7 +124,7 @@ export function validateSubBoostTemplateConfig(value: unknown): ValidationResult
   return {
     ok: true,
     config: {
-      schema: SUBBOOST_TEMPLATE_CONFIG_SCHEMA,
+      schema: SUBFUSE_TEMPLATE_CONFIG_SCHEMA,
       template,
       enabledProxyGroups: enabledProxyGroups.value,
       hiddenProxyGroups: hiddenProxyGroups.value,
@@ -376,10 +376,10 @@ function parseCustomProxyGroups(value: unknown): { ok: true; value: CustomProxyG
 
 function parseProxyGroupAdvanced(
   value: unknown
-): { ok: true; value: NonNullable<SubBoostTemplateConfig["proxyGroupAdvanced"]> } | { ok: false; error: string } {
+): { ok: true; value: NonNullable<SubFuseTemplateConfig["proxyGroupAdvanced"]> } | { ok: false; error: string } {
   if (value === undefined) return { ok: true, value: {} };
   if (!isRecord(value)) return invalid("proxyGroupAdvanced 必须是对象");
-  const out: NonNullable<SubBoostTemplateConfig["proxyGroupAdvanced"]> = {};
+  const out: NonNullable<SubFuseTemplateConfig["proxyGroupAdvanced"]> = {};
   for (const [moduleId, rawConfig] of Object.entries(value)) {
     const id = moduleId.trim();
     if (!BUILTIN_MODULE_IDS.has(id)) return invalid("proxyGroupAdvanced 包含未知代理组");

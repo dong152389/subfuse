@@ -259,7 +259,7 @@ describe("public core config and refresh branch coverage", () => {
           "public-key": "bad",
         },
       })
-    ).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    ).toHaveProperty("_subfuse-invalid-mihomo-node", true);
   });
 
   it("parses platform proxy fallbacks for optional WireGuard and fingerprint branches", () => {

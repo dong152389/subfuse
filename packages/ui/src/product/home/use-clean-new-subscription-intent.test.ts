@@ -21,11 +21,11 @@ vi.mock("react", async (importOriginal) => {
   };
 });
 
-vi.mock("@subboost/ui/product/subscription/home-url-intent", () => ({
+vi.mock("@subfuse/ui/product/subscription/home-url-intent", () => ({
   isCleanNewSubscriptionIntent: mocks.isCleanNewSubscriptionIntent,
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: {
     getState: () => ({
       reset: mocks.reset,

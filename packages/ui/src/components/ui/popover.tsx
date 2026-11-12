@@ -3,8 +3,8 @@
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { CircleHelp } from "lucide-react";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { cn } from "@subboost/ui/lib/utils";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { cn } from "@subfuse/ui/lib/utils";
 
 const Popover = PopoverPrimitive.Root;
 const PopoverTrigger = PopoverPrimitive.Trigger;

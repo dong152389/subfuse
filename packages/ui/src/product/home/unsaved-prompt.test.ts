@@ -17,10 +17,10 @@ vi.mock("react", async (importOriginal) => {
   };
 });
 vi.mock("zustand/react/shallow", () => ({ useShallow: (selector: unknown) => selector }));
-vi.mock("@subboost/ui/product/subscription/source-import-state", () => ({
+vi.mock("@subfuse/ui/product/subscription/source-import-state", () => ({
   isSourcePendingImport: mocks.isSourcePendingImport,
 }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: (selector: (state: typeof mocks.storeState) => unknown) => selector(mocks.storeState),
 }));
 

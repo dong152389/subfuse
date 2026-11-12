@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, HelpCircle } from "lucide-react";
-import { HelpPopover } from "@subboost/ui/components/ui/popover";
+import { HelpPopover } from "@subfuse/ui/components/ui/popover";
 
 export function ExperimentalCnRuleHelpButton() {
   return (

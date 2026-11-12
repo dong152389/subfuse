@@ -1,7 +1,7 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { User } from "@subboost/ui/store/user-store";
+import type { User } from "@subfuse/ui/store/user-store";
 
 const mocks = vi.hoisted(() => ({
   buttons: [] as any[],
@@ -58,14 +58,14 @@ vi.mock("lucide-react", () => ({
   Zap: () => React.createElement("span", null, "zap-icon"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => React.createElement("section", props, props.children),
   CardContent: (props: any) => React.createElement("div", props, props.children),
   CardFooter: (props: any) => React.createElement("footer", props, props.children),
@@ -73,7 +73,7 @@ vi.mock("@subboost/ui/components/ui/card", () => ({
   CardTitle: (props: any) => React.createElement("h2", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/tabs", () => ({
+vi.mock("@subfuse/ui/components/ui/tabs", () => ({
   Tabs: (props: any) => {
     mocks.tabs.push(props);
     return React.createElement("div", { "data-tabs-value": props.value ?? props.defaultValue }, props.children);
@@ -83,37 +83,37 @@ vi.mock("@subboost/ui/components/ui/tabs", () => ({
   TabsTrigger: (props: any) => React.createElement("button", props, props.children),
 }));
 
-vi.mock("@subboost/ui/product/converter/quick-mode", () => ({
+vi.mock("@subfuse/ui/product/converter/quick-mode", () => ({
   QuickMode: () => React.createElement("div", null, "quick-mode"),
 }));
 
-vi.mock("@subboost/ui/product/converter/advanced-mode", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode", () => ({
   AdvancedMode: () => React.createElement("div", null, "advanced-mode"),
 }));
 
-vi.mock("@subboost/ui/product/home/unsaved-prompt", () => ({
+vi.mock("@subfuse/ui/product/home/unsaved-prompt", () => ({
   UnsavedPrompt: () => React.createElement("div", null, "unsaved-prompt"),
 }));
 
-vi.mock("@subboost/ui/product/preview/visual-graph", () => ({
+vi.mock("@subfuse/ui/product/preview/visual-graph", () => ({
   VisualGraph: () => React.createElement("div", null, "visual-graph"),
 }));
 
-vi.mock("@subboost/ui/product/preview/diff-highlight", () => ({
+vi.mock("@subfuse/ui/product/preview/diff-highlight", () => ({
   YamlHighlight: (props: any) => {
     mocks.yamlHighlight = props;
     return React.createElement("pre", null, props.content);
   },
 }));
 
-vi.mock("@subboost/ui/product/home/subscription-link-dialog", () => ({
+vi.mock("@subfuse/ui/product/home/subscription-link-dialog", () => ({
   SubscriptionLinkDialog: (props: any) => {
     mocks.subscriptionDialog = props;
     return React.createElement("div", null, "subscription-dialog");
   },
 }));
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 
@@ -196,7 +196,7 @@ describe("HomeLayout", () => {
       authChecked: false,
       user: null,
     });
-    expect(html).toContain("SubBoost");
+    expect(html).toContain("SubFuse");
     expect(html).toContain("quick-mode");
     expect(html).toContain("advanced-mode");
     expect(html).toContain("visual-graph");

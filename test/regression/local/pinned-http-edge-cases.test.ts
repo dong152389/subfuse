@@ -16,7 +16,7 @@ describe("local pinned HTTP transport edge behavior", () => {
   beforeAll(async () => {
     server = createServer((request, response) => {
       observedMethods.push(request.method || "");
-      const pathname = new URL(request.url || "/", "http://local.subboost.test").pathname;
+      const pathname = new URL(request.url || "/", "http://local.subfuse.test").pathname;
 
       if (pathname === "/reset-once") {
         resetOnceRequestCount += 1;
@@ -88,10 +88,10 @@ describe("local pinned HTTP transport edge behavior", () => {
     overrides: Partial<Parameters<typeof requestPinnedText>[0]> = {},
   ) {
     return requestPinnedText({
-      url: `http://local.subboost.test:${port}${pathname}`,
+      url: `http://local.subfuse.test:${port}${pathname}`,
       addresses: ["127.0.0.1"],
       method: "GET",
-      userAgent: "SubBoost Regression",
+      userAgent: "SubFuse Regression",
       maxBytes: 1024,
       signal: new AbortController().signal,
       ...overrides,
@@ -165,7 +165,7 @@ describe("local pinned HTTP transport edge behavior", () => {
 
   it("selects HTTPS transport and only sends SNI for hostname URLs", async () => {
     await expect(request("/plain", {
-      url: `https://local.subboost.test:${port}/plain`,
+      url: `https://local.subfuse.test:${port}/plain`,
     })).rejects.toBeInstanceOf(Error);
     await expect(request("/plain", {
       url: `https://127.0.0.1:${port}/plain`,

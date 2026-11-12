@@ -5,7 +5,7 @@ import {
   deleteTemplate,
   listTemplates,
 } from "@local/lib/template-service";
-import { parseCurrentTemplateTab } from "@subboost/server-core/templates";
+import { parseCurrentTemplateTab } from "@subfuse/server-core/templates";
 
 function parseIds(value: string | null): string[] {
   if (!value) return [];

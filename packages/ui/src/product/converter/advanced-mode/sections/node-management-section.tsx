@@ -2,19 +2,19 @@
 
 import * as React from "react";
 import { List, Search } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { Button } from "@subboost/ui/components/ui/button";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { Input } from "@subboost/ui/components/ui/input";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { DEFAULT_NODE_NAME_TEMPLATE } from "@subboost/core/node-name-template";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { DEFAULT_NODE_NAME_TEMPLATE } from "@subfuse/core/node-name-template";
 import {
   DEFAULT_NODE_NAME_FILTER_CONFIG,
   resolveNodeNameFilter,
-} from "@subboost/core/subscription/node-name-filter";
-import { useConfigStore, type SubscriptionSource } from "@subboost/ui/store/config-store";
-import { useProductInteractionAdapter } from "@subboost/ui/product/interactions";
+} from "@subfuse/core/subscription/node-name-filter";
+import { useConfigStore, type SubscriptionSource } from "@subfuse/ui/store/config-store";
+import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
 import { SectionHeader } from "../section-header";
 import { NodeManagementAutoProcessingDialog } from "./node-management/auto-processing-dialog";
 import { NodeManagementBulkEditDialog } from "./node-management/bulk-edit-dialog";
@@ -22,7 +22,7 @@ import { NodeManagementNodeList } from "./node-management/node-list";
 
 const NODE_SOURCE_IDS_KEY = "_sourceIds";
 const ORIGIN_NAME_KEY = "_originName";
-const LISTENER_PORT_WARNING_STORAGE_KEY = "subboost.listenerPortWarningAccepted";
+const LISTENER_PORT_WARNING_STORAGE_KEY = "subfuse.listenerPortWarningAccepted";
 
 function canGenerateProxyProvider(source: SubscriptionSource): boolean {
   if (source.type !== "url" || source.useProxyProviders !== true) return false;

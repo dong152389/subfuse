@@ -2,37 +2,37 @@
 
 import * as React from "react";
 import { ArrowRight, Check, Pencil, Trash2, X } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Input } from "@subboost/ui/components/ui/input";
-import { FormField } from "@subboost/ui/components/ui/form-field";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@subboost/ui/components/ui/select";
-import { Switch } from "@subboost/ui/components/ui/switch";
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
-import { resolveProxyGroupModuleName } from "@subboost/core/proxy-group-name";
-import { resolveProxyGroupTargetName } from "@subboost/core/proxy-group-targets";
+} from "@subfuse/ui/components/ui/select";
+import { Switch } from "@subfuse/ui/components/ui/switch";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
+import { resolveProxyGroupModuleName } from "@subfuse/core/proxy-group-name";
+import { resolveProxyGroupTargetName } from "@subfuse/core/proxy-group-targets";
 import {
   createCustomRuleId,
   CUSTOM_RULE_TYPES,
-} from "@subboost/core/rules/custom-rule-utils";
-import { normalizeCustomRuleValue } from "@subboost/core/rules/custom-rule-value";
-import { getCustomRuleDefinition, supportsNoResolve } from "@subboost/core/rules/custom-rule-types";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { allocateRuleSetId } from "@subboost/core/rules/rule-model";
-import { useProductApiAdapter } from "@subboost/ui/product/api-adapter";
+} from "@subfuse/core/rules/custom-rule-utils";
+import { normalizeCustomRuleValue } from "@subfuse/core/rules/custom-rule-value";
+import { getCustomRuleDefinition, supportsNoResolve } from "@subfuse/core/rules/custom-rule-types";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { allocateRuleSetId } from "@subfuse/core/rules/rule-model";
+import { useProductApiAdapter } from "@subfuse/ui/product/api-adapter";
 import { resolveRuleSetUrl, useRuleSetOperation } from "./use-rule-set-resolution";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import type { CustomProxyGroup, CustomRule, ProxyGroupRuleTarget, RuleSetMetadata } from "@subboost/core/types/config";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import type { CustomProxyGroup, CustomRule, ProxyGroupRuleTarget, RuleSetMetadata } from "@subfuse/core/types/config";
 import {
   useProductInteractionAdapter,
   type ProductRuleKind,
-} from "@subboost/ui/product/interactions";
+} from "@subfuse/ui/product/interactions";
 import { ProxyGroupsCustomRulesBatchDialog } from "./proxy-groups-custom-rules-batch-dialog";
 import {
   RULE_ADD_ROW_FRAME_CLASS,

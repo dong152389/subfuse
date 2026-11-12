@@ -3,8 +3,8 @@
 import * as React from "react";
 import { QrCode } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@subboost/ui/components/ui/dialog";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@subfuse/ui/components/ui/dialog";
 
 export function SubscriptionQrCode({ url }: { url: string }) {
   return (

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
 import {
   applyTheme,
   DEFAULT_THEME,
@@ -14,7 +14,7 @@ import {
   readStoredTheme,
   THEME_STORAGE_KEY,
   type ThemeName,
-} from "@subboost/ui/theme/theme";
+} from "@subfuse/ui/theme/theme";
 
 export function ThemeToggle() {
   const [theme, setTheme] = React.useState<ThemeName>(DEFAULT_THEME);

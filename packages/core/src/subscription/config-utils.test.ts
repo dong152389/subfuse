@@ -3,8 +3,8 @@ import {
   buildGenerateOptionsFromConfig,
   getEffectiveTestOptions,
 } from "./config-utils";
-import { generateClashConfig } from "@subboost/core/generator";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { generateClashConfig } from "@subfuse/core/generator";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function node(patch: Partial<ParsedNode> = {}): ParsedNode {
   return {

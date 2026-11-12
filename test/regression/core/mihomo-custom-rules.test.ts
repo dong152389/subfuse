@@ -6,7 +6,7 @@ import { parseCustomRuleBatchImport } from "../../../packages/core/src/rules/cus
 import { buildGenerateOptionsFromConfig } from "../../../packages/core/src/subscription/config-utils";
 import { generateClashConfig } from "../../../packages/core/src/generator";
 import { configToYaml } from "../../../packages/core/src/generator/yaml";
-import { validateSubBoostTemplateConfig } from "../../../packages/core/src/templates/config-template";
+import { validateSubFuseTemplateConfig } from "../../../packages/core/src/templates/config-template";
 import { validConfig } from "../../../packages/core/src/templates/config-template.test-helpers";
 
 function parse(text: string, defaultType: (typeof CUSTOM_RULE_TYPES)[number] = "DOMAIN") {
@@ -18,7 +18,7 @@ describe("Mihomo stable custom rule round trips", () => {
     const value = getCustomRuleDefinition(type).example;
     const imported = parse(`${type},${value},DIRECT${supportsNoResolve(type) ? ",no-resolve" : ""}`);
     expect(imported.canImport).toBe(true);
-    const template = validateSubBoostTemplateConfig(validConfig({ customRules: imported.rules }));
+    const template = validateSubFuseTemplateConfig(validConfig({ customRules: imported.rules }));
     expect(template.ok).toBe(true);
     if (!template.ok) throw new Error(template.error);
     const options = buildGenerateOptionsFromConfig(JSON.parse(JSON.stringify({
@@ -62,7 +62,7 @@ describe("Mihomo stable custom rule round trips", () => {
   it("does not add no-resolve to source IP, domain, process or logic rules", () => {
     for (const type of ["SRC-IP-CIDR", "DOMAIN", "PROCESS-NAME", "AND"] as const) {
       const value = getCustomRuleDefinition(type).example;
-      const result = validateSubBoostTemplateConfig(validConfig({ customRules: [{ id: type, type, value, target: "DIRECT", noResolve: true }] }));
+      const result = validateSubFuseTemplateConfig(validConfig({ customRules: [{ id: type, type, value, target: "DIRECT", noResolve: true }] }));
       expect(result.ok && result.config.customRules[0].noResolve).toBe(false);
     }
     expect(supportsNoResolve("RULE-SET")).toBe(true);
@@ -75,14 +75,14 @@ describe("Mihomo stable custom rule round trips", () => {
   });
 
   it("canonicalizes imported type names and compares legacy flags by their effect", () => {
-    expect(parse("domain,local.subboost.test,DIRECT").rules[0]?.type).toBe("DOMAIN");
-    const result = parseCustomRuleBatchImport({ text: "DOMAIN,local.subboost.test,DIRECT", defaultType: "DOMAIN", defaultTarget: "DIRECT", defaultNoResolve: false, targetOptions: ["DIRECT"], existingRules: [{ id: "old", type: "DOMAIN", value: "local.subboost.test", target: "DIRECT", noResolve: true }] });
+    expect(parse("domain,local.subfuse.test,DIRECT").rules[0]?.type).toBe("DOMAIN");
+    const result = parseCustomRuleBatchImport({ text: "DOMAIN,local.subfuse.test,DIRECT", defaultType: "DOMAIN", defaultTarget: "DIRECT", defaultNoResolve: false, targetOptions: ["DIRECT"], existingRules: [{ id: "old", type: "DOMAIN", value: "local.subfuse.test", target: "DIRECT", noResolve: true }] });
     expect(result.duplicateCount).toBe(1);
   });
 
   it.each([
     ["AND,((NETWORK,tcp))", "AND", "((NETWORK,tcp))"],
-    ["OR,((AND,((NETWORK,tcp))),(DOMAIN,local.subboost.test)),", "OR", "((AND,((NETWORK,tcp))),(DOMAIN,local.subboost.test))"],
+    ["OR,((AND,((NETWORK,tcp))),(DOMAIN,local.subfuse.test)),", "OR", "((AND,((NETWORK,tcp))),(DOMAIN,local.subfuse.test))"],
     ["NOT,((NETWORK,udp))", "NOT", "((NETWORK,udp))"],
     ["DOMAIN-REGEX,^local{1,3}", "DOMAIN-REGEX", "^local{1,3}"],
     ["DOMAIN-REGEX,^local{1,3},", "DOMAIN-REGEX", "^local{1,3}"],
@@ -90,10 +90,10 @@ describe("Mihomo stable custom rule round trips", () => {
     ["DOMAIN-REGEX,^[a,b]{1,}$", "DOMAIN-REGEX", "^[a,b]{1,}$"],
     ["DOMAIN-REGEX,^[]a,b]{1,3}$", "DOMAIN-REGEX", "^[]a,b]{1,3}$"],
     ["DOMAIN-REGEX,^[^]a,b]{1,3}$", "DOMAIN-REGEX", "^[^]a,b]{1,3}$"],
-    [String.raw`DOMAIN-REGEX,^local\,subboost$`, "DOMAIN-REGEX", String.raw`^local\,subboost$`],
+    [String.raw`DOMAIN-REGEX,^local\,subfuse$`, "DOMAIN-REGEX", String.raw`^local\,subfuse$`],
     [String.raw`DOMAIN-REGEX,^local[\],]{3}$`, "DOMAIN-REGEX", String.raw`^local[\],]{3}$`],
-    ['"DOMAIN-REGEX","^local,subboost$"', "DOMAIN-REGEX", "^local,subboost$"],
-    ['"DOMAIN-REGEX","^local,subboost$",', "DOMAIN-REGEX", "^local,subboost$"],
+    ['"DOMAIN-REGEX","^local,subfuse$"', "DOMAIN-REGEX", "^local,subfuse$"],
+    ['"DOMAIN-REGEX","^local,subfuse$",', "DOMAIN-REGEX", "^local,subfuse$"],
     ['DOMAIN-REGEX,^"local"{1,3}', "DOMAIN-REGEX", '^"local"{1,3}'],
   ])("inherits the target without splitting payload commas: %s", (text, type, value) => {
     const result = parse(text);
@@ -105,7 +105,7 @@ describe("Mihomo stable custom rule round trips", () => {
     "AND,((NETWORK,tcp)),Missing",
     "DOMAIN-REGEX,^local{1,3},Missing",
     "DOMAIN-REGEX,^local,Missing",
-    '"DOMAIN-REGEX","^local,subboost$",Missing',
+    '"DOMAIN-REGEX","^local,subfuse$",Missing',
   ])("does not absorb an unknown explicit target into the payload: %s", (text) => {
     const result = parse(text);
     expect(result.canImport).toBe(false);
@@ -123,7 +123,7 @@ describe("Mihomo stable custom rule round trips", () => {
       const imported = parse(`${type},${value},DIRECT,${params}`);
       expect(imported.canImport).toBe(true);
       expect(imported.rules[0]).toMatchObject({ type: sourceType, value, target: "DIRECT", noResolve: false });
-      const template = validateSubBoostTemplateConfig(validConfig({ customRules: imported.rules }));
+      const template = validateSubFuseTemplateConfig(validConfig({ customRules: imported.rules }));
       expect(template.ok).toBe(true);
       if (!template.ok) throw new Error(template.error);
       const options = buildGenerateOptionsFromConfig(JSON.parse(JSON.stringify({
@@ -138,8 +138,8 @@ describe("Mihomo stable custom rule round trips", () => {
     expect(parse("IP-CIDR,203.0.113.0/24,,src").rules[0]).toMatchObject({ type: "SRC-IP-CIDR", target: "DIRECT" });
     const duplicate = parseCustomRuleBatchImport({ text: "IP-CIDR6,203.0.113.0/24,DIRECT,no-resolve,src", defaultType: "DOMAIN", defaultTarget: "DIRECT", defaultNoResolve: false, targetOptions: ["DIRECT"], existingRules: [{ id: "old", type: "SRC-IP-CIDR", value: "203.0.113.0/24", target: "DIRECT" }] });
     expect(duplicate.duplicateCount).toBe(1);
-    expect(parse("DOMAIN,local.subboost.test,DIRECT,src").errorCount).toBe(1);
-    expect(parse("RULE-SET,https://local.subboost.test/list.mrs,DIRECT,no-resolve,src").errorCount).toBe(1);
+    expect(parse("DOMAIN,local.subfuse.test,DIRECT,src").errorCount).toBe(1);
+    expect(parse("RULE-SET,https://local.subfuse.test/list.mrs,DIRECT,no-resolve,src").errorCount).toBe(1);
   });
 
   it("handles long malformed regex delimiter input in bounded time", () => {
@@ -202,7 +202,7 @@ describe("Mihomo stable custom rule round trips", () => {
         const imported = parse(`${type},${value}${suffix}`);
         expect(imported.canImport).toBe(true);
         expect(imported.rules[0]).toMatchObject({ type, value, target, noResolve: false });
-        const template = validateSubBoostTemplateConfig(validConfig({ customRules: imported.rules }));
+        const template = validateSubFuseTemplateConfig(validConfig({ customRules: imported.rules }));
         expect(template.ok).toBe(true);
         if (!template.ok) throw new Error(template.error);
         const options = buildGenerateOptionsFromConfig(JSON.parse(JSON.stringify({

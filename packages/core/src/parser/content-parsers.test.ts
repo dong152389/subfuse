@@ -77,7 +77,7 @@ describe("content parser registry helpers", () => {
 
   it("keeps flow-looking URI fragments on the link parser path", () => {
     const name = '{"type": reject}#full-fragment';
-    const link = `ss://${encodeBase64("aes-128-gcm:secret")}@local.subboost.test:443#${encodeURIComponent(name)}`;
+    const link = `ss://${encodeBase64("aes-128-gcm:secret")}@local.subfuse.test:443#${encodeURIComponent(name)}`;
     expect(isClashYamlContent(`# comment\n${link}`)).toBe(false);
     expect(parseSubscription(`# comment\n${link}`)).toMatchObject({ totalParsed: 1, totalFailed: 0, nodes: [{ name, type: "ss" }] });
     expect(isClashYamlContent("# comment\n---\n\n")).toBe(false);
@@ -89,9 +89,9 @@ describe("content parser registry helpers", () => {
 
   it.each([
     '[{name: missing-type}]', '- {name: missing-type}',
-    '[{"proxy-providers": {remote: {type: http, url: "https://local.subboost.test/nodes"}}}]',
-    '{"proxy-providers": {remote: {type: http, url: "https://local.subboost.test/nodes"}}}',
-    'proxy-providers:\n  remote: {type: http, url: "https://local.subboost.test/nodes"}',
+    '[{"proxy-providers": {remote: {type: http, url: "https://local.subfuse.test/nodes"}}}]',
+    '{"proxy-providers": {remote: {type: http, url: "https://local.subfuse.test/nodes"}}}',
+    'proxy-providers:\n  remote: {type: http, url: "https://local.subfuse.test/nodes"}',
   ])("keeps the YAML parser's errors for non-node objects and providers: %s", (content) => {
     const direct = parseClashYaml(content);
     expect(direct.nodes).toEqual([]);
@@ -102,8 +102,8 @@ describe("content parser registry helpers", () => {
   it("keeps platform section headers separate from YAML flow sequences", () => {
     expect(isClashYamlContent("[Proxy]\nDirect = direct")).toBe(false);
     expect(parseSubscription("[Proxy]\nDirect = direct")).toMatchObject({ nodes: [], errors: [] });
-    expect(parseSubscription("[Proxy]\nNode = ss, local.subboost.test, 443, encrypt-method=aes-128-gcm, password=secret"))
-      .toMatchObject({ totalParsed: 1, totalFailed: 0, nodes: [{ name: "Node", type: "ss", server: "local.subboost.test", port: 443 }] });
+    expect(parseSubscription("[Proxy]\nNode = ss, local.subfuse.test, 443, encrypt-method=aes-128-gcm, password=secret"))
+      .toMatchObject({ totalParsed: 1, totalFailed: 0, nodes: [{ name: "Node", type: "ss", server: "local.subfuse.test", port: 443 }] });
   });
 
   it("keeps platform-like scalar entries inside YAML sequences on the YAML path", () => {
@@ -115,7 +115,7 @@ describe("content parser registry helpers", () => {
     expect(preprocessSubscriptionContent(nested)).toEqual({ content: nested, errors: [], applied: [] });
     expect(parseClashYaml(nested)).toMatchObject({ totalParsed: 1, totalFailed: 1 });
     expect(parseSubscription(nested)).toMatchObject({ totalParsed: 1, totalFailed: 1, nodes: [{ name: "blocked", type: "reject" }] });
-    const scalar = "- |\n  [Proxy]\n  Node = ss, local.subboost.test, 443, encrypt-method=aes-128-gcm, password=secret";
+    const scalar = "- |\n  [Proxy]\n  Node = ss, local.subfuse.test, 443, encrypt-method=aes-128-gcm, password=secret";
     expect(parseClashYaml(scalar)).toMatchObject({ nodes: [], errors: [] });
     expect(preprocessSubscriptionContent(scalar)).toEqual({ content: scalar, errors: [], applied: [] });
     expect(parseSubscription(scalar)).toMatchObject({ nodes: [], errors: [] });
@@ -136,7 +136,7 @@ describe("content parser registry helpers", () => {
   });
 
   it("keeps URI imports after semicolon comments and reports large malformed bracket roots", () => {
-    const link = `ss://${encodeBase64("aes-128-gcm:secret")}@local.subboost.test:443#Node`;
+    const link = `ss://${encodeBase64("aes-128-gcm:secret")}@local.subfuse.test:443#Node`;
     expect(parseSubscription(`; Profile: generated\n${link}`)).toMatchObject({ totalParsed: 1, totalFailed: 0 });
     const malformed = parseSubscription(`[{name: "${"x".repeat(100_000)}", type: reject]]`);
     expect(malformed.nodes).toEqual([]);
@@ -152,7 +152,7 @@ describe("content parser registry helpers", () => {
   it("uses only YAML mapping separators and retains multiline values", () => {
     expect(isClashYamlContent("name:without-whitespace")).toBe(false);
     expect(isClashYamlContent("plain text")).toBe(false);
-    expect(parseSubscription("'type':\tanytls\nserver: local.subboost.test\nport: 443\npassword: secret"))
+    expect(parseSubscription("'type':\tanytls\nserver: local.subfuse.test\nport: 443\npassword: secret"))
       .toMatchObject({ totalParsed: 1, totalFailed: 0 });
     expect(parseSubscription("type:\n  reject\nname: blocked")).toMatchObject({ totalParsed: 1, totalFailed: 0 });
   });

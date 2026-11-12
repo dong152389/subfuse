@@ -2,15 +2,15 @@ import { randomUUID } from "node:crypto";
 import {
   deriveSessionRevocationIdentity,
   SESSION_CLOCK_TOLERANCE_SECONDS,
-} from "@subboost/server-core/session-revocation";
+} from "@subfuse/server-core/session-revocation";
 import { cookies } from "next/headers";
 import { jwtVerify, SignJWT } from "jose";
 import { isHttpsAppUrl, requireEnv } from "./env";
 import { prisma } from "./prisma";
 
-export const SESSION_COOKIE = "subboost_local_session";
-const SESSION_ISSUER = "subboost-local";
-const SESSION_REVOCATION_NAMESPACE = "subboost-local";
+export const SESSION_COOKIE = "subfuse_local_session";
+const SESSION_ISSUER = "subfuse-local";
+const SESSION_REVOCATION_NAMESPACE = "subfuse-local";
 
 export type SessionPayload = {
   adminId: string;

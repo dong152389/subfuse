@@ -63,22 +63,22 @@ vi.mock("lucide-react", () => ({
   Shield: () => null,
   Trash2: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: ({ asChild: _asChild, ...props }: any) => {
     mocks.buttons.push(props);
     return React.createElement("button", { title: props.title, onClick: props.onClick }, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => React.createElement("section", null, props.children),
   CardContent: (props: any) => React.createElement("div", null, props.children),
   CardHeader: (props: any) => React.createElement("header", null, props.children),
   CardTitle: (props: any) => React.createElement("h2", null, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: vi.fn() }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.store }));
-vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: vi.fn() }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.store }));
+vi.mock("@subfuse/core/subscription/auto-update-interval", () => ({
   autoUpdateIntervalHoursToSeconds: (hours: number) => hours * 3600,
   autoUpdateIntervalSecondsToHours: (seconds: number) => seconds / 3600,
   getAutoUpdateIntervalPolicyMinLabel: () => "6 小时",
@@ -89,15 +89,15 @@ vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
     requireIntegerHours: true,
   }),
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-stats-cards", () => ({ DashboardStatsCards: () => null }));
-vi.mock("@subboost/ui/dashboard/dashboard-format", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-stats-cards", () => ({ DashboardStatsCards: () => null }));
+vi.mock("@subfuse/ui/dashboard/dashboard-format", () => ({
   formatDashboardDate: (value: string) => value,
   formatIntervalLabel: (seconds: number) => `${seconds / 3600} 小时`,
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-refresh-toast", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-refresh-toast", () => ({
   buildRefreshSubscriptionSuccessToast: () => ({ title: "刷新成功" }),
 }));
-vi.mock("@subboost/ui/dashboard/subscription-settings-dialog", () => ({
+vi.mock("@subfuse/ui/dashboard/subscription-settings-dialog", () => ({
   SubscriptionSettingsDialog: () => null,
 }));
 

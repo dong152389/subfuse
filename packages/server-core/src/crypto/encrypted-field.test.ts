@@ -10,11 +10,11 @@ const masterKey = "unit-test-encryption-key-32-bytes-minimum";
 
 describe("encrypted field crypto", () => {
   it("encrypts and decrypts the shared v2 format with an explicit master key", () => {
-    const ciphertext = encryptEncryptedFieldV2("hello subboost", masterKey);
+    const ciphertext = encryptEncryptedFieldV2("hello subfuse", masterKey);
 
     expect(isV2EncryptedField(ciphertext)).toBe(true);
     expect(ciphertext.split(":")).toHaveLength(4);
-    expect(decryptEncryptedFieldV2(ciphertext, masterKey)).toBe("hello subboost");
+    expect(decryptEncryptedFieldV2(ciphertext, masterKey)).toBe("hello subfuse");
   });
 
   it("rejects non-v2 ciphertext", () => {

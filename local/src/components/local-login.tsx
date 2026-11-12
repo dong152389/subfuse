@@ -11,11 +11,11 @@ import {
   LOCAL_ADMIN_PASSWORD_MIN_LENGTH,
   USER_PASSWORD_MIN_LENGTH,
 } from "@local/lib/admin-credentials";
-import { Button } from "@subboost/ui/components/ui/button";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
-import { PasswordField } from "@subboost/ui/components/ui/password-field";
-import { hasAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { PasswordField } from "@subfuse/ui/components/ui/password-field";
+import { hasAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
 import { LocalEmailLogin } from "./local-email-login";
 import { LocalGitHubBind } from "./local-github-bind";
 
@@ -230,7 +230,7 @@ export function LocalLogin() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(setupRequired ? { "X-SubBoost-Setup-Token": setupToken } : {}),
+          ...(setupRequired ? { "X-SubFuse-Setup-Token": setupToken } : {}),
         },
         body: JSON.stringify(payload),
       });
@@ -252,11 +252,11 @@ export function LocalLogin() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <Image src="/logo.png" alt="SubBoost" width={64} height={64} className="rounded-2xl shadow-lg shadow-blue-500/25" />
+            <Image src="/logo.png" alt="SubFuse" width={64} height={64} className="rounded-2xl shadow-lg shadow-blue-500/25" />
           </Link>
           <h1 className="text-2xl font-bold mt-4 text-fg">
             {!auth || setupRequired || githubBindTicket
-              ? "欢迎使用 SubBoost"
+              ? "欢迎使用 SubFuse"
               : activeTab === "reset_password"
               ? "重置密码"
               : isRegister

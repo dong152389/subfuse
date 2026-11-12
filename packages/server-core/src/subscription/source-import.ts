@@ -1,16 +1,16 @@
-import { parseSubscription } from "@subboost/core/parser";
+import { parseSubscription } from "@subfuse/core/parser";
 import {
   hasClientUpdatePlaceholderError,
   looksLikeClientUpdatePlaceholderNodes,
-} from "@subboost/core/parser/placeholder";
+} from "@subfuse/core/parser/placeholder";
 import {
   createSubscriptionImportErrorInfo,
   inferSubscriptionImportErrorCategory,
   sanitizePublicErrorText,
   type SubscriptionImportErrorInfo,
-} from "@subboost/core/subscription/import-error";
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
-import type { ParseResult, ParsedNode } from "@subboost/core/types/node";
+} from "@subfuse/core/subscription/import-error";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
+import type { ParseResult, ParsedNode } from "@subfuse/core/types/node";
 import { compareSubscriptionSnapshots, createSubscriptionRequestBudget, hasUsableSubscriptionSnapshot, SUBSCRIPTION_MAX_PROFILE_REQUESTS,
   type SubscriptionSnapshotComparison } from "./snapshot-comparison";
 import { SUBSCRIPTION_IMPORT_USER_AGENTS } from "./user-agents";

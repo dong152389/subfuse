@@ -7,10 +7,10 @@
  */
 
 import { decodeBase64 } from "../base64";
-import type { VLESSNode, XHttpDownloadSettings, XHttpOpts, XHttpReuseSettings } from "@subboost/core/types/node";
-import { buildMihomoEchOptsFromShareValue } from "@subboost/core/mihomo/ech";
-import { isRealityPublicKey, normalizeRealityShortId } from "@subboost/core/mihomo/reality";
-import { isVlessMlkemEncryption } from "@subboost/core/mihomo/vless-encryption";
+import type { VLESSNode, XHttpDownloadSettings, XHttpOpts, XHttpReuseSettings } from "@subfuse/core/types/node";
+import { buildMihomoEchOptsFromShareValue } from "@subfuse/core/mihomo/ech";
+import { isRealityPublicKey, normalizeRealityShortId } from "@subfuse/core/mihomo/reality";
+import { isVlessMlkemEncryption } from "@subfuse/core/mihomo/vless-encryption";
 import { splitWsPathEarlyData } from "../ws-early-data";
 import { parseUrlWithNeutralScheme, safeDecodeFormUrlEncoded, safeDecodeURIComponent } from "./url-decode";
 import { parseJsonObject, parseJsonStringMap } from "../json-utils";

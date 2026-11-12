@@ -3,8 +3,8 @@
  * 合并代理组和分流规则为统一的"分流代理组"概念
  */
 
-import type { ParsedNode } from "@subboost/core/types/node";
-import { DEFAULT_LOAD_BALANCE_STRATEGY } from "@subboost/core/types/config";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { DEFAULT_LOAD_BALANCE_STRATEGY } from "@subfuse/core/types/config";
 import type {
   BuiltinRuleEdits,
   CustomProxyGroup,
@@ -14,10 +14,10 @@ import type {
   ProxyGroupAdvancedConfig,
   ProxyGroupGroupType,
   RuleProvider,
-} from "@subboost/core/types/config";
-import { resolveProxyGroupMembers } from "@subboost/core/proxy-group-advanced";
-import { isSubscriptionInfoNodeName } from "@subboost/core/subscription/info-node-name";
-import { isDisabledCustomProxyGroupTarget } from "@subboost/core/proxy-group-targets";
+} from "@subfuse/core/types/config";
+import { resolveProxyGroupMembers } from "@subfuse/core/proxy-group-advanced";
+import { isSubscriptionInfoNodeName } from "@subfuse/core/subscription/info-node-name";
+import { isDisabledCustomProxyGroupTarget } from "@subfuse/core/proxy-group-targets";
 
 import { PROXY_GROUP_MODULES, type ProxyGroupModule, type ProxyGroupRule } from "./proxy-group-modules";
 import {
@@ -28,7 +28,7 @@ import {
   resolveModuleNameFromModule,
 } from "./rules";
 import { getModuleRuleOrderKey } from "./module-rules";
-import { buildRuleSetUrlFromPath } from "@subboost/core/rules/rule-model";
+import { buildRuleSetUrlFromPath } from "@subfuse/core/rules/rule-model";
 import { buildTypedProxyGroup } from "./proxy-group-type";
 
 export { PROXY_GROUP_MODULES };

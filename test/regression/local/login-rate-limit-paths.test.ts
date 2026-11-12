@@ -23,7 +23,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("bcryptjs", () => ({ default: { compare: mocks.bcryptCompare } }));
 vi.mock("@local/lib/prisma", () => ({ prisma: mocks.prisma }));
 vi.mock("@local/lib/session", () => ({
-  SESSION_COOKIE: "subboost-local-session",
+  SESSION_COOKIE: "subfuse-local-session",
   sessionCookieOptions: mocks.sessionCookieOptions,
   signSession: mocks.signSession,
 }));
@@ -38,7 +38,7 @@ vi.mock("@local/lib/rate-limit", () => ({
 import { POST } from "../../../local/app/api/auth/login/route";
 
 function loginRequest(body: unknown) {
-  return new Request("http://local.subboost.test/api/auth/login", {
+  return new Request("http://local.subfuse.test/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

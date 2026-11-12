@@ -1,4 +1,4 @@
-import { cn } from "@subboost/ui/lib/utils";
+import { cn } from "@subfuse/ui/lib/utils";
 
 type ArtisticNavSize = "sm" | "md";
 

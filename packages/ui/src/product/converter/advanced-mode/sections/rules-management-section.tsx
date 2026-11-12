@@ -2,17 +2,17 @@
 
 import * as React from "react";
 import { ArrowDown, ArrowUp, ListOrdered } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { Input } from "@subboost/ui/components/ui/input";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Switch } from "@subboost/ui/components/ui/switch";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Switch } from "@subfuse/ui/components/ui/switch";
 import {
   buildGeneratedRuleEntries,
   hasFullRuleOrderKeys,
   type GeneratedRuleEntry,
-} from "@subboost/core/generator/rules";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+} from "@subfuse/core/generator/rules";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 import { SectionHeader } from "../section-header";
 
 function clamp(value: number, min: number, max: number): number {

@@ -19,13 +19,13 @@
     ],
     "paths": {
       "@/*": ["./local/src/*"],
-      "@subboost/core": ["./packages/core/src/index.ts"],
-      "@subboost/core/*": ["./packages/core/src/*"],
-      "@subboost/server-core": ["./packages/server-core/src/index.ts"],
-      "@subboost/server-core/*": ["./packages/server-core/src/*"],
-      "@subboost/ui": ["./packages/ui/src/index.ts"],
-      "@subboost/ui/*": ["./packages/ui/src/*"],
-      "@subboost/config/*": ["./packages/config/*"]
+      "@subfuse/core": ["./packages/core/src/index.ts"],
+      "@subfuse/core/*": ["./packages/core/src/*"],
+      "@subfuse/server-core": ["./packages/server-core/src/index.ts"],
+      "@subfuse/server-core/*": ["./packages/server-core/src/*"],
+      "@subfuse/ui": ["./packages/ui/src/index.ts"],
+      "@subfuse/ui/*": ["./packages/ui/src/*"],
+      "@subfuse/config/*": ["./packages/config/*"]
     },
     "target": "ES2017"
   },

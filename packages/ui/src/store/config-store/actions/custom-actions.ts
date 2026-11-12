@@ -1,10 +1,10 @@
-import type { BuiltinRuleEdits, CustomProxyGroup, CustomRule } from "@subboost/core/types/config";
+import type { BuiltinRuleEdits, CustomProxyGroup, CustomRule } from "@subfuse/core/types/config";
 import {
   createCustomRuleId,
   ensureCustomRuleId,
-} from "@subboost/core/rules/custom-rule-utils";
-import { normalizePersistedRuleOrder } from "@subboost/core/generator/rules";
-import { normalizeProxyGroupAdvancedConfig } from "@subboost/core/proxy-group-advanced";
+} from "@subfuse/core/rules/custom-rule-utils";
+import { normalizePersistedRuleOrder } from "@subfuse/core/generator/rules";
+import { normalizeProxyGroupAdvancedConfig } from "@subfuse/core/proxy-group-advanced";
 import type { ConfigActions } from "../definitions";
 import type { GetState, SetAndGenerateConfig, SetState } from "../store-types";
 import {

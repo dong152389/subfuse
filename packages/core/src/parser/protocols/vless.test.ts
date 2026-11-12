@@ -35,7 +35,7 @@ describe("parseVLESS", () => {
     const grpc = parseVLESS(
       `vless://${UUID}@grpc.example.com:443?security=tls&type=grpc&serviceName=svc&mode=gun&authority=authority.example.com#GRPC`
     );
-    const headers = encodeURIComponent("User-Agent:SubBoost|X-Test:yes");
+    const headers = encodeURIComponent("User-Agent:SubFuse|X-Test:yes");
     const downloadHeaders = encodeURIComponent('{"Accept":"application/octet-stream"}');
     const xhttp = parseVLESS(
       `vless://${UUID}@xhttp.example.com:443?security=tls&type=xhttp&path=/x&host=cdn.example.com&xhttp-mode=packet-up&xhttp-headers=${headers}&no-grpc-header=1&x-padding-bytes=100-200&sc-max-each-post-bytes=2048&max-concurrency=4&download-path=/download&download-host=download.example.com&download-headers=${downloadHeaders}#XHTTP`
@@ -58,7 +58,7 @@ describe("parseVLESS", () => {
         host: "cdn.example.com",
         mode: "packet-up",
         headers: {
-          "User-Agent": "SubBoost",
+          "User-Agent": "SubFuse",
           "X-Test": "yes",
         },
         "no-grpc-header": true,

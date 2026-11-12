@@ -17,7 +17,7 @@ import {
   type PreparedRefreshCacheResult,
   type RefreshNodeSnapshotResult,
   type SubscriptionAutoUpdateStateFields,
-} from "@subboost/server-core/subscription";
+} from "@subfuse/server-core/subscription";
 import { encryptJson } from "./crypto";
 import { prisma } from "./prisma";
 import {

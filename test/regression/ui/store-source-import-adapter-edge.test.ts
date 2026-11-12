@@ -2,19 +2,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createSubscriptionImportErrorInfo,
   SubscriptionImportError,
-} from "@subboost/core/subscription/import-error";
+} from "@subfuse/core/subscription/import-error";
 
 const mocks = vi.hoisted(() => ({
   importSource: vi.fn(),
 }));
 
-vi.mock("@subboost/ui/product/api-adapter", () => ({
+vi.mock("@subfuse/ui/product/api-adapter", () => ({
   getActiveProductApiAdapter: () => ({
     sourceImport: { importSource: mocks.importSource },
   }),
 }));
 
-import { fetchUrlContentInBrowser } from "@subboost/ui/store/config-store/definitions";
+import { fetchUrlContentInBrowser } from "@subfuse/ui/store/config-store/definitions";
 
 describe("browser source import adapter edge payloads", () => {
   beforeEach(() => {

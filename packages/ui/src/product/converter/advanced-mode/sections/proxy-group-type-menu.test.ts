@@ -15,14 +15,14 @@ vi.mock("lucide-react", () => ({
   ChevronDown: () => React.createElement("span", null, "down-icon"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => React.createElement("div", null, props.children),
   DropdownMenuContent: (props: any) => {
     captures.contents.push(props);
@@ -46,7 +46,7 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuTrigger: (props: any) => React.createElement("div", null, props.children),
 }));
 
-vi.mock("@subboost/ui/lib/utils", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({
   cn: (...parts: unknown[]) => parts.filter(Boolean).join(" "),
 }));
 

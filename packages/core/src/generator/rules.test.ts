@@ -9,7 +9,7 @@ import {
 } from "./rules";
 import { generateClashConfig } from "./index";
 import { PROXY_GROUP_MODULES } from "./proxy-groups";
-import type { CustomRule, CustomRuleSet } from "@subboost/core/types/config";
+import type { CustomRule, CustomRuleSet } from "@subfuse/core/types/config";
 
 const customRules: CustomRule[] = [
   {

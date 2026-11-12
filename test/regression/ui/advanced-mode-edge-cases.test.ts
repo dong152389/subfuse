@@ -121,17 +121,17 @@ vi.mock("lucide-react", async (importOriginal) => ({
   Trash2: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     (mocks.captures.buttons ||= []).push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/dropdown-menu", () => ({
   DropdownMenu: (props: any) => {
     (mocks.captures.dropdownMenus ||= []).push(props);
     return props.children;
@@ -148,13 +148,13 @@ vi.mock("@subboost/ui/components/ui/dropdown-menu", () => ({
   DropdownMenuSubTrigger: (props: any) => props.children,
   DropdownMenuTrigger: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     (mocks.captures.inputs ||= []).push(props);
     return React.createElement("input", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/select", () => ({
+vi.mock("@subfuse/ui/components/ui/select", () => ({
   Select: (props: any) => {
     (mocks.captures.selects ||= []).push(props);
     return React.createElement("select", null, props.children);
@@ -164,33 +164,33 @@ vi.mock("@subboost/ui/components/ui/select", () => ({
   SelectTrigger: (props: any) => React.createElement(React.Fragment, null, props.children),
   SelectValue: (props: any) => React.createElement("span", null, props.placeholder),
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     (mocks.captures.switches ||= []).push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/textarea", () => ({
+vi.mock("@subfuse/ui/components/ui/textarea", () => ({
   Textarea: (props: any) => {
     (mocks.captures.textareas ||= []).push(props);
     return React.createElement("textarea", props);
   },
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "Auto", rules: [] },
     { id: "fallback", name: "Fallback", rules: [] },
   ],
 }));
-vi.mock("@subboost/core/generator/module-rules", () => ({
+vi.mock("@subfuse/core/generator/module-rules", () => ({
   getEffectiveModuleRules: (module: { id: string }) => mocks.effectiveRulesByModule[module.id] || [],
 }));
-vi.mock("@subboost/core/node-name-template", () => ({
+vi.mock("@subfuse/core/node-name-template", () => ({
   DEFAULT_NODE_NAME_TEMPLATE: "[{tag}] {name}",
   formatNodeNameFromTemplate: ({ originName, tag, template }: any) => `${template || "{name}"}:${tag || ""}:${originName}`,
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { name: string }, override?: string) => override || module.name,
   splitLeadingEmoji: (name: string) => {
     const trimmed = String(name || "").trim();
@@ -199,17 +199,17 @@ vi.mock("@subboost/core/proxy-group-name", () => ({
     return { hasEmojiPrefix: true, emoji: match[1], label: match[2] };
   },
 }));
-vi.mock("@subboost/core/rules/metadata", () => ({
+vi.mock("@subfuse/core/rules/metadata", () => ({
   RULE_CATEGORIES: { streaming: { name: "流媒体" } },
 }));
-vi.mock("@subboost/core/subscription/import-error", () => ({
+vi.mock("@subfuse/core/subscription/import-error", () => ({
   normalizeSubscriptionImportErrorInfo: (value: any) => (value ? { message: value.message || String(value) } : null),
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/product/converter/source-display-label", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/product/converter/source-display-label", () => ({
   buildSourceDisplayLabel: ({ typeLabel, order, total, tag }: any) => `${typeLabel} ${order}/${total}${tag ? ` ${tag}` : ""}`,
 }));
-vi.mock("@subboost/ui/product/converter/source-controls", () => ({
+vi.mock("@subfuse/ui/product/converter/source-controls", () => ({
   AddSourceMenu: (props: any) => {
     mocks.captures.addSourceMenu = props;
     return null;
@@ -220,18 +220,18 @@ vi.mock("@subboost/ui/product/converter/source-controls", () => ({
     return null;
   },
 }));
-vi.mock("@subboost/ui/product/converter/subscription-import-error", () => ({
+vi.mock("@subfuse/ui/product/converter/subscription-import-error", () => ({
   SubscriptionImportErrorBadge: (props: any) => React.createElement("span", null, props.errorMessage ?? props.errorInfo?.message ?? ""),
 }));
-vi.mock("@subboost/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
-vi.mock("@subboost/ui/product/subscription/source-import-state", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({ useProductInteractionAdapter: () => mocks.interactions }));
+vi.mock("@subfuse/ui/product/subscription/source-import-state", () => ({
   markSourceAsPendingImport: mocks.markSourceAsPendingImport,
 }));
-vi.mock("@subboost/ui/product/subscription/source-order", () => ({ moveSubscriptionSource: mocks.moveSubscriptionSource }));
-vi.mock("@subboost/ui/product/subscription/subscription-userinfo-display", () => ({
+vi.mock("@subfuse/ui/product/subscription/source-order", () => ({ moveSubscriptionSource: mocks.moveSubscriptionSource }));
+vi.mock("@subfuse/ui/product/subscription/subscription-userinfo-display", () => ({
   getSubscriptionUserInfoDisplay: () => mocks.userInfoDisplay,
 }));
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return {
@@ -240,45 +240,45 @@ vi.mock("@subboost/ui/store/config-store", () => {
     useConfigStore,
   };
 });
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => ({ user: mocks.user }) }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/constants", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => ({ user: mocks.user }) }));
+vi.mock("@subfuse/ui/product/converter/advanced-mode/constants", () => ({
   sourceTypeInfo: {
     url: { label: "订阅链接", placeholder: "https://example.com/sub", icon: () => null },
     yaml: { label: "YAML 配置", placeholder: "proxies:", icon: () => null },
     nodes: { label: "节点链接", placeholder: "ss://node", icon: () => null },
   },
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/section-header", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/section-header", () => ({
   SectionHeader: (props: any) => {
     mocks.captures.header = props;
     return React.createElement("header", null, props.title, props.badge);
   },
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/input-source-editor-dialog", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/input-source-editor-dialog", () => ({
   InputSourceEditorDialog: (props: any) => {
     mocks.captures.editor = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/node-management/bulk-edit-dialog", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/node-management/bulk-edit-dialog", () => ({
   NodeManagementBulkEditDialog: (props: any) => {
     mocks.captures.bulkDialog = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/node-management/node-list", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/node-management/node-list", () => ({
   NodeManagementNodeList: (props: any) => {
     mocks.captures.nodeList = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/proxy-groups-added-rule-sets", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/proxy-groups-added-rule-sets", () => ({
   ProxyGroupsAddedRuleSets: (props: any) => {
     mocks.captures.addedRuleSets = props;
     return React.createElement("div", null, props.showSearchHint ? "search-hint" : "rule-sets");
   },
 }));
-vi.mock("@subboost/ui/product/converter/advanced-mode/sections/proxy-groups-rules-search", () => ({
+vi.mock("@subfuse/ui/product/converter/advanced-mode/sections/proxy-groups-rules-search", () => ({
   getRuleDisplayName: (rule: any) => rule.nameZh || rule.name || rule.id,
   replaceRuleProviderBase: (url: string, base: string) => {
     const match = url.match(/\/(geosite|geoip)\/[^/]+\.mrs$/);

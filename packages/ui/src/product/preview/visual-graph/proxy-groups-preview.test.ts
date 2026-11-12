@@ -14,7 +14,7 @@ vi.mock("lucide-react", () => ({
   Shield: () => null,
   Zap: () => null,
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
 
 import { ProxyGroupsPreview, type VisualDisplayGroup } from "./proxy-groups-preview";
 

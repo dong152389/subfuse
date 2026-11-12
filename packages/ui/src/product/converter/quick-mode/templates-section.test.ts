@@ -83,13 +83,13 @@ vi.mock("lucide-react", () => ({
   Heart: () => null,
   Loader2: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     mocks.captures.inputs.push(props);
     return React.createElement("input", {
@@ -99,13 +99,13 @@ vi.mock("@subboost/ui/components/ui/input", () => ({
     });
   },
 }));
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => {
     mocks.captures.cards.push(props);
     return React.createElement("section", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     mocks.captures.dialog = props;
     return props.children;
@@ -114,25 +114,25 @@ vi.mock("@subboost/ui/components/ui/dialog", () => ({
   DialogHeader: (props: any) => props.children,
   DialogTitle: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return { useConfigStore };
 });
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
-vi.mock("@subboost/core/templates/builtin", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
+vi.mock("@subfuse/core/templates/builtin", () => ({
   BUILTIN_TEMPLATE_IDS: {
     minimal: "builtin-minimal",
     standard: "builtin-standard",
     full: "builtin-full",
   },
 }));
-vi.mock("@subboost/ui/product/api-adapter", () => ({
+vi.mock("@subfuse/ui/product/api-adapter", () => ({
   useProductApiAdapter: () => mocks.productApi,
 }));
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 vi.mock("./constants", () => ({

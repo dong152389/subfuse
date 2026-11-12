@@ -4,8 +4,8 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@subboost/core": ["./src/index.ts"],
-      "@subboost/core/*": ["./src/*"]
+      "@subfuse/core": ["./src/index.ts"],
+      "@subfuse/core/*": ["./src/*"]
     },
     "noEmit": true
   },

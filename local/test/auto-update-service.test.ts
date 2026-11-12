@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { refreshNodeSnapshot } from "@subboost/server-core/subscription";
+import { refreshNodeSnapshot } from "@subfuse/server-core/subscription";
 import { prisma } from "@local/lib/prisma";
 import { runLocalSubscriptionAutoUpdateCron } from "@local/lib/auto-update-service";
 
@@ -33,8 +33,8 @@ vi.mock("@local/lib/prisma", () => ({
   },
 }));
 
-vi.mock("@subboost/server-core/subscription", async (importActual) => {
-  const actual = await importActual<typeof import("@subboost/server-core/subscription")>();
+vi.mock("@subfuse/server-core/subscription", async (importActual) => {
+  const actual = await importActual<typeof import("@subfuse/server-core/subscription")>();
   return {
     ...actual,
     refreshNodeSnapshot: vi.fn(),

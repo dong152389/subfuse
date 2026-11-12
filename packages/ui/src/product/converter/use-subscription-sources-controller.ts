@@ -1,15 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { DEFAULT_NODE_NAME_TEMPLATE, formatNodeNameFromTemplate } from "@subboost/core/node-name-template";
-import { normalizeSubscriptionImportErrorInfo } from "@subboost/core/subscription/import-error";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { getNodeSourceIds, useConfigStore, type SourceType, type SubscriptionSource } from "@subboost/ui/store/config-store";
-import { useUserStore } from "@subboost/ui/store/user-store";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { useProductInteractionAdapter, type ProductInteractionResult } from "@subboost/ui/product/interactions";
-import { markSourceAsPendingImport } from "@subboost/ui/product/subscription/source-import-state";
-import { moveSubscriptionSource } from "@subboost/ui/product/subscription/source-order";
+import { DEFAULT_NODE_NAME_TEMPLATE, formatNodeNameFromTemplate } from "@subfuse/core/node-name-template";
+import { normalizeSubscriptionImportErrorInfo } from "@subfuse/core/subscription/import-error";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { getNodeSourceIds, useConfigStore, type SourceType, type SubscriptionSource } from "@subfuse/ui/store/config-store";
+import { useUserStore } from "@subfuse/ui/store/user-store";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { useProductInteractionAdapter, type ProductInteractionResult } from "@subfuse/ui/product/interactions";
+import { markSourceAsPendingImport } from "@subfuse/ui/product/subscription/source-import-state";
+import { moveSubscriptionSource } from "@subfuse/ui/product/subscription/source-order";
 
 export type SubscriptionSourcesMode = "quick" | "advanced";
 

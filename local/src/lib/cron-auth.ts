@@ -1,4 +1,4 @@
-import { validateCronSecret } from "@subboost/server-core/cron-auth";
+import { validateCronSecret } from "@subfuse/server-core/cron-auth";
 import { apiError } from "./http";
 
 function getCronSecret(): string {

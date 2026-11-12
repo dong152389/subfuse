@@ -40,18 +40,18 @@ vi.mock("react", async (importOriginal) => {
   };
 });
 
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return { useConfigStore };
 });
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 
-import { PROXY_GROUP_MODULES } from "@subboost/core/generator/proxy-groups";
+import { PROXY_GROUP_MODULES } from "@subfuse/core/generator/proxy-groups";
 import { ProxyGroupAdvancedPanel } from "../../../packages/ui/src/product/converter/advanced-mode/sections/proxy-group-advanced-panel";
 import {
   ProxyGroupRuleMoveMenu,

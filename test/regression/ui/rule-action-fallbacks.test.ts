@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { initialState } from "@subboost/ui/store/config-store/definitions";
-import { createCustomActions } from "@subboost/ui/store/config-store/actions/custom-actions";
+import { initialState } from "@subfuse/ui/store/config-store/definitions";
+import { createCustomActions } from "@subfuse/ui/store/config-store/actions/custom-actions";
 import {
   compactBuiltinRuleEdits,
   findBuiltinRuleEditKeyByTarget,
   retargetBuiltinRuleEdits,
   updateBuiltinRuleEdit,
-} from "@subboost/ui/store/config-store/actions/proxy-group-rule-set-helpers";
-import { createTemplateActions } from "@subboost/ui/store/config-store/actions/template-actions";
+} from "@subfuse/ui/store/config-store/actions/proxy-group-rule-set-helpers";
+import { createTemplateActions } from "@subfuse/ui/store/config-store/actions/template-actions";
 
 function createHarness(overrides: Record<string, unknown> = {}) {
   let state = { ...structuredClone(initialState), ...overrides } as any;

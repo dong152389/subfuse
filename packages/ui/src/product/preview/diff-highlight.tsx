@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { cn } from "@subboost/ui/lib/utils";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { cn } from "@subfuse/ui/lib/utils";
 
 /**
  * YAML 语法高亮（简单版本）

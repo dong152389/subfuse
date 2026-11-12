@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedNode } from "@subboost/core/types/node";
-import type { DialerProxyGroup } from "@subboost/core/types/template-config";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import type { DialerProxyGroup } from "@subfuse/core/types/template-config";
 import {
   applyDialerProxy,
   generateDialerProxyGroups,

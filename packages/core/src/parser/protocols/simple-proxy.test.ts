@@ -3,9 +3,9 @@ import { parseHttp, parseSimpleProxy, parseSocks, parseSsh, parseTelegramProxyLi
 
 describe("simple proxy parsers", () => {
   it("parses HTTP and HTTPS URLs with auth, headers, SNI, and TLS verification aliases", () => {
-    const jsonHeaders = encodeURIComponent('{"User-Agent":"SubBoost","X-Test":"yes"}');
+    const jsonHeaders = encodeURIComponent('{"User-Agent":"SubFuse","X-Test":"yes"}');
     const http = parseHttp(
-      "http://user:pass@http.example.com:8080?headers=User-Agent:SubBoost|X-Test:yes&tls-verification=false&sni=edge.example.com#HTTP"
+      "http://user:pass@http.example.com:8080?headers=User-Agent:SubFuse|X-Test:yes&tls-verification=false&sni=edge.example.com#HTTP"
     );
     const httpJson = parseHttp(`http://json.example.com:8080?headers=${jsonHeaders}#JSON`);
     const httpBadJson = parseHttp(
@@ -28,14 +28,14 @@ describe("simple proxy parsers", () => {
       sni: "edge.example.com",
       "skip-cert-verify": true,
       headers: {
-        "User-Agent": "SubBoost",
+        "User-Agent": "SubFuse",
         "X-Test": "yes",
       },
     });
     expect(httpJson).toMatchObject({
       name: "JSON",
       headers: {
-        "User-Agent": "SubBoost",
+        "User-Agent": "SubFuse",
         "X-Test": "yes",
       },
     });

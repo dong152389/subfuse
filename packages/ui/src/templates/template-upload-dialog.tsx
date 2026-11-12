@@ -1,8 +1,8 @@
 "use client";
 
 import { Globe, Loader2, Lock, Upload } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { ChoiceChip, ChoiceGroup } from "@subboost/ui/components/ui/choice-group";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { ChoiceChip, ChoiceGroup } from "@subfuse/ui/components/ui/choice-group";
 import {
   Dialog,
   DialogContent,
@@ -10,12 +10,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@subboost/ui/components/ui/dialog";
-import { Input } from "@subboost/ui/components/ui/input";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Textarea } from "@subboost/ui/components/ui/textarea";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { cn } from "@subboost/ui/lib/utils";
+} from "@subfuse/ui/components/ui/dialog";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Textarea } from "@subfuse/ui/components/ui/textarea";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { cn } from "@subfuse/ui/lib/utils";
 
 type UploadMode = "config" | "yaml";
 

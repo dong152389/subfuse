@@ -1,5 +1,5 @@
-import { loadMihomoYaml } from "@subboost/core/config/yaml-schema";
-import type { GroupListenerBinding, GroupListenerTarget } from "@subboost/core/types/config";
+import { loadMihomoYaml } from "@subfuse/core/config/yaml-schema";
+import type { GroupListenerBinding, GroupListenerTarget } from "@subfuse/core/types/config";
 
 /** 分组监听端口冲突检查所需的最小状态切片 */
 export interface GroupListenerConflictState {

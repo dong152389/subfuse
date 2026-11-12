@@ -1,5 +1,5 @@
-import type { CnCandidateParent, CnRuleCandidate } from "@subboost/core/rules/cn-candidate-utils";
-import type { RuleSetInfo } from "@subboost/core/rules/metadata";
+import type { CnCandidateParent, CnRuleCandidate } from "@subfuse/core/rules/cn-candidate-utils";
+import type { RuleSetInfo } from "@subfuse/core/rules/metadata";
 
 export type GitTreeEntry = {
   path: string;

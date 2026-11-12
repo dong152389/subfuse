@@ -4,9 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, ShieldAlert, ShieldCheck } from "lucide-react";
 
-import { Button } from "@subboost/ui/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
-import { useUserStore } from "@subboost/ui/store/user-store";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
+import { useUserStore } from "@subfuse/ui/store/user-store";
 import { SmtpSettingsCard } from "@local/components/smtp-settings-card";
 import { GitHubOAuthSettingsCard } from "@local/components/github-oauth-settings-card";
 

@@ -13,8 +13,8 @@ import {
   Shield,
   Zap,
 } from "lucide-react";
-import type { ProxyGroupGroupType } from "@subboost/core/types/config";
-import { cn } from "@subboost/ui/lib/utils";
+import type { ProxyGroupGroupType } from "@subfuse/core/types/config";
+import { cn } from "@subfuse/ui/lib/utils";
 
 export type VisualDisplayGroup = {
   id: string;

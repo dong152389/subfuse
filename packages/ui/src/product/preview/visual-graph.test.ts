@@ -60,17 +60,17 @@ vi.mock("lucide-react", () => ({
   Network: () => null,
   Server: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/protocol-badge", () => ({
+vi.mock("@subfuse/ui/components/ui/protocol-badge", () => ({
   ProtocolBadge: (props: any) => {
     mocks.captures.protocolBadges.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: (selector?: any) => (typeof selector === "function" ? selector(mocks.store) : mocks.store),
 }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
 	  PROXY_GROUP_MODULES: [
 	    {
 	      id: "select",
@@ -92,14 +92,14 @@ vi.mock("@subboost/core/generator/proxy-groups", () => ({
 	  ],
   generateProxyGroups: vi.fn(() => mocks.generatedProxyGroups),
 }));
-vi.mock("@subboost/core/generator/module-rules", () => ({
+vi.mock("@subfuse/core/generator/module-rules", () => ({
   getModuleRuleOrderKey: (moduleId: string, ruleId: string) => `module:${moduleId}:${ruleId}`,
   getEffectiveModuleRules: vi.fn(() => mocks.effectiveRules),
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { id: string; name: string }, override?: string) => override || module.name,
 }));
-vi.mock("@subboost/core/rules/custom-routing-rule-sets", () => ({
+vi.mock("@subfuse/core/rules/custom-routing-rule-sets", () => ({
   collectCustomRoutingRuleSets: vi.fn(() => mocks.customRuleSets),
 }));
 vi.mock("./visual-graph/custom-rules-preview", () => ({

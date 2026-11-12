@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import { Mail, CheckCircle2, Loader2, Send } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
 
 async function readJson<T>(response: Response): Promise<T> {
   const text = await response.text();
@@ -153,7 +153,7 @@ export function SmtpSettingsCard() {
             <div className="grid gap-3 sm:grid-cols-2 items-center">
               <FormField label="发件人显示地址 (From)">
                 <Input
-                  placeholder="SubBoost &lt;noreply@example.com&gt;"
+                  placeholder="SubFuse &lt;noreply@example.com&gt;"
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
                 />

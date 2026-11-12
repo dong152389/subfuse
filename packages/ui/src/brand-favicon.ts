@@ -1,10 +1,10 @@
-import { SUBBOOST_ICON_PATH } from "@subboost/ui/brand";
+import { SUBFUSE_ICON_PATH } from "@subfuse/ui/brand";
 
-export function createSubBoostFaviconRedirect(): Response {
+export function createSubFuseFaviconRedirect(): Response {
   return new Response(null, {
     status: 308,
     headers: {
-      Location: SUBBOOST_ICON_PATH,
+      Location: SUBFUSE_ICON_PATH,
       "Cache-Control": "public, max-age=0, must-revalidate",
     },
   });

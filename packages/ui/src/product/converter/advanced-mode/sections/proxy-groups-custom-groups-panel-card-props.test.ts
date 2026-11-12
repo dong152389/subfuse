@@ -16,28 +16,28 @@ vi.mock("lucide-react", () => ({
   Trash2: () => null,
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => React.createElement("button", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => React.createElement("input", props),
 }));
 
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
 
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "Auto" },
     { id: "fallback", name: "Fallback" },
   ],
 }));
 
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { name: string }, override?: string) => override || module.name,
 }));
 
-vi.mock("@subboost/core/proxy-group-targets", () => ({
+vi.mock("@subfuse/core/proxy-group-targets", () => ({
   resolveProxyGroupTargetName: (target: any, options: any) => {
     if (typeof target === "string") return target;
     if (target?.kind === "custom") {
@@ -48,21 +48,21 @@ vi.mock("@subboost/core/proxy-group-targets", () => ({
   },
 }));
 
-vi.mock("@subboost/core/rules/custom-routing-rule-sets", () => ({
+vi.mock("@subfuse/core/rules/custom-routing-rule-sets", () => ({
   extractRuleSetPathFromUrl: (url: string) => url,
 }));
 
-vi.mock("@subboost/core/types/config", () => ({
+vi.mock("@subfuse/core/types/config", () => ({
   DEFAULT_LOAD_BALANCE_STRATEGY: "consistent-hashing",
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => {
+vi.mock("@subfuse/ui/store/config-store", () => {
   const useConfigStore = () => mocks.store;
   (useConfigStore as any).getState = () => mocks.store;
   return { useConfigStore };
 });
 
-vi.mock("@subboost/ui/product/interactions", () => ({
+vi.mock("@subfuse/ui/product/interactions", () => ({
   useProductInteractionAdapter: () => mocks.interactions,
 }));
 

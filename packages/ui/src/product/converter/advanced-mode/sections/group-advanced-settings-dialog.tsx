@@ -1,27 +1,27 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@subboost/ui/components/ui/button";
+import { Button } from "@subfuse/ui/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@subboost/ui/components/ui/dialog";
-import { FormField } from "@subboost/ui/components/ui/form-field";
-import { Input } from "@subboost/ui/components/ui/input";
-import { SwitchField } from "@subboost/ui/components/ui/switch-field";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+} from "@subfuse/ui/components/ui/dialog";
+import { FormField } from "@subfuse/ui/components/ui/form-field";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 import {
   DEFAULT_LOAD_BALANCE_STRATEGY,
   type GroupListenerBinding,
   type GroupListenerTarget,
   type LoadBalanceStrategy,
   type ProxyGroupGroupType,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 import { ProxyGroupTypeMenu } from "./proxy-group-type-menu";
-import { normalizeGroupTestUrl } from "@subboost/core/proxy-group-advanced";
+import { normalizeGroupTestUrl } from "@subfuse/core/proxy-group-advanced";
 import {
   validateGroupListenerPort,
   type GroupListenerConflictState,

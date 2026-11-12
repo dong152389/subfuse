@@ -1,17 +1,17 @@
-import { getNodeSourceIds } from "@subboost/core/subscription/node-source-state";
+import { getNodeSourceIds } from "@subfuse/core/subscription/node-source-state";
 import {
   DEFAULT_LOAD_BALANCE_STRATEGY,
   isLoadBalanceStrategy,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 import type {
   CustomProxyGroup,
   NodeRegion,
   ProxyGroupAdvancedConfig,
   ProxyGroupGroupType,
   ProxyGroupMemberRef,
-} from "@subboost/core/types/config";
-import type { ParsedNode } from "@subboost/core/types/node";
-import { getProxyGroupMemberKey } from "@subboost/core/proxy-group-targets";
+} from "@subfuse/core/types/config";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import { getProxyGroupMemberKey } from "@subfuse/core/proxy-group-targets";
 
 export const REGION_PRESETS: Array<{
   id: NodeRegion;

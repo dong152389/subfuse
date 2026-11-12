@@ -16,19 +16,19 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("node:dns/promises", () => ({ lookup: mocks.lookup }));
-vi.mock("@subboost/core/subscription/import-error", () => ({
+vi.mock("@subfuse/core/subscription/import-error", () => ({
   createSubscriptionImportErrorInfo: mocks.createSubscriptionImportErrorInfo,
   inferSubscriptionImportErrorCategory: mocks.inferSubscriptionImportErrorCategory,
   sanitizePublicErrorText: mocks.sanitizePublicErrorText,
 }));
-vi.mock("@subboost/server-core/subscription", () => ({
+vi.mock("@subfuse/server-core/subscription", () => ({
   importSubscriptionFromUrl: mocks.importSubscriptionFromUrl,
-  SUBSCRIPTION_IMPORT_USER_AGENTS: ["SubBoost Regression"],
+  SUBSCRIPTION_IMPORT_USER_AGENTS: ["SubFuse Regression"],
 }));
-vi.mock("@subboost/server-core/subscription/doh-resolver", () => ({
+vi.mock("@subfuse/server-core/subscription/doh-resolver", () => ({
   resolveHostnameByDoh: mocks.resolveHostnameByDoh,
 }));
-vi.mock("@subboost/server-core/subscription/ssrf-ip", () => ({
+vi.mock("@subfuse/server-core/subscription/ssrf-ip", () => ({
   isPrivateOrReservedIp: mocks.isPrivateOrReservedIp,
   normalizeResolvedIpAddresses: mocks.normalizeResolvedIpAddresses,
   selectDnsAddressesAfterFakeIpRecheck: mocks.selectDnsAddressesAfterFakeIpRecheck,
@@ -47,7 +47,7 @@ import { importSourceUrlDirect } from "../../../local/src/lib/source-import";
 async function runTransport(url: string, overrides: Record<string, unknown> = {}) {
   mocks.importSubscriptionFromUrl.mockImplementationOnce(async (_request, options) => options.fetchText({
     url,
-    userAgent: "SubBoost Regression",
+    userAgent: "SubFuse Regression",
     purpose: "content",
     timeoutMs: 100,
     maxBytes: 64,

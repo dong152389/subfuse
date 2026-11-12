@@ -65,7 +65,7 @@ describe("useConfigStore", () => {
 
   it("switches config draft storage scopes and regenerates restored drafts", async () => {
     const storage = createMemoryStorage({
-      "subboost-config:user:u1": JSON.stringify({
+      "subfuse-config:user:u1": JSON.stringify({
         state: {
           template: "full",
           dnsYaml: "persisted dns",
@@ -79,7 +79,7 @@ describe("useConfigStore", () => {
 
     setConfigDraftUserScope("u1");
 
-    expect(useConfigStore.persist.getOptions().name).toBe("subboost-config:user:u1");
+    expect(useConfigStore.persist.getOptions().name).toBe("subfuse-config:user:u1");
     expect(useConfigStore.getState()).toMatchObject({
       template: "full",
       dnsYaml: "persisted dns",
@@ -94,7 +94,7 @@ describe("useConfigStore", () => {
 
   it("drops stale draft versions instead of migrating legacy dnsYaml defaults", async () => {
     const storage = createMemoryStorage({
-      "subboost-config:user:u1": JSON.stringify({
+      "subfuse-config:user:u1": JSON.stringify({
         state: {
           template: "full",
           dnsYaml: "legacy base config",
@@ -118,7 +118,7 @@ describe("useConfigStore", () => {
 
     setConfigDraftUserScope(null);
 
-    expect(useConfigStore.persist.getOptions().name).toBe("subboost-config:guest");
+    expect(useConfigStore.persist.getOptions().name).toBe("subfuse-config:guest");
     expect(mocks.computeGeneratedYamlResult).not.toHaveBeenCalled();
   });
 
@@ -147,7 +147,7 @@ describe("useConfigStore", () => {
     useConfigStore.getState().setDnsYaml("guest draft");
     expect(useConfigStore.getState().generatedYaml).toBe("yaml:guest draft");
     expect(() => setConfigDraftUserScope("u1")).not.toThrow();
-    expect(useConfigStore.persist.getOptions().name).toBe("subboost-config:user:u1");
+    expect(useConfigStore.persist.getOptions().name).toBe("subfuse-config:user:u1");
     expect(useConfigStore.getState().dnsYaml).not.toBe("guest draft");
     useConfigStore.getState().setDnsYaml("user draft");
     setConfigDraftUserScope("u1");
@@ -155,7 +155,7 @@ describe("useConfigStore", () => {
     setConfigDraftUserScope("u2");
     expect(useConfigStore.getState().dnsYaml).not.toBe("user draft");
     setConfigDraftUserScope(null);
-    expect(useConfigStore.persist.getOptions().name).toBe("subboost-config:guest");
+    expect(useConfigStore.persist.getOptions().name).toBe("subfuse-config:guest");
     expect(() => useConfigStore.persist.clearStorage()).not.toThrow();
     useConfigStore.getState().setDnsYaml("editable again");
     expect(useConfigStore.getState().generatedYaml).toBe("yaml:editable again");

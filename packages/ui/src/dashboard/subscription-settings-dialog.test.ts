@@ -9,7 +9,7 @@ const captures = vi.hoisted(() => ({
   dialogs: [] as any[],
 }));
 
-vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
+vi.mock("@subfuse/core/subscription/auto-update-interval", () => ({
   getAutoUpdateIntervalPolicyMinLabel: (policy: { minHours: number }) => `${policy.minHours} 小时`,
   resolveAutoUpdateIntervalPolicy: (isAdmin: boolean) => ({
     defaultHours: 24,
@@ -19,30 +19,30 @@ vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
   }),
 }));
 
-vi.mock("@subboost/ui/components/subscription/smart-node-matching-help", () => ({
+vi.mock("@subfuse/ui/components/subscription/smart-node-matching-help", () => ({
   SmartNodeMatchingHelp: ({ enabled }: { enabled: boolean }) =>
     React.createElement("span", null, enabled ? "smart-on" : "smart-off"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/input", () => ({
+vi.mock("@subfuse/ui/components/ui/input", () => ({
   Input: (props: any) => {
     captures.inputs.push(props);
     return React.createElement("input", props);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/label", () => ({
+vi.mock("@subfuse/ui/components/ui/label", () => ({
   Label: (props: any) => React.createElement("label", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     captures.switches.push(props);
     return React.createElement("button", {
@@ -53,7 +53,7 @@ vi.mock("@subboost/ui/components/ui/switch", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/dialog", () => ({
+vi.mock("@subfuse/ui/components/ui/dialog", () => ({
   Dialog: (props: any) => {
     captures.dialogs.push(props);
     return React.createElement("div", null, props.children);

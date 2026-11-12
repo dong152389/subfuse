@@ -1,5 +1,5 @@
 "use client";
-import { SubscriptionQrButton } from "@subboost/ui/product/subscription/subscription-qr-code";
+import { SubscriptionQrButton } from "@subfuse/ui/product/subscription/subscription-qr-code";
 
 import * as React from "react";
 import Link from "next/link";
@@ -19,30 +19,30 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { Button } from "@subboost/ui/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
-import { confirmDialog } from "@subboost/ui/components/ui/confirm-dialog";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { useUserStore, type User } from "@subboost/ui/store/user-store";
+import { Button } from "@subfuse/ui/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
+import { confirmDialog } from "@subfuse/ui/components/ui/confirm-dialog";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { useUserStore, type User } from "@subfuse/ui/store/user-store";
 import {
   autoUpdateIntervalHoursToSeconds,
   autoUpdateIntervalSecondsToHours,
   getAutoUpdateIntervalPolicyMinLabel,
   resolveAutoUpdateIntervalPolicy,
   type AutoUpdateIntervalPolicyOverride,
-} from "@subboost/core/subscription/auto-update-interval";
-import { DashboardStatsCards } from "@subboost/ui/dashboard/dashboard-stats-cards";
-import { formatDashboardDate, formatIntervalLabel } from "@subboost/ui/dashboard/dashboard-format";
-import { buildRefreshSubscriptionSuccessToast } from "@subboost/ui/dashboard/dashboard-refresh-toast";
-import { copyTextToClipboard } from "@subboost/ui/lib/clipboard";
+} from "@subfuse/core/subscription/auto-update-interval";
+import { DashboardStatsCards } from "@subfuse/ui/dashboard/dashboard-stats-cards";
+import { formatDashboardDate, formatIntervalLabel } from "@subfuse/ui/dashboard/dashboard-format";
+import { buildRefreshSubscriptionSuccessToast } from "@subfuse/ui/dashboard/dashboard-refresh-toast";
+import { copyTextToClipboard } from "@subfuse/ui/lib/clipboard";
 import {
   buildAutoUpdateDisabledNotice,
   buildNodeQuotaWarning,
   createResetDashboardAutoUpdateState,
   isNodeQuotaAutoUpdateDisabled,
-} from "@subboost/ui/dashboard/dashboard-auto-update-warning";
-import { SubscriptionSettingsDialog } from "@subboost/ui/dashboard/subscription-settings-dialog";
-import type { RefreshSubscriptionResponse, Subscription, SubscriptionLink } from "@subboost/ui/dashboard/dashboard-types";
+} from "@subfuse/ui/dashboard/dashboard-auto-update-warning";
+import { SubscriptionSettingsDialog } from "@subfuse/ui/dashboard/subscription-settings-dialog";
+import type { RefreshSubscriptionResponse, Subscription, SubscriptionLink } from "@subfuse/ui/dashboard/dashboard-types";
 
 type UpdateSettingsPayload = {
   name: string;
@@ -77,13 +77,13 @@ type Props = {
 
 function buildYamlDownloadFilename(name: string): string {
   const base =
-    String(name || "subboost-config")
+    String(name || "subfuse-config")
       .trim()
       .replace(/[\r\n]/g, " ")
       .replace(/[<>:"/\\|?*]+/g, "")
       .replace(/\s+/g, "_")
       .replace(/\.(?:ya?ml)$/i, "")
-      .slice(0, 80) || "subboost-config";
+      .slice(0, 80) || "subfuse-config";
   return `${base}.yaml`;
 }
 
@@ -151,7 +151,7 @@ export function SubscriptionDashboardSurface({ adapter }: Props) {
 
     const unseen = disabled.filter((sub) => {
       const fingerprint = `${sub.autoUpdateState.disabledAt}:${sub.autoUpdateState.disabledReason}`;
-      const storageKey = `subboost:notice:auto_update_disabled:${user.id}:${sub.id}`;
+      const storageKey = `subfuse:notice:auto_update_disabled:${user.id}:${sub.id}`;
       try {
         if (localStorage.getItem(storageKey) === fingerprint) return false;
         localStorage.setItem(storageKey, fingerprint);

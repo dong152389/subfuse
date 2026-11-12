@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { isCleanNewSubscriptionIntent } from "@subboost/ui/product/subscription/home-url-intent";
-import { useConfigStore } from "@subboost/ui/store/config-store";
+import { isCleanNewSubscriptionIntent } from "@subfuse/ui/product/subscription/home-url-intent";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
 
 type Options = {
   authChecked: boolean;

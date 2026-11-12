@@ -5,8 +5,8 @@ const IV_LENGTH = 12;
 const TAG_LENGTH = 16;
 const KEY_LENGTH = 32;
 const V2_PREFIX = "v2";
-const V2_HKDF_SALT = "subboost:encrypted-field:v2";
-const V2_HKDF_INFO = "subboost:aes-256-gcm:v2";
+const V2_HKDF_SALT = "subfuse:encrypted-field:v2";
+const V2_HKDF_INFO = "subfuse:aes-256-gcm:v2";
 
 function deriveV2Key(masterKey: string): Buffer {
   return Buffer.from(hkdfSync("sha256", Buffer.from(masterKey, "utf8"), V2_HKDF_SALT, V2_HKDF_INFO, KEY_LENGTH));

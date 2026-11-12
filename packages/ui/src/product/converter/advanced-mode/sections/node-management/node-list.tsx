@@ -2,14 +2,14 @@
 
 import * as React from "react";
 import { Check, ChevronDown, ChevronUp, Pencil, RotateCcw, Trash2, X } from "lucide-react";
-import { Badge } from "@subboost/ui/components/ui/badge";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Input } from "@subboost/ui/components/ui/input";
-import { ProtocolBadge } from "@subboost/ui/components/ui/protocol-badge";
-import { toast } from "@subboost/ui/components/ui/toaster";
-import { formatNodeNameFromTemplate } from "@subboost/core/node-name-template";
-import { cn } from "@subboost/ui/lib/utils";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { Badge } from "@subfuse/ui/components/ui/badge";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { ProtocolBadge } from "@subfuse/ui/components/ui/protocol-badge";
+import { toast } from "@subfuse/ui/components/ui/toaster";
+import { formatNodeNameFromTemplate } from "@subfuse/core/node-name-template";
+import { cn } from "@subfuse/ui/lib/utils";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 type NodeNameParts = {
   baseName: string;

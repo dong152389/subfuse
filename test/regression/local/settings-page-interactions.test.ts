@@ -50,21 +50,21 @@ vi.mock("lucide-react", () => ({
   ShieldCheck: () => React.createElement("span", null, "shield"),
 }));
 
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: ({ variant: _variant, ...props }: Record<string, any>) => {
     harness.buttons.push({ variant: _variant, ...props });
     return React.createElement("button", props, props.children);
   },
 }));
 
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: Record<string, any>) => React.createElement("section", props, props.children),
   CardContent: (props: Record<string, any>) => React.createElement("div", props, props.children),
   CardHeader: (props: Record<string, any>) => React.createElement("header", props, props.children),
   CardTitle: (props: Record<string, any>) => React.createElement("h2", props, props.children),
 }));
 
-vi.mock("@subboost/ui/components/ui/switch-field", () => ({
+vi.mock("@subfuse/ui/components/ui/switch-field", () => ({
   SwitchField: (props: Record<string, any>) => {
     harness.switches.push(props);
     return React.createElement("button", {
@@ -75,7 +75,7 @@ vi.mock("@subboost/ui/components/ui/switch-field", () => ({
   },
 }));
 
-vi.mock("@subboost/ui/store/user-store", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({
   useUserStore: () => harness.userState,
 }));
 

@@ -1,8 +1,8 @@
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import {
   resolveSubscriptionUserInfo,
   type SubscriptionUserInfo,
-} from "@subboost/core/subscription/subscription-userinfo";
+} from "@subfuse/core/subscription/subscription-userinfo";
 
 function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) return "-";

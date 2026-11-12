@@ -61,22 +61,22 @@ vi.mock("lucide-react", () => ({
   Star: () => null,
   Trash2: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/card", () => ({
+vi.mock("@subfuse/ui/components/ui/card", () => ({
   Card: (props: any) => props.children,
   CardContent: (props: any) => props.children,
   CardHeader: (props: any) => props.children,
   CardTitle: (props: any) => props.children,
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
-vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/ui/store/user-store", () => ({ useUserStore: () => mocks.userStore }));
+vi.mock("@subfuse/core/subscription/auto-update-interval", () => ({
   autoUpdateIntervalHoursToSeconds: (hours: number) => Math.round(hours * 3600),
   autoUpdateIntervalSecondsToHours: (seconds: number) => Math.round((seconds / 3600) * 1000) / 1000,
   getAutoUpdateIntervalPolicyMinLabel: (policy: { minHours: number }) => `${policy.minHours} 小时`,
@@ -88,20 +88,20 @@ vi.mock("@subboost/core/subscription/auto-update-interval", () => ({
       typeof override?.requireIntegerHours === "boolean" ? override.requireIntegerHours : true,
   }),
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-stats-cards", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-stats-cards", () => ({
   DashboardStatsCards: (props: any) => {
     mocks.captures.stats = props;
     return null;
   },
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-format", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-format", () => ({
   formatDashboardDate: (value: string) => `date:${value}`,
   formatIntervalLabel: (seconds: number) => `${seconds / 3600} 小时`,
 }));
-vi.mock("@subboost/ui/dashboard/dashboard-refresh-toast", () => ({
+vi.mock("@subfuse/ui/dashboard/dashboard-refresh-toast", () => ({
   buildRefreshSubscriptionSuccessToast: mocks.buildRefreshSubscriptionSuccessToast,
 }));
-vi.mock("@subboost/ui/dashboard/subscription-settings-dialog", () => ({
+vi.mock("@subfuse/ui/dashboard/subscription-settings-dialog", () => ({
   SubscriptionSettingsDialog: (props: any) => {
     mocks.captures.settingsDialog = props;
     return null;
@@ -323,7 +323,7 @@ describe("SubscriptionDashboardSurface", () => {
     renderSurface(adapter, { 0: [disabledSubscription], 1: false }, { runEffects: true });
     await flushPromises();
     expect(localStorage.setItem).toHaveBeenCalledWith(
-      "subboost:notice:auto_update_disabled:user-1:sub-2",
+      "subfuse:notice:auto_update_disabled:user-1:sub-2",
       "2026-01-03T00:00:00.000Z:fetch_failed"
     );
     expect(mocks.toast).toHaveBeenCalledWith(expect.objectContaining({ title: "自动更新已关闭", variant: "warning" }));
@@ -421,7 +421,7 @@ describe("SubscriptionDashboardSurface", () => {
     const dom = stubDocumentActions();
     const blob = new Blob(["mixed-port: 7890\n"], { type: "text/yaml" });
     const fetchMock = vi.fn(async () => ({ ok: true, status: 200, blob: vi.fn(async () => blob) }));
-    const createObjectURL = vi.fn(() => "blob:subboost-config");
+    const createObjectURL = vi.fn(() => "blob:subfuse-config");
     const revokeObjectURL = vi.fn();
     class TestURL extends URL {}
     TestURL.createObjectURL = createObjectURL;
@@ -436,12 +436,12 @@ describe("SubscriptionDashboardSurface", () => {
     expect(fetchMock).toHaveBeenCalledWith("https://example.com/sub");
     expect(createObjectURL).toHaveBeenCalledWith(blob);
     expect(dom.createElement).toHaveBeenCalledWith("a");
-    expect(dom.anchor.href).toBe("blob:subboost-config");
+    expect(dom.anchor.href).toBe("blob:subfuse-config");
     expect(dom.anchor.download).toBe("Primary.yaml");
     expect(dom.anchor.rel).toBe("noopener noreferrer");
     expect(dom.anchor.click).toHaveBeenCalled();
     expect(dom.anchor.remove).toHaveBeenCalled();
-    expect(revokeObjectURL).toHaveBeenCalledWith("blob:subboost-config");
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:subfuse-config");
   });
 
   it("reports download failures without opening the subscription URL", async () => {
@@ -472,7 +472,7 @@ describe("SubscriptionDashboardSurface", () => {
     const fetchMock = vi.fn(async () => ({ ok: true, status: 200, blob: vi.fn(async () => blob) }));
     vi.stubGlobal("fetch", fetchMock);
     class TestURL extends URL {}
-    TestURL.createObjectURL = vi.fn(() => "blob:subboost-config");
+    TestURL.createObjectURL = vi.fn(() => "blob:subfuse-config");
     TestURL.revokeObjectURL = vi.fn();
     vi.stubGlobal("URL", TestURL);
 
@@ -536,7 +536,7 @@ describe("SubscriptionDashboardSurface", () => {
   });
 
   it("confirms link rotation, guards duplicate clicks and preserves unsaved settings", async () => {
-    const link = { id: subscription.id, token: "rotated", subscriptionUrl: "https://local.subboost.test/new" };
+    const link = { id: subscription.id, token: "rotated", subscriptionUrl: "https://local.subfuse.test/new" };
     const adapter = createAdapter({ resetSubscriptionLink: vi.fn(async () => link) });
     renderSurface(adapter, { 0: [subscription], 1: false, 4: true, 5: subscription, 6: "Unsaved name" });
     mocks.confirmDialog.mockResolvedValueOnce(false);

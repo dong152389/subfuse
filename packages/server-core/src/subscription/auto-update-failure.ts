@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { safeParseJsonObject } from "@subboost/core/json";
-import { extractHttpStatus } from "@subboost/core/subscription/import-error";
+import { safeParseJsonObject } from "@subfuse/core/json";
+import { extractHttpStatus } from "@subfuse/core/subscription/import-error";
 
 // Product-neutral failure policy shared by server adapters.
 export const AUTO_UPDATE_EXTERNAL_FAILURE_THRESHOLD = 3;

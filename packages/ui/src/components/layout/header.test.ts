@@ -61,7 +61,7 @@ vi.mock("lucide-react", () => ({
   Shield: () => React.createElement("span", null, "shield-icon"),
 }));
 
-vi.mock("@subboost/ui/components/auth/user-menu", async () => {
+vi.mock("@subfuse/ui/components/auth/user-menu", async () => {
   const ReactModule = await import("react");
   return {
     UserMenu: (props: any) => {
@@ -71,24 +71,24 @@ vi.mock("@subboost/ui/components/auth/user-menu", async () => {
   };
 });
 
-vi.mock("@subboost/ui/components/layout/theme-toggle", async () => {
+vi.mock("@subfuse/ui/components/layout/theme-toggle", async () => {
   const ReactModule = await import("react");
   return {
     ThemeToggle: () => ReactModule.createElement("button", null, "theme-toggle"),
   };
 });
 
-vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
+vi.mock("@subfuse/ui/store/config-store/auth-handoff", () => ({
   captureAuthConfigHandoff: mocks.captureAuthConfigHandoff,
 }));
 
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: {
     getState: () => mocks.configState,
   },
 }));
 
-vi.mock("@subboost/ui/store/user-store", () => ({
+vi.mock("@subfuse/ui/store/user-store", () => ({
   useUserStore: () => mocks.userState,
 }));
 
@@ -120,7 +120,7 @@ describe("Header", () => {
   it("renders guest default navigation without authenticated links", () => {
     const html = renderHeader();
 
-    expect(html).toContain("SubBoost");
+    expect(html).toContain("SubFuse");
     expect(html).toContain("online");
     expect(html).toContain("在线入口");
     expect(html).toContain("首页");
@@ -160,18 +160,18 @@ describe("Header", () => {
 
     expect(html).not.toContain("self-host");
     expect(html).not.toContain("自部署入口");
-    expect(html).toContain("SubBoost");
+    expect(html).toContain("SubFuse");
   });
 
   it("renders a linked new release badge outside the home link", () => {
-    const releaseUrl = "https://github.com/SubBoost/subboost/releases/tag/v9.8.7";
+    const releaseUrl = "https://github.com/SubFuse/subfuse/releases/tag/v9.8.7";
     const html = renderHeader({
       mode: "local",
       extraBrandBadge: {
         label: "new",
         href: releaseUrl,
         external: true,
-        title: "SubBoost v9.8.7 已发布",
+        title: "SubFuse v9.8.7 已发布",
       },
     });
 
@@ -226,12 +226,12 @@ describe("Header", () => {
     mocks.userState = { user };
     const html = renderHeader({ mode, privilegedMenuItem: { href: adminPath, label: "管理" } as any }, true);
     const desktop = html.match(/<nav class="([^"]+)"/)?.[1];
-    const mobile = html.match(/id="subboost-mobile-navigation" class="([^"]+)"/)?.[1];
+    const mobile = html.match(/id="subfuse-mobile-navigation" class="([^"]+)"/)?.[1];
     expect(desktop).toContain(tabletMenu ? "lg:flex" : "md:flex");
     expect(desktop).not.toContain(tabletMenu ? "md:flex" : "lg:flex");
     expect(mobile).toContain(tabletMenu ? "lg:hidden" : "md:hidden");
     expect(html).toContain('aria-expanded="true"');
-    expect(html).toContain('aria-controls="subboost-mobile-navigation"');
+    expect(html).toContain('aria-controls="subfuse-mobile-navigation"');
     if (tabletMenu) expect(mocks.links.some(link => link.href === adminPath && typeof link.onClick === "function")).toBe(true);
   });
 

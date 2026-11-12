@@ -16,16 +16,16 @@ function textResponse(body: string): Response {
 
 describe("rule catalog deduplication and cache behavior", () => {
   afterEach(() => {
-    vi.doUnmock("@subboost/core/generator/proxy-group-modules");
-    vi.doUnmock("@subboost/core/rules/cn-candidate-utils");
-    vi.doUnmock("@subboost/core/rules-database");
+    vi.doUnmock("@subfuse/core/generator/proxy-group-modules");
+    vi.doUnmock("@subfuse/core/rules/cn-candidate-utils");
+    vi.doUnmock("@subfuse/core/rules-database");
     vi.restoreAllMocks();
     vi.resetModules();
   });
 
   it("deduplicates repeated variants, sorts diagnostics, and reuses its fresh inner cache", async () => {
     vi.resetModules();
-    vi.doMock("@subboost/core/generator/proxy-group-modules", () => ({
+    vi.doMock("@subfuse/core/generator/proxy-group-modules", () => ({
       PROXY_GROUP_MODULES: [
         {
           id: "module-b",
@@ -39,7 +39,7 @@ describe("rule catalog deduplication and cache behavior", () => {
         },
       ],
     }));
-    vi.doMock("@subboost/core/rules-database", () => ({
+    vi.doMock("@subfuse/core/rules-database", () => ({
       ALL_RULES: [
         {
           id: "duplicate-b",
@@ -48,7 +48,7 @@ describe("rule catalog deduplication and cache behavior", () => {
           category: "other",
           behavior: "domain",
           format: "mrs",
-          url: "https://local.subboost.test/geosite/duplicate-b.mrs",
+          url: "https://local.subfuse.test/geosite/duplicate-b.mrs",
         },
         {
           id: "duplicate-b",
@@ -57,7 +57,7 @@ describe("rule catalog deduplication and cache behavior", () => {
           category: "other",
           behavior: "domain",
           format: "mrs",
-          url: "https://local.subboost.test/geosite/duplicate-b.mrs",
+          url: "https://local.subfuse.test/geosite/duplicate-b.mrs",
         },
         {
           id: "duplicate-a",
@@ -66,7 +66,7 @@ describe("rule catalog deduplication and cache behavior", () => {
           category: "other",
           behavior: "domain",
           format: "mrs",
-          url: "https://local.subboost.test/geosite/duplicate-a.mrs",
+          url: "https://local.subfuse.test/geosite/duplicate-a.mrs",
         },
         {
           id: "duplicate-a",
@@ -75,14 +75,14 @@ describe("rule catalog deduplication and cache behavior", () => {
           category: "other",
           behavior: "domain",
           format: "mrs",
-          url: "https://local.subboost.test/geosite/duplicate-a.mrs",
+          url: "https://local.subfuse.test/geosite/duplicate-a.mrs",
         },
       ],
     }));
-    vi.doMock("@subboost/core/rules/cn-candidate-utils", async () => {
+    vi.doMock("@subfuse/core/rules/cn-candidate-utils", async () => {
       const actual = await vi.importActual<
         typeof import("../../../packages/core/src/rules/cn-candidate-utils")
-      >("@subboost/core/rules/cn-candidate-utils");
+      >("@subfuse/core/rules/cn-candidate-utils");
       return {
         ...actual,
         buildCnRuleVariantIds: () => [
@@ -109,7 +109,7 @@ describe("rule catalog deduplication and cache behavior", () => {
           ],
         });
       }
-      if (url.endsWith(".list")) return textResponse("DOMAIN,local.subboost.test\n");
+      if (url.endsWith(".list")) return textResponse("DOMAIN,local.subfuse.test\n");
       return textResponse("");
     });
 

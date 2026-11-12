@@ -4,7 +4,7 @@ import {
   buildCnRuleCandidateUnavailableResponse,
   parseCnRuleCandidateQuery,
   RuleIndexUnavailableError,
-} from "@subboost/server-core/rules";
+} from "@subfuse/server-core/rules";
 import { getCnRuleCandidateDiscovery } from "@local/lib/rule-catalog";
 
 export async function GET(request: NextRequest) {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { CustomProxyGroup, CustomRuleSet } from "@subboost/core/types/config";
-import { collectCustomRoutingRuleSets } from "@subboost/core/rules/custom-routing-rule-sets";
+import type { CustomProxyGroup, CustomRuleSet } from "@subfuse/core/types/config";
+import { collectCustomRoutingRuleSets } from "@subfuse/core/rules/custom-routing-rule-sets";
 import { generateRuleProviders } from "./proxy-groups";
 import { buildGeneratedRuleEntries, resolveModuleName } from "./rules";
 
@@ -11,8 +11,8 @@ const set = (target: CustomRuleSet["target"], id = "bilibili"): CustomRuleSet =>
 });
 const options = {
   nodes: [], enabledModules: ["select", "cn"], customRules: [],
-  ruleProviderBaseUrl: "https://local.subboost.test/rules",
-  testUrl: "https://local.subboost.test/probe", testInterval: 60,
+  ruleProviderBaseUrl: "https://local.subfuse.test/rules",
+  testUrl: "https://local.subfuse.test/probe", testInterval: 60,
   fallbackPolicyTarget: "🚀 节点选择",
   availablePolicyTargets: ["🚀 节点选择", "🔒 国内服务", "Regional", "DIRECT", "REJECT"],
 };
@@ -30,12 +30,12 @@ describe("rule target string references", () => {
       ...options, proxyGroupNameOverrides, customProxyGroups: [{ ...regional, name: "Renamed" }],
       availablePolicyTargets: [...options.availablePolicyTargets, domesticName, "Renamed"],
       customRuleSets: [set(" module: cn "), set("custom:regional", "regional-rule")],
-      customRules: [{ id: "plain", type: "DOMAIN", value: "local.subboost.test", target: "custom:regional" }],
+      customRules: [{ id: "plain", type: "DOMAIN", value: "local.subfuse.test", target: "custom:regional" }],
       builtinRuleEdits: { "module:cn:cn-ip": { target: "custom:regional" } },
     });
     expect(entries.map((entry) => entry.text)).toEqual(expect.arrayContaining([
       `RULE-SET,bilibili,${domesticName}`, "RULE-SET,regional-rule,Renamed",
-      "DOMAIN,local.subboost.test,Renamed", "RULE-SET,cn-ip,Renamed,no-resolve",
+      "DOMAIN,local.subfuse.test,Renamed", "RULE-SET,cn-ip,Renamed,no-resolve",
     ]));
   });
 
@@ -43,7 +43,7 @@ describe("rule target string references", () => {
     const customRuleSets = [set("custom:disabled", "disabled-rule"), set("module:cn")];
     const config = {
       ...options, customRuleSets, customProxyGroups: [disabled],
-      customRules: [{ id: "disabled", type: "DOMAIN" as const, value: "local.subboost.test", target: "custom:disabled" }],
+      customRules: [{ id: "disabled", type: "DOMAIN" as const, value: "local.subfuse.test", target: "custom:disabled" }],
     };
     expect(buildGeneratedRuleEntries(config).some((entry) => entry.key.includes("disabled"))).toBe(false);
     const providers = generateRuleProviders(config);

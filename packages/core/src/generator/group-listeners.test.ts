@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { generateClashConfig } from "./index";
 import { GroupListenerError } from "./group-listeners";
-import type { ParsedNode } from "@subboost/core/types/node";
-import type { GroupListenerBinding } from "@subboost/core/types/config";
+import type { ParsedNode } from "@subfuse/core/types/node";
+import type { GroupListenerBinding } from "@subfuse/core/types/config";
 
 function ssNode(patch: Partial<ParsedNode> = {}): ParsedNode {
   return {

@@ -1,24 +1,24 @@
 "use client";
 
 import * as React from "react";
-import { toast, ToastAction } from "@subboost/ui/components/ui/toaster";
-import type { ParsedNode } from "@subboost/core/types/node";
+import { toast, ToastAction } from "@subfuse/ui/components/ui/toaster";
+import type { ParsedNode } from "@subfuse/core/types/node";
 import {
   getNodeSourceIds,
   type SubscriptionSource,
   type DialerProxyGroup,
-} from "@subboost/ui/store/config-store";
-import type { BuiltinRuleEdits, CustomRule, CustomProxyGroup, CustomRuleSet } from "@subboost/core/types/config";
-import type { User } from "@subboost/ui/store/user-store";
-import { useConfigStore } from "@subboost/ui/store/config-store";
-import { captureAuthConfigHandoff } from "@subboost/ui/store/config-store/auth-handoff";
+} from "@subfuse/ui/store/config-store";
+import type { BuiltinRuleEdits, CustomRule, CustomProxyGroup, CustomRuleSet } from "@subfuse/core/types/config";
+import type { User } from "@subfuse/ui/store/user-store";
+import { useConfigStore } from "@subfuse/ui/store/config-store";
+import { captureAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
 import {
   hasSubscriptionUserInfo,
   mergeSubscriptionUserInfo,
   normalizeSubscriptionUserInfo,
   resolveSubscriptionUserInfo,
   type SubscriptionUserInfo,
-} from "@subboost/core/subscription/subscription-userinfo";
+} from "@subfuse/core/subscription/subscription-userinfo";
 import {
   autoUpdateIntervalHoursToSeconds,
   autoUpdateIntervalSecondsToHours,
@@ -26,17 +26,17 @@ import {
   resolveAutoUpdateIntervalPolicy,
   type AutoUpdateIntervalPolicy,
   type AutoUpdateIntervalPolicyOverride,
-} from "@subboost/core/subscription/auto-update-interval";
-import type { NodeNameFilterConfig } from "@subboost/core/subscription/node-name-filter";
-import { tryNormalizeSubscriptionUrlInput } from "@subboost/core/subscription/url-input";
-import { DEFAULT_NODE_NAME_TEMPLATE } from "@subboost/core/node-name-template";
-import { formatDateInBeijing } from "@subboost/core/time/beijing";
+} from "@subfuse/core/subscription/auto-update-interval";
+import type { NodeNameFilterConfig } from "@subfuse/core/subscription/node-name-filter";
+import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
+import { DEFAULT_NODE_NAME_TEMPLATE } from "@subfuse/core/node-name-template";
+import { formatDateInBeijing } from "@subfuse/core/time/beijing";
 import {
   useProductInteractionAdapter,
   type ProductInteractionResult,
   type ProductMode,
-} from "@subboost/ui/product/interactions";
-import { copyTextToClipboard } from "@subboost/ui/lib/clipboard";
+} from "@subfuse/ui/product/interactions";
+import { copyTextToClipboard } from "@subfuse/ui/lib/clipboard";
 
 type EditingSubscription = {
   id: string;

@@ -13,20 +13,20 @@ const releaseAssets = requireCjs("../../../scripts/selfhost-release-assets.cjs")
 };
 
 const ENV_KEYS = [
-  "SUBBOOST_RELEASE_ASSET_BASE_URL",
-  "SUBBOOST_ONECLICK_BASE_URL",
-  "SUBBOOST_BUILD_SHA",
-  "SUBBOOST_IMAGE",
-  "SUBBOOST_IMAGE_REPOSITORY",
-  "SUBBOOST_RELEASE_IMAGE_TAG",
-  "SUBBOOST_RELEASE_ASSET_OUTPUT",
-  "SUBBOOST_ONECLICK_OUTPUT",
+  "SUBFUSE_RELEASE_ASSET_BASE_URL",
+  "SUBFUSE_ONECLICK_BASE_URL",
+  "SUBFUSE_BUILD_SHA",
+  "SUBFUSE_IMAGE",
+  "SUBFUSE_IMAGE_REPOSITORY",
+  "SUBFUSE_RELEASE_IMAGE_TAG",
+  "SUBFUSE_RELEASE_ASSET_OUTPUT",
+  "SUBFUSE_ONECLICK_OUTPUT",
   "GITHUB_REF_NAME",
-  "SUBBOOST_INSTALLER_RELEASE_URL",
-  "SUBBOOST_INSTALLER_UPDATE_RELEASE_URL",
-  "SUBBOOST_INSTALLER_COMPOSE_URL",
-  "SUBBOOST_INSTALLER_MANAGER_URL",
-  "SUBBOOST_INSTALLER_IMAGE",
+  "SUBFUSE_INSTALLER_RELEASE_URL",
+  "SUBFUSE_INSTALLER_UPDATE_RELEASE_URL",
+  "SUBFUSE_INSTALLER_COMPOSE_URL",
+  "SUBFUSE_INSTALLER_MANAGER_URL",
+  "SUBFUSE_INSTALLER_IMAGE",
 ] as const;
 const originalEnv = new Map(ENV_KEYS.map((key) => [key, process.env[key]]));
 
@@ -44,7 +44,7 @@ afterEach(() => {
 });
 
 function withVersionDirectory(version: unknown, run: (root: string) => void): void {
-  const root = mkdtempSync(join(tmpdir(), "subboost-public-assets-coverage-"));
+  const root = mkdtempSync(join(tmpdir(), "subfuse-public-assets-coverage-"));
   try {
     mkdirSync(root, { recursive: true });
     writeFileSync(join(root, "package.json"), JSON.stringify({ version }), "utf8");
@@ -88,24 +88,24 @@ describe("selfhost release asset argument regressions", () => {
   });
 
   it("uses documented environment precedence and installer defaults", () => {
-    process.env.SUBBOOST_RELEASE_ASSET_BASE_URL = "https://primary.example.invalid/assets";
-    process.env.SUBBOOST_ONECLICK_BASE_URL = "https://fallback.example.invalid/assets";
-    process.env.SUBBOOST_RELEASE_ASSET_OUTPUT = "dist/primary";
-    process.env.SUBBOOST_ONECLICK_OUTPUT = "dist/fallback";
-    process.env.SUBBOOST_BUILD_SHA = "abcdef1234567890";
-    process.env.SUBBOOST_IMAGE = "example.invalid/subboost@sha256:abc";
-    process.env.SUBBOOST_IMAGE_REPOSITORY = "example.invalid/subboost";
-    process.env.SUBBOOST_RELEASE_IMAGE_TAG = "example.invalid/subboost:v2.7.0";
+    process.env.SUBFUSE_RELEASE_ASSET_BASE_URL = "https://primary.example.invalid/assets";
+    process.env.SUBFUSE_ONECLICK_BASE_URL = "https://fallback.example.invalid/assets";
+    process.env.SUBFUSE_RELEASE_ASSET_OUTPUT = "dist/primary";
+    process.env.SUBFUSE_ONECLICK_OUTPUT = "dist/fallback";
+    process.env.SUBFUSE_BUILD_SHA = "abcdef1234567890";
+    process.env.SUBFUSE_IMAGE = "example.invalid/subfuse@sha256:abc";
+    process.env.SUBFUSE_IMAGE_REPOSITORY = "example.invalid/subfuse";
+    process.env.SUBFUSE_RELEASE_IMAGE_TAG = "example.invalid/subfuse:v2.7.0";
     process.env.GITHUB_REF_NAME = "v2.7.0";
-    process.env.SUBBOOST_INSTALLER_IMAGE = "example.invalid/subboost:v2.7.0";
+    process.env.SUBFUSE_INSTALLER_IMAGE = "example.invalid/subfuse:v2.7.0";
 
     expect(releaseAssets.parseArgs([])).toMatchObject({
       baseUrl: "https://primary.example.invalid/assets",
       buildSha: "abcdef1234567890",
-      image: "example.invalid/subboost@sha256:abc",
-      imageRepository: "example.invalid/subboost",
-      imageTag: "example.invalid/subboost:v2.7.0",
-      installerImage: "example.invalid/subboost:v2.7.0",
+      image: "example.invalid/subfuse@sha256:abc",
+      imageRepository: "example.invalid/subfuse",
+      imageTag: "example.invalid/subfuse:v2.7.0",
+      installerImage: "example.invalid/subfuse:v2.7.0",
       output: "dist/primary",
       releaseTag: "v2.7.0",
     });
@@ -117,8 +117,8 @@ describe("selfhost release asset argument regressions", () => {
       expect(releaseAssets.buildManifest(root, args)).toMatchObject({
         buildSha: "abcdef1234567890",
         buildVersion: "2.7.0+sha.abcdef123456",
-        image: "ghcr.io/dong152389/subboost:v2.7.0",
-        imageTag: "ghcr.io/dong152389/subboost:v2.7.0",
+        image: "ghcr.io/dong152389/subfuse:v2.7.0",
+        imageTag: "ghcr.io/dong152389/subfuse:v2.7.0",
         version: "2.7.0",
       });
     });
@@ -145,7 +145,7 @@ describe("selfhost release asset argument regressions", () => {
         "git",
         [
           "-c",
-          "user.name=SubBoost Test",
+          "user.name=SubFuse Test",
           "-c",
           "user.email=test@example.com",
           "commit",

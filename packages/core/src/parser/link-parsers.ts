@@ -11,7 +11,7 @@ import { parseVMess } from "./protocols/vmess";
 import { parseWireGuard } from "./protocols/wireguard";
 import { parseSnell } from "./protocols/snell";
 import { parseNetch } from "./protocols/netch";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 interface LinkParserDefinition {
   name: string;

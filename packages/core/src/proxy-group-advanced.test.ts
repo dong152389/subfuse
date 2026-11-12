@@ -5,7 +5,7 @@ import {
   resolveProxyGroupMembers,
 } from "./proxy-group-advanced";
 import { withNodeSourceId } from "./subscription/node-source-state";
-import type { ParsedNode } from "@subboost/core/types/node";
+import type { ParsedNode } from "@subfuse/core/types/node";
 
 function node(name: string): ParsedNode {
   return {

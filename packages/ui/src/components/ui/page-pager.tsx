@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { IconButton } from "@subboost/ui/components/ui/icon-button";
-import { Input } from "@subboost/ui/components/ui/input";
-import { cn } from "@subboost/ui/lib/utils";
+import { IconButton } from "@subfuse/ui/components/ui/icon-button";
+import { Input } from "@subfuse/ui/components/ui/input";
+import { cn } from "@subfuse/ui/lib/utils";
 
 export type PagePagerProps = {
   page: number;

@@ -8,7 +8,7 @@ const publicKey = "A".repeat(43);
 
 describe("upstream protocol field preservation", () => {
   it.each([true, false, "true", "false", 1, 0])("normalizes explicit Reality support %s through YAML generation", (support) => {
-    const input = { name: "Reality", type: "vless", server: "local.subboost.test", port: 443,
+    const input = { name: "Reality", type: "vless", server: "local.subfuse.test", port: 443,
       uuid: "11111111-1111-4111-8111-111111111111", "reality-opts": {
         "public-key": publicKey, "support-x25519mlkem768": support,
       } };

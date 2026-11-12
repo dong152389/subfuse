@@ -38,42 +38,42 @@ vi.mock("lucide-react", () => ({
   Trash2: () => null,
   X: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.buttons.push(props);
     return null;
   },
 }));
-vi.mock("@subboost/ui/components/ui/select", () => ({
+vi.mock("@subfuse/ui/components/ui/select", () => ({
   Select: (props: any) => props.children,
   SelectContent: (props: any) => props.children,
   SelectItem: (props: any) => props.children,
   SelectTrigger: (props: any) => props.children,
   SelectValue: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/ui/components/ui/toaster", () => ({ toast: mocks.toast }));
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "auto", name: "Auto", rules: [] },
     { id: "fallback", name: "Fallback", rules: [] },
   ],
 }));
-vi.mock("@subboost/core/generator/module-rules", () => ({
+vi.mock("@subfuse/core/generator/module-rules", () => ({
   getModuleRuleOrderKey: (moduleId: string, ruleId: string) =>
     `${moduleId}:${ruleId}`,
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { name: string }, override?: string) =>
     override || module.name,
 }));
-vi.mock("@subboost/core/proxy-group-targets", () => ({
+vi.mock("@subfuse/core/proxy-group-targets", () => ({
   resolveProxyGroupTargetName: (target: unknown) =>
     typeof target === "string" ? target : "",
 }));
-vi.mock("@subboost/core/rules/custom-routing-rule-sets", () => ({
+vi.mock("@subfuse/core/rules/custom-routing-rule-sets", () => ({
   collectCustomRoutingRuleSets: () => mocks.ruleSets,
   getRuleSetTargetValue: (target: { kind: string; id: string }) =>
     `${target.kind}:${target.id}`,
@@ -85,7 +85,7 @@ vi.mock("@subboost/core/rules/custom-routing-rule-sets", () => ({
       : null;
   },
 }));
-vi.mock("@subboost/ui/store/config-store", () => ({
+vi.mock("@subfuse/ui/store/config-store", () => ({
   useConfigStore: () => mocks.store,
 }));
 
@@ -201,12 +201,12 @@ describe("ProxyGroupsAddedRuleSets invalid saves", () => {
   });
 
   it.each(["text", "yaml"])("replaces stale %s metadata when an edited URL becomes mrs", (format) => {
-    renderEditing({ ...moduleItem, path: "https://local.subboost.test/rules", format } as typeof moduleItem, {
-      path: "https://local.subboost.test/geoip/replacement.mrs", targetValue: "module:auto", noResolve: true,
+    renderEditing({ ...moduleItem, path: "https://local.subfuse.test/rules", format } as typeof moduleItem, {
+      path: "https://local.subfuse.test/geoip/replacement.mrs", targetValue: "module:auto", noResolve: true,
     });
     clickSave();
     expect(mocks.store.updateModuleRule).toHaveBeenCalledWith("auto", "rule-a", expect.objectContaining({
-      path: "https://local.subboost.test/geoip/replacement.mrs", format: "mrs", behavior: "ipcidr",
+      path: "https://local.subfuse.test/geoip/replacement.mrs", format: "mrs", behavior: "ipcidr",
     }));
   });
 });

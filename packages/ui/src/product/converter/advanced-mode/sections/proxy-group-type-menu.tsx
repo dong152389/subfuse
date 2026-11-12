@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Check, ChevronDown } from "lucide-react";
-import { Button } from "@subboost/ui/components/ui/button";
+import { Button } from "@subfuse/ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +11,13 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@subboost/ui/components/ui/dropdown-menu";
-import { cn } from "@subboost/ui/lib/utils";
+} from "@subfuse/ui/components/ui/dropdown-menu";
+import { cn } from "@subfuse/ui/lib/utils";
 import {
   DEFAULT_LOAD_BALANCE_STRATEGY,
   LOAD_BALANCE_STRATEGIES,
   type LoadBalanceStrategy,
-} from "@subboost/core/types/config";
+} from "@subfuse/core/types/config";
 
 export type ProxyGroupTypeMenuValue =
   | "select"

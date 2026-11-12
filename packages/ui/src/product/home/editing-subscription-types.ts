@@ -1,4 +1,4 @@
-import type { SubscriptionSource } from "@subboost/ui/store/config-store";
+import type { SubscriptionSource } from "@subfuse/ui/store/config-store";
 
 export type EditingSubscription = {
   id: string;

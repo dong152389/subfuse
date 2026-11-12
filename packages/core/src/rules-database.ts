@@ -12,7 +12,7 @@ import {
   DEFAULT_RULE_PROVIDER_BASE_URL,
   RULE_CATEGORIES,
   type RuleSetInfo,
-} from "@subboost/core/rules/metadata";
+} from "@subfuse/core/rules/metadata";
 
 // 基础 URL
 const BASE_URL = DEFAULT_RULE_PROVIDER_BASE_URL;

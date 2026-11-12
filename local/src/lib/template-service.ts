@@ -1,13 +1,13 @@
-import { buildDefaultSubBoostTemplateConfig } from "@subboost/core/config/defaults";
+import { buildDefaultSubFuseTemplateConfig } from "@subfuse/core/config/defaults";
 import {
   builtinIdToType,
   getBuiltinTemplateId,
   getBuiltinTemplateSummaryMetadata,
-} from "@subboost/core/templates/builtin";
-import { getTemplateList } from "@subboost/core/templates";
-import { validateSubBoostTemplateConfig } from "@subboost/core/templates/config-template";
-import type { SubBoostTemplateConfig } from "@subboost/core/types/template-config";
-import type { TemplateTab } from "@subboost/server-core/templates";
+} from "@subfuse/core/templates/builtin";
+import { getTemplateList } from "@subfuse/core/templates";
+import { validateSubFuseTemplateConfig } from "@subfuse/core/templates/config-template";
+import type { SubFuseTemplateConfig } from "@subfuse/core/types/template-config";
+import type { TemplateTab } from "@subfuse/server-core/templates";
 import { decryptJsonObject, encryptJson } from "./crypto";
 import { prisma } from "./prisma";
 
@@ -43,7 +43,7 @@ export type LocalTemplateDetail = {
   name: string;
   description: string;
   kind: "config";
-  config: SubBoostTemplateConfig;
+  config: SubFuseTemplateConfig;
 };
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -115,7 +115,7 @@ export async function getTemplateDetail(ownerId: string | null, id: string): Pro
       name: summary?.name || builtinType,
       description: summary?.description || "",
       kind: "config",
-      config: buildDefaultSubBoostTemplateConfig(builtinType),
+      config: buildDefaultSubFuseTemplateConfig(builtinType),
     };
   }
 
@@ -127,7 +127,7 @@ export async function getTemplateDetail(ownerId: string | null, id: string): Pro
     name: row.name,
     description: row.description || "",
     kind: "config",
-    config: decryptJsonObject(row.encryptedConfig) as SubBoostTemplateConfig,
+    config: decryptJsonObject(row.encryptedConfig) as SubFuseTemplateConfig,
   };
 }
 
@@ -138,7 +138,7 @@ export async function createTemplate(ownerId: string, body: unknown): Promise<Lo
   const name = asString(payload.name);
   if (!name || name.length > 100) throw new Error("Invalid name.");
 
-  const validated = validateSubBoostTemplateConfig(payload.config);
+  const validated = validateSubFuseTemplateConfig(payload.config);
   if (!validated.ok) throw new Error(validated.error);
 
   const row = await prisma.localTemplate.create({

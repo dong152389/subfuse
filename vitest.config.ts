@@ -4,7 +4,7 @@ import { transformWithOxc } from "vite";
 
 function tsxTransformPlugin() {
   return {
-    name: "subboost-public-vitest-tsx-transform",
+    name: "subfuse-public-vitest-tsx-transform",
     enforce: "pre" as const,
     async transform(code: string, id: string) {
       const filePath = id.split("?")[0].replace(/\\/g, "/");
@@ -39,10 +39,10 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "local/src"),
       "@local": path.resolve(__dirname, "local/src"),
-      "@subboost/core": path.resolve(__dirname, "packages/core/src"),
-      "@subboost/server-core": path.resolve(__dirname, "packages/server-core/src"),
-      "@subboost/ui": path.resolve(__dirname, "packages/ui/src"),
-      "@subboost/config": path.resolve(__dirname, "packages/config"),
+      "@subfuse/core": path.resolve(__dirname, "packages/core/src"),
+      "@subfuse/server-core": path.resolve(__dirname, "packages/server-core/src"),
+      "@subfuse/ui": path.resolve(__dirname, "packages/ui/src"),
+      "@subfuse/config": path.resolve(__dirname, "packages/config"),
     },
   },
 });

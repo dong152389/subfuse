@@ -63,35 +63,35 @@ vi.mock("lucide-react", () => ({
   RotateCcw: () => null,
   Trash2: () => null,
 }));
-vi.mock("@subboost/ui/components/ui/badge", () => ({
+vi.mock("@subfuse/ui/components/ui/badge", () => ({
   Badge: (props: any) => React.createElement("span", props, props.children),
 }));
-vi.mock("@subboost/ui/components/ui/button", () => ({
+vi.mock("@subfuse/ui/components/ui/button", () => ({
   Button: (props: any) => {
     mocks.captures.buttons.push(props);
     return React.createElement("button", props, props.children);
   },
 }));
-vi.mock("@subboost/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
-vi.mock("@subboost/ui/components/ui/switch", () => ({
+vi.mock("@subfuse/ui/components/ui/confirm-dialog", () => ({ confirmDialog: mocks.confirmDialog }));
+vi.mock("@subfuse/ui/components/ui/switch", () => ({
   Switch: (props: any) => {
     mocks.captures.switches.push(props);
     return React.createElement("button", { type: "button", "aria-pressed": props.checked });
   },
 }));
-vi.mock("@subboost/core/generator/proxy-groups", () => ({
+vi.mock("@subfuse/core/generator/proxy-groups", () => ({
   PROXY_GROUP_MODULES: [
     { id: "cn", name: "CN", rules: [] },
     { id: "auto", name: "Auto", rules: [] },
     { id: "hidden", name: "Hidden", rules: [] },
   ],
 }));
-vi.mock("@subboost/core/generator/module-rules", () => ({
+vi.mock("@subfuse/core/generator/module-rules", () => ({
   getEffectiveModuleRuleItems: () => mocks.effectiveRules,
   getExcludedModuleRuleIds: () => mocks.excludedRuleIds,
   isModuleRuleMovedFrom: mocks.isMoved,
 }));
-vi.mock("@subboost/core/generator/rules", () => ({
+vi.mock("@subfuse/core/generator/rules", () => ({
   EXPERIMENTAL_CN_RULE: {
     id: "experimental-cn",
     name: "中国业务实验规则",
@@ -99,11 +99,11 @@ vi.mock("@subboost/core/generator/rules", () => ({
     path: "rule-set/experimental-cn.mrs",
   },
 }));
-vi.mock("@subboost/core/proxy-group-name", () => ({
+vi.mock("@subfuse/core/proxy-group-name", () => ({
   resolveProxyGroupModuleName: (module: { id: string; name: string }, override?: string) => override || module.name,
 }));
-vi.mock("@subboost/ui/lib/utils", () => ({ cn: (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ") }));
-vi.mock("@subboost/ui/product/api-adapter", () => ({ useProductApiAdapter: () => ({ rules: mocks.rulesApi }) }));
+vi.mock("@subfuse/ui/lib/utils", () => ({ cn: (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ") }));
+vi.mock("@subfuse/ui/product/api-adapter", () => ({ useProductApiAdapter: () => ({ rules: mocks.rulesApi }) }));
 vi.mock("./proxy-group-rule-row", () => ({
   ProxyGroupManualRuleRow: (props: any) => {
     mocks.captures.manualRows.push(props);

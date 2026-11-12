@@ -1,4 +1,4 @@
-import type { TemplateType } from "@subboost/core/types/config";
+import type { TemplateType } from "@subfuse/core/types/config";
 
 export const BUILTIN_TEMPLATE_IDS: Record<TemplateType, string> = {
   minimal: "builtin-minimal",

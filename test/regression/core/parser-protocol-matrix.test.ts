@@ -285,7 +285,7 @@ describe("public core parser branch sweep", () => {
       server: "bad-reality.example.com",
       port: 443,
       "reality-opts": { "public-key": "bad" },
-    })).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    })).toHaveProperty("_subfuse-invalid-mihomo-node", true);
 
     expect(normalizeMihomoVlessForGeneration({
       type: "vless",
@@ -323,7 +323,7 @@ describe("public core parser branch sweep", () => {
         mode: "stream-one",
         "download-settings": {},
       },
-    })).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    })).toHaveProperty("_subfuse-invalid-mihomo-node", true);
 
     expect(isMihomoSupportedProxyNode({
       type: "vless",
@@ -390,7 +390,7 @@ describe("public core parser branch sweep", () => {
           "reality-opts": "bad",
         },
       },
-    })).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    })).toHaveProperty("_subfuse-invalid-mihomo-node", true);
 
     expect(normalizeMihomoVlessForGeneration({
       name: "Download Reality Missing Key",
@@ -404,7 +404,7 @@ describe("public core parser branch sweep", () => {
           "reality-opts": {},
         },
       },
-    })).toHaveProperty("_subboost-invalid-mihomo-node", true);
+    })).toHaveProperty("_subfuse-invalid-mihomo-node", true);
   });
 
   it("covers additional parser fallbacks through real protocol inputs", () => {
@@ -532,7 +532,7 @@ describe("public core parser branch sweep", () => {
       network: "ws",
       "ws-opts": { headers: { Host: "plain.example.com" } },
     });
-    expect(parseVLESS(`vless://${UUID}@local.subboost.test:443?type=xhttp&xhttp-headers=&download-headers=#XEmpty`)).toMatchObject({
+    expect(parseVLESS(`vless://${UUID}@local.subfuse.test:443?type=xhttp&xhttp-headers=&download-headers=#XEmpty`)).toMatchObject({
       network: "xhttp",
       "xhttp-opts": { path: "/" },
     });
