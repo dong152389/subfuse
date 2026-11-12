@@ -1,12 +1,100 @@
 import { jwtVerify, SignJWT } from "jose";
 import { prisma } from "./prisma";
 import { decryptJson, encryptJson } from "./crypto";
-import { requireEnv } from "./env";
+import { getAppUrl, requireEnv } from "./env";
 
 export type GitHubOAuthConfig = {
   clientId: string;
   clientSecret: string;
+  callbackUrl?: string;
 };
+
+export const GITHUB_OAUTH_CALLBACK_PATH = "/api/auth/github/callback";
+
+export function normalizeGitHubCallbackUrl(input: string | null | undefined): string | null {
+  if (typeof input !== "string") return null;
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    return null;
+  }
+
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    return null;
+  }
+
+  parsed.hash = "";
+  parsed.search = "";
+
+  const normalizedPath =
+    parsed.pathname === "/" || parsed.pathname === ""
+      ? GITHUB_OAUTH_CALLBACK_PATH
+      : parsed.pathname.replace(/\/+$/, "");
+
+  return `${parsed.origin}${normalizedPath}`;
+}
+
+function getForwardedRequestOrigin(request: Request): string | null {
+  if (process.env.TRUST_PROXY_HEADERS === "true") {
+    const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+    const host = forwardedHost || request.headers.get("host")?.split(",")[0]?.trim();
+    if (host) {
+      const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim().toLowerCase();
+      const proto = forwardedProto === "https" || forwardedProto === "http" ? forwardedProto : new URL(request.url).protocol.replace(":", "");
+      try {
+        return new URL(`${proto}://${host}`).origin;
+      } catch {
+        // fall through to request.url
+      }
+    }
+  }
+
+  try {
+    return new URL(request.url).origin;
+  } catch {
+    return null;
+  }
+}
+
+export function resolveGitHubOAuthUrls(
+  request: Request,
+  config?: Pick<GitHubOAuthConfig, "callbackUrl"> | null
+): { baseUrl: string; redirectUri: string } {
+  const configuredCallback = normalizeGitHubCallbackUrl(config?.callbackUrl);
+  if (configuredCallback) {
+    return {
+      baseUrl: new URL(configuredCallback).origin,
+      redirectUri: configuredCallback,
+    };
+  }
+
+  let baseUrl = "";
+  const hasExplicitAppUrl = typeof process.env.APP_URL === "string" && process.env.APP_URL.trim().length > 0;
+  if (hasExplicitAppUrl) {
+    try {
+      baseUrl = getAppUrl();
+    } catch {
+      baseUrl = "";
+    }
+  }
+
+  if (!baseUrl) {
+    baseUrl = getForwardedRequestOrigin(request) || "";
+  }
+
+  if (!baseUrl) {
+    baseUrl = getAppUrl();
+  }
+
+  return {
+    baseUrl,
+    redirectUri: `${baseUrl}${GITHUB_OAUTH_CALLBACK_PATH}`,
+  };
+}
 
 const GITHUB_SETTING_KEY = "github_oauth_config";
 const GITHUB_BIND_TOKEN_ISSUER = "subboost-github-bind";
@@ -42,7 +130,12 @@ export async function getGitHubOAuthConfig(): Promise<GitHubOAuthConfig | null> 
     if (setting?.value) {
       const parsed = decryptJson<GitHubOAuthConfig | null>(setting.value, null);
       if (parsed?.clientId && parsed.clientSecret) {
-        return parsed;
+        const callbackUrl = normalizeGitHubCallbackUrl(parsed.callbackUrl);
+        return {
+          clientId: parsed.clientId,
+          clientSecret: parsed.clientSecret,
+          ...(callbackUrl ? { callbackUrl } : {}),
+        };
       }
     }
   } catch (error) {
@@ -51,9 +144,14 @@ export async function getGitHubOAuthConfig(): Promise<GitHubOAuthConfig | null> 
 
   const clientId = process.env.GITHUB_CLIENT_ID?.trim();
   const clientSecret = process.env.GITHUB_CLIENT_SECRET?.trim();
+  const callbackUrl = normalizeGitHubCallbackUrl(process.env.GITHUB_CALLBACK_URL);
 
   if (clientId && clientSecret) {
-    return { clientId, clientSecret };
+    return {
+      clientId,
+      clientSecret,
+      ...(callbackUrl ? { callbackUrl } : {}),
+    };
   }
 
   return null;

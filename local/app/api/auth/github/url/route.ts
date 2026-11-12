@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getGitHubOAuthConfig } from "@local/lib/github-oauth";
-import { getAppUrl } from "@local/lib/env";
+import { getGitHubOAuthConfig, resolveGitHubOAuthUrls } from "@local/lib/github-oauth";
 import { randomBytes } from "node:crypto";
 
 export async function GET(request: Request) {
@@ -12,14 +11,7 @@ export async function GET(request: Request) {
     });
   }
 
-  let baseUrl = "";
-  try {
-    baseUrl = getAppUrl();
-  } catch {
-    baseUrl = new URL(request.url).origin;
-  }
-
-  const redirectUri = `${baseUrl}/api/auth/github/callback`;
+  const { redirectUri } = resolveGitHubOAuthUrls(request, config);
   const state = randomBytes(16).toString("hex");
 
   const url = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(

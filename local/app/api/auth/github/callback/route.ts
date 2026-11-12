@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
-import { fetchGitHubUser, signGitHubBindTicket } from "@local/lib/github-oauth";
-import { getAppUrl } from "@local/lib/env";
+import {
+  fetchGitHubUser,
+  getGitHubOAuthConfig,
+  resolveGitHubOAuthUrls,
+  signGitHubBindTicket,
+} from "@local/lib/github-oauth";
 import { prisma } from "@local/lib/prisma";
 import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@local/lib/session";
 
@@ -8,20 +12,13 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const errorParam = requestUrl.searchParams.get("error_description") || requestUrl.searchParams.get("error");
-
-  let baseUrl = "";
-  try {
-    baseUrl = getAppUrl();
-  } catch {
-    baseUrl = requestUrl.origin;
-  }
+  const config = await getGitHubOAuthConfig();
+  const { baseUrl, redirectUri } = resolveGitHubOAuthUrls(request, config);
 
   if (errorParam || !code) {
     const errorMsg = errorParam || "GitHub 授权已取消或失败";
     return NextResponse.redirect(`${baseUrl}/login?error=${encodeURIComponent(errorMsg)}`);
   }
-
-  const redirectUri = `${baseUrl}/api/auth/github/callback`;
 
   try {
     const ghUser = await fetchGitHubUser(code, redirectUri);

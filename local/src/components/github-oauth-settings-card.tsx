@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { Loader2 } from "lucide-react";
+import { Check, Copy, Loader2 } from "lucide-react";
 import { Button } from "@subboost/ui/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/components/ui/card";
 import { FormField } from "@subboost/ui/components/ui/form-field";
 import { Input } from "@subboost/ui/components/ui/input";
+import { copyTextToClipboard } from "@subboost/ui/lib/clipboard";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -27,23 +28,47 @@ async function readJson<T>(response: Response): Promise<T> {
 export function GitHubOAuthSettingsCard() {
   const [clientId, setClientId] = React.useState("");
   const [clientSecret, setClientSecret] = React.useState("");
+  const [callbackUrl, setCallbackUrl] = React.useState("");
+  const [defaultCallbackUrl, setDefaultCallbackUrl] = React.useState("");
+  const [browserCallbackUrl, setBrowserCallbackUrl] = React.useState("");
+  const [copiedCallback, setCopiedCallback] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
   const [notice, setNotice] = React.useState<{ text: string; error?: boolean } | null>(null);
 
   React.useEffect(() => {
+    const currentOriginCallback = `${window.location.origin}/api/auth/github/callback`;
+    setBrowserCallbackUrl(currentOriginCallback);
+
     let cancelled = false;
     void fetch("/api/settings/github-oauth", { cache: "no-store" })
-      .then((res) => readJson<{ configured: boolean; config?: any }>(res))
+      .then((res) =>
+        readJson<{
+          configured: boolean;
+          defaultCallbackUrl?: string;
+          effectiveCallbackUrl?: string;
+          config?: { clientId?: string; hasClientSecret?: boolean; callbackUrl?: string } | null;
+        }>(res)
+      )
       .then((data) => {
-        if (!cancelled && data.config) {
+        if (cancelled) return;
+        const fallbackUrl = data.defaultCallbackUrl || currentOriginCallback;
+        setDefaultCallbackUrl(fallbackUrl);
+        if (data.config) {
           setClientId(data.config.clientId || "");
           if (data.config.hasClientSecret) {
             setClientSecret("••••••••");
           }
+          setCallbackUrl(data.config.callbackUrl || currentOriginCallback);
+        } else {
+          setCallbackUrl(currentOriginCallback);
         }
       })
-      .catch(() => {})
+      .catch(() => {
+        if (!cancelled) {
+          setCallbackUrl(currentOriginCallback);
+        }
+      })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
@@ -51,6 +76,24 @@ export function GitHubOAuthSettingsCard() {
       cancelled = true;
     };
   }, []);
+
+  const resolvedPreviewCallback = callbackUrl.trim() || defaultCallbackUrl || browserCallbackUrl;
+  const hasOriginMismatch = React.useMemo(() => {
+    if (!browserCallbackUrl || !resolvedPreviewCallback) return false;
+    try {
+      return new URL(resolvedPreviewCallback).origin !== new URL(browserCallbackUrl).origin;
+    } catch {
+      return false;
+    }
+  }, [browserCallbackUrl, resolvedPreviewCallback]);
+
+  const handleCopyCallback = async () => {
+    if (!resolvedPreviewCallback) return;
+    const copied = await copyTextToClipboard(resolvedPreviewCallback);
+    if (!copied) return;
+    setCopiedCallback(true);
+    setTimeout(() => setCopiedCallback(false), 2000);
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,10 +103,18 @@ export function GitHubOAuthSettingsCard() {
       const response = await fetch("/api/settings/github-oauth", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clientId, clientSecret }),
+        body: JSON.stringify({ clientId, clientSecret, callbackUrl }),
       });
-      const data = await readJson<{ error?: string; message?: string }>(response);
+      const data = await readJson<{
+        error?: string;
+        message?: string;
+        callbackUrl?: string;
+        effectiveCallbackUrl?: string;
+      }>(response);
       if (!response.ok) throw new Error(data.error || "保存失败");
+      if (typeof data.callbackUrl === "string" && data.callbackUrl) {
+        setCallbackUrl(data.callbackUrl);
+      }
       setNotice({ text: data.message || "GitHub OAuth 配置已保存" });
     } catch (err) {
       setNotice({ text: err instanceof Error ? err.message : "保存失败", error: true });
@@ -81,8 +132,8 @@ export function GitHubOAuthSettingsCard() {
         <div>
           <CardTitle className="text-base">GitHub OAuth 登录配置</CardTitle>
           <p className="text-xs text-fg-50 mt-0.5">
-            在 GitHub Developer settings 中创建 OAuth App，授权回调 URL 请填写{" "}
-            <code className="text-indigo-400 font-mono">/api/auth/github/callback</code>
+            在 GitHub Developer settings 中创建 OAuth App，并将下方完整授权回调 URL 原样填入{" "}
+            <code className="text-indigo-400 font-mono">Authorization callback URL</code>
           </p>
         </div>
       </CardHeader>
@@ -107,6 +158,58 @@ export function GitHubOAuthSettingsCard() {
                   onChange={(e) => setClientSecret(e.target.value)}
                 />
               </FormField>
+            </div>
+
+            <div className="space-y-1.5">
+              <FormField
+                label="授权回调 URL（Authorization callback URL）"
+                description="需与 GitHub OAuth App 中填写的回调地址完全一致（协议、域名、端口均须匹配，localhost 与 127.0.0.1 不可混用）；留空则回退至环境变量 APP_URL。"
+              >
+                <div className="flex gap-2">
+                  <Input
+                    placeholder={browserCallbackUrl || "https://your-domain.com/api/auth/github/callback"}
+                    value={callbackUrl}
+                    onChange={(e) => setCallbackUrl(e.target.value)}
+                    className="font-mono text-xs"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => void handleCopyCallback()}
+                    disabled={!resolvedPreviewCallback}
+                    className="shrink-0 gap-1.5"
+                  >
+                    {copiedCallback ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-emerald-400" />
+                        已复制
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        复制
+                      </>
+                    )}
+                  </Button>
+                  {browserCallbackUrl && callbackUrl.trim() !== browserCallbackUrl && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCallbackUrl(browserCallbackUrl)}
+                      className="shrink-0"
+                    >
+                      使用当前地址
+                    </Button>
+                  )}
+                </div>
+              </FormField>
+              {hasOriginMismatch && (
+                <p className="text-xs text-amber-300">
+                  当前设置的回调域名与您正在访问的地址（{browserCallbackUrl}）不一致，保存后请确保 GitHub 中填写的地址与上方一致，或点击「使用当前地址」并保存。
+                </p>
+              )}
             </div>
 
             <div className="flex justify-between items-center pt-2 border-t border-ink/10">
