@@ -1,4 +1,7 @@
 "use client";
+import Link from "next/link";
+import { Shield } from "lucide-react";
+import { Card, CardContent } from "@subboost/ui/components/ui/card";
 import {
   SubscriptionDashboardSurface,
   type DashboardSurfaceAdapter,
@@ -58,6 +61,26 @@ const localDashboardAdapter: DashboardSurfaceAdapter = {
     return data.subscription;
   },
   resolveDownloadUrl: resolveLocalDashboardDownloadUrl,
+  renderExtraQuickActions: ({ user }) => {
+    if (!user.isAdmin || user.isBanned) return null;
+    return (
+      <Link href="/dashboard/admin" className="md:col-span-2">
+        <Card className="cursor-pointer hover:border-ink/20 transition-colors">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-lg bg-indigo-500/20 text-indigo-400">
+                <Shield className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-medium">管理员配置</h3>
+                <p className="text-sm text-fg-50">配置 SMTP 邮件服务与 GitHub OAuth 授权登录</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    );
+  },
 };
 
 export default function DashboardPage() {

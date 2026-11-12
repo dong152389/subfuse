@@ -27,6 +27,7 @@ type AuthState = {
 type ProvidersState = {
   emailEnabled: boolean;
   githubEnabled: boolean;
+  loaded?: boolean;
 };
 
 async function readJson<T>(response: Response): Promise<T> {
@@ -61,10 +62,11 @@ export function LocalLogin() {
   const [isRegister, setIsRegister] = React.useState(false);
 
   // Email & GitHub Auth states
-  const [activeTab, setActiveTab] = React.useState<"password" | "email">("password");
+  const [activeTab, setActiveTab] = React.useState<"password" | "email" | "reset_password">("password");
   const [providers, setProviders] = React.useState<ProvidersState>({
     emailEnabled: false,
     githubEnabled: false,
+    loaded: false,
   });
   const [githubBindTicket, setGithubBindTicket] = React.useState<string | null>(null);
   const [githubRedirecting, setGithubRedirecting] = React.useState(false);
@@ -105,10 +107,19 @@ export function LocalLogin() {
           setProviders({
             emailEnabled: Boolean(data.emailEnabled),
             githubEnabled: Boolean(data.githubEnabled),
+            loaded: true,
           });
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) {
+          setProviders({
+            emailEnabled: false,
+            githubEnabled: false,
+            loaded: true,
+          });
+        }
+      });
 
     return () => {
       cancelled = true;
@@ -126,6 +137,10 @@ export function LocalLogin() {
 
   const handleSendRegCode = async () => {
     setError("");
+    if (providers.loaded && !providers.emailEnabled) {
+      setError("系统尚未配置 SMTP 邮件服务，请管理员登录后前往「管理员配置」完成设置");
+      return;
+    }
     const trimmed = regEmail.trim();
     if (!trimmed || !isValidEmail(trimmed)) {
       setError("请输入有效的注册邮箱");
@@ -152,6 +167,10 @@ export function LocalLogin() {
 
   const handleGitHubClick = async () => {
     setError("");
+    if (providers.loaded && !providers.githubEnabled) {
+      setError("GitHub OAuth 尚未配置，请管理员登录后前往「管理员配置」完成设置");
+      return;
+    }
     setGithubRedirecting(true);
     try {
       const response = await fetch("/api/auth/github/url");
@@ -261,8 +280,8 @@ export function LocalLogin() {
             />
           ) : auth ? (
             <>
-              {/* Tab selector for login */}
-              {!setupRequired && !isRegister && providers.emailEnabled && (
+              {/* Tab selector for login and registration */}
+              {!setupRequired && (
                 <div className="flex rounded-xl bg-ink/10 p-1 mb-2">
                   <button
                     type="button"
@@ -285,7 +304,7 @@ export function LocalLogin() {
                       setError("");
                     }}
                     className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                      activeTab === "email"
+                      activeTab === "email" || activeTab === "reset_password"
                         ? "bg-primary text-white shadow-sm"
                         : "text-fg-50 hover:text-fg"
                     }`}
@@ -295,32 +314,76 @@ export function LocalLogin() {
                 </div>
               )}
 
-              {activeTab === "email" && !setupRequired && !isRegister ? (
-                <LocalEmailLogin
-                  onSuccess={() => {
-                    window.location.href = getPostLoginHref();
-                  }}
-                  onSwitchToPassword={() => {
-                    setActiveTab("password");
-                    setError("");
-                  }}
-                />
+              {(activeTab === "email" || activeTab === "reset_password") && !setupRequired ? (
+                <div className="space-y-3">
+                  <LocalEmailLogin
+                    key={activeTab}
+                    initialMode={activeTab === "reset_password" ? "reset_password" : "code_login"}
+                    emailEnabled={providers.emailEnabled}
+                    providersLoaded={Boolean(providers.loaded)}
+                    isRegister={isRegister}
+                    onSuccess={() => {
+                      window.location.href = getPostLoginHref();
+                    }}
+                    onSwitchToPassword={() => {
+                      setActiveTab("password");
+                      setError("");
+                    }}
+                  />
+                  {error ? (
+                    <p className="text-red-400 text-sm" aria-live="polite">
+                      {error}
+                    </p>
+                  ) : null}
+                  {activeTab !== "reset_password" && (
+                    <div className="flex items-center justify-between pt-1 text-sm text-fg-50">
+                      <div>
+                        {isRegister ? "已有账号？" : "还没有账号？"}
+                        <a
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            setIsRegister(!isRegister);
+                            setError("");
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setIsRegister(!isRegister);
+                              setError("");
+                            }
+                          }}
+                          className="text-indigo-400 hover:text-indigo-300 ml-1.5 font-medium underline-offset-4 hover:underline cursor-pointer"
+                        >
+                          {isRegister ? "直接登录" : "立即注册"}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <FormField label={setupRequired ? "管理员账号" : isRegister ? "用户名" : "管理员账号"}>
                     <Input
                       autoComplete="username"
-                      placeholder="管理员账号"
+                      placeholder={isRegister ? "用户名" : "管理员账号"}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       className="h-12"
                     />
                   </FormField>
 
-                  {/* Optional Email Binding during Registration if SMTP is enabled */}
-                  {isRegister && providers.emailEnabled && (
+                  {/* Optional Email Binding during Registration */}
+                  {isRegister && (
                     <>
-                      <FormField label="关联邮箱（可选）" description="绑定邮箱后可使用邮箱验证码登录与找回密码">
+                      <FormField
+                        label="关联邮箱（可选）"
+                        description={
+                          providers.loaded && !providers.emailEnabled
+                            ? "系统尚未配置 SMTP 邮件服务，暂不支持发送验证码（可留空直接注册，或由管理员前往「管理员配置」开启）"
+                            : "绑定邮箱后可使用邮箱验证码登录与找回密码"
+                        }
+                      >
                         <div className="relative">
                           <Input
                             type="email"
@@ -352,7 +415,7 @@ export function LocalLogin() {
                             <Button
                               type="button"
                               variant="outline"
-                              disabled={regCountdown > 0 || regSendingCode || !regEmail}
+                              disabled={(providers.loaded && !providers.emailEnabled) || regCountdown > 0 || regSendingCode || !regEmail}
                               onClick={() => void handleSendRegCode()}
                               className="h-12 px-3 whitespace-nowrap text-xs"
                             >
@@ -446,11 +509,11 @@ export function LocalLogin() {
                         </a>
                       </div>
 
-                      {!isRegister && providers.emailEnabled && (
+                      {!isRegister && (
                         <button
                           type="button"
                           onClick={() => {
-                            setActiveTab("email");
+                            setActiveTab("reset_password");
                             setError("");
                           }}
                           className="text-xs text-fg-40 hover:text-fg-60 transition-colors"
@@ -464,7 +527,7 @@ export function LocalLogin() {
               )}
 
               {/* GitHub OAuth Button */}
-              {!setupRequired && providers.githubEnabled && (
+              {!setupRequired && (
                 <div className="pt-2">
                   <div className="relative my-3">
                     <div className="absolute inset-0 flex items-center">
@@ -487,8 +550,14 @@ export function LocalLogin() {
                     ) : (
                       <GitHubIcon className="w-5 h-5" />
                     )}
-                    使用 GitHub 账号登录
+                    {isRegister ? "使用 GitHub 账号注册 / 登录" : "使用 GitHub 账号登录"}
                   </Button>
+
+                  {providers.loaded && !providers.githubEnabled ? (
+                    <p className="mt-2 text-center text-xs text-fg-40">
+                      GitHub OAuth 尚未配置，管理员可在「管理员配置」中开启
+                    </p>
+                  ) : null}
                 </div>
               )}
             </>

@@ -17,10 +17,16 @@ async function readJson<T>(response: Response): Promise<T> {
 
 export function LocalEmailLogin({
   initialMode = "code_login",
+  emailEnabled = true,
+  providersLoaded = true,
+  isRegister = false,
   onSuccess,
   onSwitchToPassword,
 }: {
   initialMode?: EmailAuthMode;
+  emailEnabled?: boolean;
+  providersLoaded?: boolean;
+  isRegister?: boolean;
   onSuccess: () => void;
   onSwitchToPassword: () => void;
 }) {
@@ -34,6 +40,7 @@ export function LocalEmailLogin({
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState("");
   const [successNotice, setSuccessNotice] = React.useState("");
+  const smtpUnavailable = providersLoaded && !emailEnabled;
 
   // Countdown timer
   React.useEffect(() => {
@@ -47,6 +54,10 @@ export function LocalEmailLogin({
   const handleSendCode = async () => {
     setError("");
     setSuccessNotice("");
+    if (smtpUnavailable) {
+      setError("系统尚未配置 SMTP 邮件服务，请管理员登录后前往「管理员配置」完成设置");
+      return;
+    }
     const trimmedEmail = email.trim();
     if (!trimmedEmail) {
       setError("请输入邮箱地址");
@@ -148,6 +159,12 @@ export function LocalEmailLogin({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
+      {smtpUnavailable ? (
+        <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-3 py-2.5 text-xs text-amber-300 leading-relaxed">
+          系统尚未配置 SMTP 邮件服务，暂无法发送邮箱验证码。管理员登录后可前往「管理员配置」完成设置。
+        </div>
+      ) : null}
+
       {mode === "reset_password" ? (
         <div className="flex items-center justify-between pb-1">
           <button
@@ -197,7 +214,7 @@ export function LocalEmailLogin({
           <Button
             type="button"
             variant="outline"
-            disabled={countdown > 0 || sendingCode || !email}
+            disabled={smtpUnavailable || countdown > 0 || sendingCode || !email}
             onClick={() => void handleSendCode()}
             className="h-12 px-4 whitespace-nowrap min-w-[108px]"
           >
@@ -249,6 +266,7 @@ export function LocalEmailLogin({
       <Button
         type="submit"
         disabled={
+          smtpUnavailable ||
           submitting ||
           !email ||
           code.length !== 6 ||
@@ -257,7 +275,11 @@ export function LocalEmailLogin({
         className="h-12 w-full mt-2"
       >
         {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-        {mode === "reset_password" ? "确认重置密码" : "验证码登录 / 注册"}
+        {mode === "reset_password"
+          ? "确认重置密码"
+          : isRegister
+          ? "验证码注册并登录"
+          : "验证码登录 / 注册"}
       </Button>
 
       <div className="flex items-center justify-between pt-2 text-xs text-fg-50">
@@ -266,7 +288,7 @@ export function LocalEmailLogin({
           onClick={onSwitchToPassword}
           className="text-indigo-400 hover:text-indigo-300 transition-colors"
         >
-          账号密码登录
+          {isRegister ? "账号密码注册" : "账号密码登录"}
         </button>
 
         {mode === "code_login" && (

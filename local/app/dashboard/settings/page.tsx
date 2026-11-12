@@ -8,8 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@subboost/ui/component
 import { SwitchField } from "@subboost/ui/components/ui/switch-field";
 import { useUserStore } from "@subboost/ui/store/user-store";
 import { UserEmailBindCard } from "@local/components/user-email-bind-card";
-import { SmtpSettingsCard } from "@local/components/smtp-settings-card";
-import { GitHubOAuthSettingsCard } from "@local/components/github-oauth-settings-card";
 
 export default function SettingsPage() {
   const { user, fetchUser, logout } = useUserStore();
@@ -92,7 +90,7 @@ export default function SettingsPage() {
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold mb-1">账户设置</h1>
-          <p className="text-fg-50">账户信息、邮箱绑定、邮件发信及 GitHub 授权管理</p>
+          <p className="text-fg-50">账户信息、邮箱绑定及订阅源安全设置</p>
         </div>
       </div>
 
@@ -167,14 +165,6 @@ export default function SettingsPage() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Admin only: SMTP & GitHub OAuth settings */}
-        {user?.isAdmin && (
-          <>
-            <SmtpSettingsCard />
-            <GitHubOAuthSettingsCard />
-          </>
-        )}
       </div>
     </div>
   );

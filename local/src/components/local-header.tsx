@@ -60,5 +60,12 @@ export function LocalHeader() {
     };
   }, []);
 
-  return <Header mode="local" showModeBadge={false} extraBrandBadge={newReleaseBadge} />;
+  return (
+    <Header
+      mode="local"
+      showModeBadge={false}
+      extraBrandBadge={newReleaseBadge}
+      privilegedMenuItem={{ href: "/dashboard/admin", label: "管理员配置" }}
+    />
+  );
 }

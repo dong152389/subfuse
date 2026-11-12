@@ -6,7 +6,10 @@ import { randomBytes } from "node:crypto";
 export async function GET(request: Request) {
   const config = await getGitHubOAuthConfig();
   if (!config) {
-    return NextResponse.json({ enabled: false });
+    return NextResponse.json({
+      enabled: false,
+      error: "GitHub OAuth 尚未配置，请管理员登录后前往「管理员配置」完成设置",
+    });
   }
 
   let baseUrl = "";

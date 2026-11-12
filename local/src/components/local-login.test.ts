@@ -75,9 +75,12 @@ vi.mock("next/link", () => ({
     React.createElement("a", { href, ...props }, children),
 }));
 vi.mock("lucide-react", () => ({
+  ArrowLeft: () => React.createElement("span", null, "arrow-left-icon"),
   Eye: () => React.createElement("span", null, "eye-icon"),
   EyeOff: () => React.createElement("span", null, "eye-off-icon"),
+  KeyRound: () => React.createElement("span", null, "key-round-icon"),
   Loader2: () => React.createElement("span", null, "loader-icon"),
+  Mail: () => React.createElement("span", null, "mail-icon"),
 }));
 vi.mock("@subboost/ui/store/config-store/auth-handoff", () => ({
   hasAuthConfigHandoff: vi.fn(() => false),
@@ -212,7 +215,7 @@ describe("local login component", () => {
 
     mocks.inputs.find((input) => input.placeholder === "管理员账号").onChange({ target: { value: "root" } });
     mocks.inputs.find((input) => input.placeholder === "密码").onChange({ target: { value: "next" } });
-    mocks.buttons.find((button) => button.type === "button").onClick();
+    mocks.buttons.find((button) => button["aria-label"] === "显示密码").onClick();
     await mocks.forms[0].onSubmit({ preventDefault: vi.fn() });
 
     expect(setters[1]).toHaveBeenCalledWith("root");
@@ -342,5 +345,47 @@ describe("local login component", () => {
 
     expect(setters[5]).toHaveBeenCalledWith("两次输入的密码不一致，请重新确认");
     expect(globalThis.fetch).not.toHaveBeenCalled();
+  });
+
+  it("always shows email and GitHub login/register entry points even before providers are configured", async () => {
+    installWindow();
+    (globalThis as any).fetch = vi.fn();
+
+    const loginView = renderLogin({
+      0: { setupRequired: false, authenticated: false },
+      7: false,
+      8: "password",
+      9: { emailEnabled: false, githubEnabled: false, loaded: true },
+    });
+    expect(loginView.html).toContain("账号密码");
+    expect(loginView.html).toContain("邮箱验证码");
+    expect(loginView.html).toContain("忘记密码？");
+    expect(loginView.html).toContain("使用 GitHub 账号登录");
+    expect(loginView.html).toContain("GitHub OAuth 尚未配置");
+
+    const githubBtn = mocks.buttons.find((button) => String(button.onClick).includes("handleGitHubClick") || button.variant === "outline");
+    await githubBtn?.onClick();
+    expect(loginView.setters[5]).toHaveBeenCalledWith("GitHub OAuth 尚未配置，请管理员登录后前往「管理员配置」完成设置");
+
+    const registerView = renderLogin({
+      0: { setupRequired: false, authenticated: false },
+      7: true,
+      8: "password",
+      9: { emailEnabled: false, githubEnabled: false, loaded: true },
+    });
+    expect(registerView.html).toContain("账号密码");
+    expect(registerView.html).toContain("邮箱验证码");
+    expect(registerView.html).toContain("关联邮箱（可选）");
+    expect(registerView.html).toContain("使用 GitHub 账号注册 / 登录");
+    expect(registerView.html).toContain("系统尚未配置 SMTP 邮件服务");
+
+    const emailTabView = renderLogin({
+      0: { setupRequired: false, authenticated: false },
+      7: true,
+      8: "email",
+      9: { emailEnabled: false, githubEnabled: false, loaded: true },
+    });
+    expect(emailTabView.html).toContain("系统尚未配置 SMTP 邮件服务");
+    expect(emailTabView.html).toContain("验证码注册并登录");
   });
 });

@@ -76,6 +76,12 @@ describe("LocalHeader", () => {
         signal: expect.any(AbortSignal),
       })
     );
+    expect(mocks.header).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mode: "local",
+        privilegedMenuItem: { href: "/dashboard/admin", label: "管理员配置" },
+      })
+    );
     expect(mocks.setState).toHaveBeenCalledWith({
       label: "new",
       href: "https://github.com/SubBoost/subboost/releases/tag/v9.8.7",

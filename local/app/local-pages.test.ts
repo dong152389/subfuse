@@ -18,6 +18,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("lucide-react", () => ({
+  ArrowLeft: () => React.createElement("span", null, "ArrowLeft"),
   CheckCircle2: () => React.createElement("span", null, "CheckCircle2"),
   Github: () => React.createElement("span", null, "Github"),
   KeyRound: () => React.createElement("span", null, "KeyRound"),
@@ -27,6 +28,8 @@ vi.mock("lucide-react", () => ({
   Network: () => React.createElement("span", null, "Network"),
   Send: () => React.createElement("span", null, "Send"),
   ServerCog: () => React.createElement("span", null, "ServerCog"),
+  Shield: () => React.createElement("span", null, "Shield"),
+  ShieldAlert: () => React.createElement("span", null, "ShieldAlert"),
   ShieldCheck: () => React.createElement("span", null, "ShieldCheck"),
 }));
 
@@ -85,6 +88,15 @@ vi.mock("@local/components/local-login", () => ({
   LocalLogin: () => React.createElement("main", null, "LocalLogin"),
 }));
 
+vi.mock("@local/components/smtp-settings-card", () => ({
+  SmtpSettingsCard: () => React.createElement("section", null, "SmtpSettingsCard"),
+}));
+
+vi.mock("@local/components/github-oauth-settings-card", () => ({
+  GitHubOAuthSettingsCard: () => React.createElement("section", null, "GitHubOAuthSettingsCard"),
+}));
+
+import AdminSettingsPage from "./dashboard/admin/page";
 import DashboardPage from "./dashboard/page";
 import LoginPage from "./login/page";
 import SettingsPage from "./dashboard/settings/page";
@@ -274,5 +286,42 @@ describe("local app pages and adapters", () => {
     await Promise.resolve();
     expect(mocks.userState.logout).toHaveBeenCalledTimes(1);
     expect(window.location.href).toBe("/login");
+  });
+
+  it("renders standalone admin settings page based on admin privileges", () => {
+    let html = renderToStaticMarkup(React.createElement(AdminSettingsPage));
+    expect(html).toContain("需要管理员登录");
+
+    mocks.userState = {
+      fetchUser: vi.fn(),
+      logout: vi.fn(),
+      user: { username: "member", isAdmin: false },
+    };
+    html = renderToStaticMarkup(React.createElement(AdminSettingsPage));
+    expect(html).toContain("无权限访问");
+
+    mocks.userState = {
+      fetchUser: vi.fn(),
+      logout: vi.fn(),
+      user: { username: "admin", isAdmin: true },
+    };
+    html = renderToStaticMarkup(React.createElement(AdminSettingsPage));
+    expect(html).toContain("管理员配置");
+    expect(html).toContain("SmtpSettingsCard");
+    expect(html).toContain("GitHubOAuthSettingsCard");
+  });
+
+  it("renders admin quick action on dashboard only for non-banned admins", () => {
+    renderToStaticMarkup(React.createElement(DashboardPage));
+    const adapter = mocks.dashboardAdapter;
+
+    expect(adapter.renderExtraQuickActions({ user: { isAdmin: false, isBanned: false } })).toBeNull();
+    expect(adapter.renderExtraQuickActions({ user: { isAdmin: true, isBanned: true } })).toBeNull();
+
+    const adminCardHtml = renderToStaticMarkup(
+      adapter.renderExtraQuickActions({ user: { isAdmin: true, isBanned: false } })
+    );
+    expect(adminCardHtml).toContain('href="/dashboard/admin"');
+    expect(adminCardHtml).toContain("管理员配置");
   });
 });
