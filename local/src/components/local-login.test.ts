@@ -213,8 +213,8 @@ describe("local login component", () => {
       2: "secret",
     });
 
-    mocks.inputs.find((input) => input.placeholder === "管理员账号").onChange({ target: { value: "root" } });
-    mocks.inputs.find((input) => input.placeholder === "密码").onChange({ target: { value: "next" } });
+    mocks.inputs.find((input) => input.placeholder === "输入您的用户名或电子邮件").onChange({ target: { value: "root" } });
+    mocks.inputs.find((input) => input.placeholder === "输入密码").onChange({ target: { value: "next" } });
     mocks.buttons.find((button) => button["aria-label"] === "显示密码").onClick();
     await mocks.forms[0].onSubmit({ preventDefault: vi.fn() });
 
@@ -314,8 +314,8 @@ describe("local login component", () => {
       7: true,
     });
 
-    expect(html).toContain("注册账号以使用订阅管理功能");
-    expect(html).toContain("注册并登录");
+    expect(html).toContain("创建一个账户");
+    expect(html).toContain("创建账户");
     expect(html).toContain("已有账号？");
 
     await mocks.forms[0].onSubmit({ preventDefault: vi.fn() });
@@ -347,7 +347,7 @@ describe("local login component", () => {
     expect(globalThis.fetch).not.toHaveBeenCalled();
   });
 
-  it("always shows email and GitHub login/register entry points even before providers are configured", async () => {
+  it("renders unified username/email login and registration layout without top tabs", async () => {
     installWindow();
     (globalThis as any).fetch = vi.fn();
 
@@ -357,11 +357,13 @@ describe("local login component", () => {
       8: "password",
       9: { emailEnabled: false, githubEnabled: false, loaded: true },
     });
-    expect(loginView.html).toContain("账号密码");
-    expect(loginView.html).toContain("邮箱验证码");
+    expect(loginView.html).toContain("用户名或电子邮件");
+    expect(loginView.html).toContain("输入您的用户名或电子邮件");
     expect(loginView.html).toContain("忘记密码？");
-    expect(loginView.html).toContain("使用 GitHub 账号登录");
+    expect(loginView.html).toContain("使用邮箱验证码免密登录");
+    expect(loginView.html).toContain("使用 GitHub 继续");
     expect(loginView.html).toContain("GitHub OAuth 尚未配置");
+    expect(loginView.html).not.toContain("账号密码");
 
     const githubBtn = mocks.buttons.find((button) => String(button.onClick).includes("handleGitHubClick") || button.variant === "outline");
     await githubBtn?.onClick();
@@ -373,11 +375,22 @@ describe("local login component", () => {
       8: "password",
       9: { emailEnabled: false, githubEnabled: false, loaded: true },
     });
-    expect(registerView.html).toContain("账号密码");
-    expect(registerView.html).toContain("邮箱验证码");
-    expect(registerView.html).toContain("关联邮箱（可选）");
-    expect(registerView.html).toContain("使用 GitHub 账号注册 / 登录");
+    expect(registerView.html).toContain("创建一个账户");
+    expect(registerView.html).toContain("输入您的用户名");
+    expect(registerView.html).toContain("电子邮件（未配置 SMTP 时可留空）");
+    expect(registerView.html).toContain("发送验证码");
+    expect(registerView.html).toContain("创建账户");
+    expect(registerView.html).toContain("使用 GitHub 继续");
     expect(registerView.html).toContain("系统尚未配置 SMTP 邮件服务");
+
+    const registerEnabledView = renderLogin({
+      0: { setupRequired: false, authenticated: false },
+      7: true,
+      8: "password",
+      9: { emailEnabled: true, githubEnabled: true, loaded: true },
+    });
+    expect(registerEnabledView.html).toContain("电子邮件（验证必需）");
+    expect(registerEnabledView.html).toContain("发送验证码");
 
     const emailTabView = renderLogin({
       0: { setupRequired: false, authenticated: false },

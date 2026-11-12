@@ -202,8 +202,8 @@ export function LocalLogin() {
       return;
     }
 
-    if (isRegister && regEmail) {
-      if (!isValidEmail(regEmail.trim())) {
+    if (isRegister && (providers.emailEnabled || regEmail)) {
+      if (!regEmail.trim() || !isValidEmail(regEmail.trim())) {
         setError("请输入有效的注册邮箱");
         return;
       }
@@ -254,15 +254,49 @@ export function LocalLogin() {
           <Link href="/" className="inline-flex items-center gap-2">
             <Image src="/logo.png" alt="SubBoost" width={64} height={64} className="rounded-2xl shadow-lg shadow-blue-500/25" />
           </Link>
-          <h1 className="text-2xl font-bold mt-4 text-fg">欢迎使用 SubBoost</h1>
-          <p className="text-fg-50 mt-2">
-            {setupRequired
-              ? "初始化本地管理员账号"
-              : githubBindTicket
-              ? "完善 GitHub 账号绑定信息"
+          <h1 className="text-2xl font-bold mt-4 text-fg">
+            {!auth || setupRequired || githubBindTicket
+              ? "欢迎使用 SubBoost"
+              : activeTab === "reset_password"
+              ? "重置密码"
               : isRegister
-              ? "注册账号以使用订阅管理功能"
-              : "登录以使用订阅管理功能"}
+              ? "创建一个账户"
+              : "登录"}
+          </h1>
+          <p className="text-fg-50 mt-2 text-sm">
+            {setupRequired ? (
+              "初始化本地管理员账号"
+            ) : githubBindTicket ? (
+              "完善 GitHub 账号绑定信息"
+            ) : !auth ? (
+              "登录以使用订阅管理功能"
+            ) : activeTab === "reset_password" ? (
+              "验证已绑定的邮箱以设置新密码"
+            ) : (
+              <>
+                {isRegister ? "已有账号？" : "没有账号？"}
+                <a
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    setIsRegister(!isRegister);
+                    setActiveTab("password");
+                    setError("");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setIsRegister(!isRegister);
+                      setActiveTab("password");
+                      setError("");
+                    }
+                  }}
+                  className="text-indigo-400 hover:text-indigo-300 ml-1.5 font-medium underline-offset-4 hover:underline cursor-pointer"
+                >
+                  {isRegister ? "直接登录" : "立即注册"}
+                </a>
+              </>
+            )}
           </p>
         </div>
 
@@ -280,40 +314,6 @@ export function LocalLogin() {
             />
           ) : auth ? (
             <>
-              {/* Tab selector for login and registration */}
-              {!setupRequired && (
-                <div className="flex rounded-xl bg-ink/10 p-1 mb-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveTab("password");
-                      setError("");
-                    }}
-                    className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                      activeTab === "password"
-                        ? "bg-primary text-white shadow-sm"
-                        : "text-fg-50 hover:text-fg"
-                    }`}
-                  >
-                    账号密码
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveTab("email");
-                      setError("");
-                    }}
-                    className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                      activeTab === "email" || activeTab === "reset_password"
-                        ? "bg-primary text-white shadow-sm"
-                        : "text-fg-50 hover:text-fg"
-                    }`}
-                  >
-                    邮箱验证码
-                  </button>
-                </div>
-              )}
-
               {(activeTab === "email" || activeTab === "reset_password") && !setupRequired ? (
                 <div className="space-y-3">
                   <LocalEmailLogin
@@ -335,106 +335,49 @@ export function LocalLogin() {
                       {error}
                     </p>
                   ) : null}
-                  {activeTab !== "reset_password" && (
-                    <div className="flex items-center justify-between pt-1 text-sm text-fg-50">
-                      <div>
-                        {isRegister ? "已有账号？" : "还没有账号？"}
-                        <a
-                          role="button"
-                          tabIndex={0}
-                          onClick={() => {
-                            setIsRegister(!isRegister);
-                            setError("");
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              setIsRegister(!isRegister);
-                              setError("");
-                            }
-                          }}
-                          className="text-indigo-400 hover:text-indigo-300 ml-1.5 font-medium underline-offset-4 hover:underline cursor-pointer"
-                        >
-                          {isRegister ? "直接登录" : "立即注册"}
-                        </a>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-3">
-                  <FormField label={setupRequired ? "管理员账号" : isRegister ? "用户名" : "管理员账号"}>
+                  <FormField
+                    label={
+                      setupRequired
+                        ? "管理员账号"
+                        : isRegister
+                        ? "用户名"
+                        : "用户名或电子邮件"
+                    }
+                  >
                     <Input
                       autoComplete="username"
-                      placeholder={isRegister ? "用户名" : "管理员账号"}
+                      placeholder={
+                        setupRequired
+                          ? "管理员账号"
+                          : isRegister
+                          ? "输入您的用户名"
+                          : "输入您的用户名或电子邮件"
+                      }
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       className="h-12"
                     />
                   </FormField>
 
-                  {/* Optional Email Binding during Registration */}
-                  {isRegister && (
-                    <>
-                      <FormField
-                        label="关联邮箱（可选）"
-                        description={
-                          providers.loaded && !providers.emailEnabled
-                            ? "系统尚未配置 SMTP 邮件服务，暂不支持发送验证码（可留空直接注册，或由管理员前往「管理员配置」开启）"
-                            : "绑定邮箱后可使用邮箱验证码登录与找回密码"
-                        }
-                      >
-                        <div className="relative">
-                          <Input
-                            type="email"
-                            autoComplete="email"
-                            placeholder="name@example.com"
-                            value={regEmail}
-                            onChange={(e) => setRegEmail(e.target.value)}
-                            className="h-12 pl-10"
-                          />
-                          <Mail className="w-4 h-4 text-fg-40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                        </div>
-                      </FormField>
-
-                      {regEmail ? (
-                        <FormField label="邮箱验证码">
-                          <div className="flex gap-2">
-                            <div className="relative flex-1">
-                              <Input
-                                type="text"
-                                inputMode="numeric"
-                                maxLength={6}
-                                placeholder="6位验证码"
-                                value={regEmailCode}
-                                onChange={(e) => setRegEmailCode(e.target.value.replace(/\D/g, ""))}
-                                className="h-12 pl-10 tracking-widest font-mono"
-                              />
-                              <KeyRound className="w-4 h-4 text-fg-40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                            </div>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              disabled={(providers.loaded && !providers.emailEnabled) || regCountdown > 0 || regSendingCode || !regEmail}
-                              onClick={() => void handleSendRegCode()}
-                              className="h-12 px-3 whitespace-nowrap text-xs"
-                            >
-                              {regSendingCode ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                              ) : regCountdown > 0 ? (
-                                `${regCountdown}s 后重发`
-                              ) : (
-                                "获取验证码"
-                              )}
-                            </Button>
-                          </div>
-                        </FormField>
-                      ) : null}
-                    </>
-                  )}
-
                   <PasswordField
                     label="密码"
+                    labelAction={
+                      !setupRequired && !isRegister ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveTab("reset_password");
+                            setError("");
+                          }}
+                          className="text-xs text-fg-50 hover:text-fg underline-offset-4 hover:underline transition-colors"
+                        >
+                          忘记密码？
+                        </button>
+                      ) : undefined
+                    }
                     autoComplete={setupRequired || isRegister ? "new-password" : "current-password"}
                     description={
                       setupRequired
@@ -443,7 +386,7 @@ export function LocalLogin() {
                         ? `至少 ${USER_PASSWORD_MIN_LENGTH} 个字符`
                         : undefined
                     }
-                    placeholder="密码"
+                    placeholder={setupRequired ? "密码" : isRegister ? `输入密码（至少 ${USER_PASSWORD_MIN_LENGTH} 个字符）` : "输入密码"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="h-12"
@@ -464,6 +407,67 @@ export function LocalLogin() {
                     />
                   ) : null}
 
+                  {/* Email verification section right below confirm password in registration */}
+                  {isRegister && (
+                    <div className="space-y-3">
+                      <FormField
+                        label={
+                          providers.loaded && !providers.emailEnabled
+                            ? "电子邮件（未配置 SMTP 时可留空）"
+                            : "电子邮件（验证必需）"
+                        }
+                        description={
+                          providers.loaded && !providers.emailEnabled
+                            ? "系统尚未配置 SMTP 邮件服务，暂无法发送验证码（可留空直接注册，或由管理员前往「管理员配置」开启）"
+                            : undefined
+                        }
+                      >
+                        <div className="relative">
+                          <Input
+                            type="email"
+                            autoComplete="email"
+                            placeholder="name@example.com"
+                            value={regEmail}
+                            onChange={(e) => setRegEmail(e.target.value)}
+                            className="h-12 pl-10"
+                          />
+                          <Mail className="w-4 h-4 text-fg-40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        </div>
+                      </FormField>
+
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <Input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            aria-label="邮箱验证码"
+                            placeholder="验证码"
+                            value={regEmailCode}
+                            onChange={(e) => setRegEmailCode(e.target.value.replace(/\D/g, ""))}
+                            className="h-12 pl-10 tracking-widest font-mono"
+                          />
+                          <KeyRound className="w-4 h-4 text-fg-40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled={(providers.loaded && !providers.emailEnabled) || regCountdown > 0 || regSendingCode || !regEmail}
+                          onClick={() => void handleSendRegCode()}
+                          className="h-12 px-4 whitespace-nowrap text-xs"
+                        >
+                          {regSendingCode ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : regCountdown > 0 ? (
+                            `${regCountdown}s 后重发`
+                          ) : (
+                            "发送验证码"
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
                   {error ? (
                     <p className="text-red-400 text-sm" aria-live="polite">
                       {error}
@@ -477,50 +481,27 @@ export function LocalLogin() {
                       !username ||
                       !password ||
                       ((setupRequired || isRegister) && !passwordConfirm) ||
+                      (isRegister && providers.emailEnabled && (!regEmail || regEmailCode.length !== 6)) ||
                       (isRegister && Boolean(regEmail) && regEmailCode.length !== 6)
                     }
                     className="h-12 w-full mt-1"
                   >
                     {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                    {setupRequired ? "创建管理员" : isRegister ? "注册并登录" : "登录"}
+                    {setupRequired ? "创建管理员" : isRegister ? "创建账户" : "登录"}
                   </Button>
 
-                  {!setupRequired && (
-                    <div className="flex items-center justify-between pt-2 text-sm text-fg-50">
-                      <div>
-                        {isRegister ? "已有账号？" : "还没有账号？"}
-                        <a
-                          role="button"
-                          tabIndex={0}
-                          onClick={() => {
-                            setIsRegister(!isRegister);
-                            setError("");
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              setIsRegister(!isRegister);
-                              setError("");
-                            }
-                          }}
-                          className="text-indigo-400 hover:text-indigo-300 ml-1.5 font-medium underline-offset-4 hover:underline cursor-pointer"
-                        >
-                          {isRegister ? "直接登录" : "立即注册"}
-                        </a>
-                      </div>
-
-                      {!isRegister && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setActiveTab("reset_password");
-                            setError("");
-                          }}
-                          className="text-xs text-fg-40 hover:text-fg-60 transition-colors"
-                        >
-                          忘记密码？
-                        </button>
-                      )}
+                  {!setupRequired && !isRegister && (
+                    <div className="pt-1 text-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab("email");
+                          setError("");
+                        }}
+                        className="text-xs text-fg-50 hover:text-indigo-400 underline-offset-4 hover:underline transition-colors"
+                      >
+                        使用邮箱验证码免密登录
+                      </button>
                     </div>
                   )}
                 </form>
@@ -534,7 +515,7 @@ export function LocalLogin() {
                       <div className="w-full border-t border-ink/10" />
                     </div>
                     <div className="relative flex justify-center text-xs">
-                      <span className="bg-ink/5 px-2 text-fg-40 rounded">或者</span>
+                      <span className="bg-ink/5 px-2 text-fg-40 rounded">或继续使用</span>
                     </div>
                   </div>
 
@@ -550,7 +531,7 @@ export function LocalLogin() {
                     ) : (
                       <GitHubIcon className="w-5 h-5" />
                     )}
-                    {isRegister ? "使用 GitHub 账号注册 / 登录" : "使用 GitHub 账号登录"}
+                    使用 GitHub 继续
                   </Button>
 
                   {providers.loaded && !providers.githubEnabled ? (

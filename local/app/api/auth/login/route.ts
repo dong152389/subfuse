@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   if (!parsedBody.ok) return jsonBodyError(parsedBody);
   const body = parsedBody.value;
 
-  const username = getStringField(body, "username");
+  const username = (getStringField(body, "username") || getStringField(body, "identifier")).trim();
   const password = getStringField(body, "password");
   const usernameLimitKey = hashLocalRateLimitKey(username.toLowerCase() || "missing");
   const usernameLimit = consumeLocalRateLimit("auth-login-username", usernameLimitKey, {
@@ -39,9 +39,22 @@ export async function POST(request: Request) {
   if (!usernameLimit.allowed) {
     return localRateLimitResponse("Too many login attempts. Try again later.", usernameLimit.retryAfterSeconds);
   }
-  const admin = username
-    ? await prisma.localAdmin.findUnique({ where: { username }, select: { id: true, username: true, passwordHash: true } })
-    : null;
+  const selectFields = { id: true, username: true, passwordHash: true } as const;
+  let admin = null;
+  if (username) {
+    if (username.includes("@")) {
+      admin = await prisma.localAdmin.findUnique({
+        where: { email: username.toLowerCase() },
+        select: selectFields,
+      });
+    }
+    if (!admin) {
+      admin = await prisma.localAdmin.findUnique({
+        where: { username },
+        select: selectFields,
+      });
+    }
+  }
   const valid = admin && admin.passwordHash ? await bcrypt.compare(password, admin.passwordHash) : false;
   if (!admin || !valid) {
     return apiError("Invalid username or password.", "UNAUTHORIZED", 401);

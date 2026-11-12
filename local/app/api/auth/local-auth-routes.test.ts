@@ -87,6 +87,32 @@ describe("local auth and health routes", () => {
     expect(response.headers.get("set-cookie")).toContain("subboost-local-session=signed-session");
   });
 
+  it("logs in a user via email and password", async () => {
+    const { POST } = await import("./login/route");
+    mocks.prisma.localAdmin.findUnique.mockResolvedValueOnce({
+      id: "user-2",
+      username: "alice",
+      passwordHash: "hash",
+    });
+    mocks.bcryptCompare.mockResolvedValueOnce(true);
+
+    const response = await POST(
+      new Request("https://local.test/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ username: "Alice@Example.com", password: "secret" }),
+      })
+    );
+
+    expect(mocks.prisma.localAdmin.findUnique).toHaveBeenCalledWith({
+      where: { email: "alice@example.com" },
+      select: { id: true, username: true, passwordHash: true },
+    });
+    expect(await readJson(response)).toEqual({
+      status: 200,
+      body: { success: true, user: { id: "user-2", username: "alice" } },
+    });
+  });
+
   it("rejects invalid JSON or invalid credentials", async () => {
     const { POST } = await import("./login/route");
 

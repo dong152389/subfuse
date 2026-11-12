@@ -38,6 +38,7 @@ PasswordControl.displayName = "PasswordControl";
 
 export interface PasswordFieldProps extends Omit<InputProps, "type"> {
   label: React.ReactNode;
+  labelAction?: React.ReactNode;
   description?: React.ReactNode;
   error?: React.ReactNode;
   required?: boolean;
@@ -45,13 +46,14 @@ export interface PasswordFieldProps extends Omit<InputProps, "type"> {
 }
 
 const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
-  ({ label, description, error, required, fieldClassName, id, ...props }, ref) => {
+  ({ label, labelAction, description, error, required, fieldClassName, id, ...props }, ref) => {
     const [visible, setVisible] = React.useState(false);
 
     return (
       <FormField
         id={id}
         label={label}
+        labelAction={labelAction}
         description={description}
         error={error}
         required={required}
