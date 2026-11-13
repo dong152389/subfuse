@@ -21,6 +21,8 @@ import {
   GITHUB_OAUTH_CALLBACK_PATH,
   normalizeGitHubCallbackUrl,
   resolveGitHubOAuthUrls,
+  signGitHubOAuthState,
+  verifyGitHubOAuthState,
 } from "./github-oauth";
 
 const originalEnv = {
@@ -110,5 +112,28 @@ describe("GitHub OAuth URL resolution", () => {
       baseUrl: "https://proxy.example.com",
       redirectUri: "https://proxy.example.com/api/auth/github/callback",
     });
+  });
+
+  it("signs and verifies github oauth state for login and bind", async () => {
+    process.env.JWT_SECRET = "test-secret-key-for-jwt-signing-0001";
+
+    const loginState = await signGitHubOAuthState({ action: "login" });
+    const verifiedLogin = await verifyGitHubOAuthState(loginState);
+    expect(verifiedLogin).toEqual({
+      action: "login",
+      adminId: undefined,
+      returnUrl: undefined,
+    });
+
+    const bindState = await signGitHubOAuthState({ action: "bind", adminId: "user-123" });
+    const verifiedBind = await verifyGitHubOAuthState(bindState);
+    expect(verifiedBind).toEqual({
+      action: "bind",
+      adminId: "user-123",
+      returnUrl: undefined,
+    });
+
+    expect(await verifyGitHubOAuthState("invalid.state")).toBeNull();
+    expect(await verifyGitHubOAuthState("")).toBeNull();
   });
 });

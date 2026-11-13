@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getGitHubOAuthConfig, resolveGitHubOAuthUrls } from "@local/lib/github-oauth";
-import { randomBytes } from "node:crypto";
+import { getCurrentAdmin } from "@local/lib/auth";
+import { getGitHubOAuthConfig, resolveGitHubOAuthUrls, signGitHubOAuthState } from "@local/lib/github-oauth";
 
 export async function GET(request: Request) {
   const config = await getGitHubOAuthConfig();
@@ -11,12 +11,31 @@ export async function GET(request: Request) {
     });
   }
 
+  const requestUrl = new URL(request.url);
+  const actionParam = requestUrl.searchParams.get("action");
+  const action = actionParam === "bind" ? "bind" : "login";
+
+  let adminId: string | undefined;
+  if (action === "bind") {
+    const admin = await getCurrentAdmin();
+    if (!admin) {
+      return NextResponse.json(
+        {
+          enabled: true,
+          error: "请先登录账户后再进行 GitHub 绑定",
+        },
+        { status: 401 }
+      );
+    }
+    adminId = admin.id;
+  }
+
   const { redirectUri } = resolveGitHubOAuthUrls(request, config);
-  const state = randomBytes(16).toString("hex");
+  const state = await signGitHubOAuthState({ action, adminId });
 
   const url = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(
     config.clientId
-  )}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=read:user,user:email&state=${state}`;
+  )}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=read:user,user:email&state=${encodeURIComponent(state)}`;
 
   return NextResponse.json({
     enabled: true,

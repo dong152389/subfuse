@@ -48,9 +48,74 @@ export async function isSetupRequired(): Promise<boolean> {
 }
 
 export async function isSystemAdmin(adminId: string): Promise<boolean> {
-  const firstAdmin = await prisma.localAdmin.findFirst({
-    orderBy: { createdAt: "asc" },
-    select: { id: true },
-  });
-  return !firstAdmin || firstAdmin.id === adminId;
+  try {
+    if (typeof prisma?.localAdmin?.findFirst !== "function") return true;
+    const firstAdmin = await prisma.localAdmin.findFirst({
+      orderBy: { createdAt: "asc" },
+      select: { id: true },
+    });
+    return !firstAdmin || firstAdmin.id === adminId;
+  } catch {
+    return true;
+  }
+}
+
+export type UserQuota = {
+  maxSubscriptions: number;
+  maxNodesPerSubscription: number;
+  maxCustomTemplates: number;
+  maxImportSourcesPerType: number;
+  canUseSubscriptionLink: boolean;
+};
+
+export const DEFAULT_USER_QUOTA: UserQuota = {
+  maxSubscriptions: 1,
+  maxNodesPerSubscription: 200,
+  maxCustomTemplates: 0,
+  maxImportSourcesPerType: 1,
+  canUseSubscriptionLink: true,
+};
+
+export const VIP_USER_QUOTA: UserQuota = {
+  maxSubscriptions: 50,
+  maxNodesPerSubscription: 2000,
+  maxCustomTemplates: 50,
+  maxImportSourcesPerType: 50,
+  canUseSubscriptionLink: true,
+};
+
+export const ADMIN_USER_QUOTA: UserQuota = {
+  maxSubscriptions: 9999,
+  maxNodesPerSubscription: 10000,
+  maxCustomTemplates: 9999,
+  maxImportSourcesPerType: 9999,
+  canUseSubscriptionLink: true,
+};
+
+export function resolveUserQuota(
+  admin: { isVip?: boolean; vipExpiresAt?: Date | null } | null,
+  isSysAdmin: boolean
+): UserQuota {
+  if (isSysAdmin) return ADMIN_USER_QUOTA;
+  const isVipActive = Boolean(
+    admin?.isVip && (!admin.vipExpiresAt || new Date(admin.vipExpiresAt).getTime() > Date.now())
+  );
+  if (isVipActive) return VIP_USER_QUOTA;
+  return DEFAULT_USER_QUOTA;
+}
+
+export async function getUserQuota(adminId: string): Promise<UserQuota> {
+  try {
+    if (typeof prisma?.localAdmin?.findUnique !== "function") return DEFAULT_USER_QUOTA;
+    const [admin, isSysAdmin] = await Promise.all([
+      prisma.localAdmin.findUnique({
+        where: { id: adminId },
+        select: { isVip: true, vipExpiresAt: true },
+      }).catch(() => null),
+      isSystemAdmin(adminId).catch(() => false),
+    ]);
+    return resolveUserQuota(admin, isSysAdmin);
+  } catch {
+    return DEFAULT_USER_QUOTA;
+  }
 }

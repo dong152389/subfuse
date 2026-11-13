@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">SubFuse icon</title>
+  <desc id="desc">Three colored node streams converge into one arrow inside a rounded square.</desc>
+  <defs>
+    <linearGradient id="fuse" x1="32" y1="120" x2="180" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#29C9D8"/><stop offset="1" stop-color="#6558F5"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" rx="116" fill="#F4F6FF"/><rect x="2" y="2" width="508" height="508" rx="114" fill="none" stroke="#E1E7F2" stroke-width="4"/>
+  <g transform="translate(15 8) scale(2)">
+    <g transform="translate(38 42)">
+      <path d="M12 28H43C65 28 68 68 94 78" stroke="url(#fuse)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M12 78H94" stroke="url(#fuse)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M12 128H43C65 128 68 88 94 78" stroke="url(#fuse)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M94 78H151" stroke="url(#fuse)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M142 65L157 78L142 91" stroke="url(#fuse)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="12" cy="28" r="7" fill="#29C9D8"/>
+      <circle cx="12" cy="78" r="7" fill="#478DE7"/>
+      <circle cx="12" cy="128" r="7" fill="#6558F5"/>
+      <circle cx="94" cy="78" r="15" fill="#F4F6FF" stroke="url(#fuse)" stroke-width="8"/>
+    </g>
+  </g>
+</svg>
+

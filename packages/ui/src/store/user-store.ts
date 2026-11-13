@@ -16,6 +16,9 @@ export interface User {
   id: string;
   username: string;
   name: string | null;
+  email?: string | null;
+  githubId?: string | null;
+  githubUsername?: string | null;
   avatarUrl: string | null;
   trustLevel: number;
   aiAssistantEnabled: boolean;

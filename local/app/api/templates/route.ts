@@ -1,5 +1,7 @@
 import { getOptionalCurrentAdmin, localAdminRequiredResponse, withCurrentAdmin } from "@local/lib/api-auth";
+import { getUserQuota } from "@local/lib/auth";
 import { apiError, json, jsonBodyError, LOCAL_JSON_BODY_LIMITS, readJsonBody } from "@local/lib/http";
+import { prisma } from "@local/lib/prisma";
 import {
   createTemplate,
   deleteTemplate,
@@ -51,6 +53,15 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   return withCurrentAdmin(async (admin) => {
+    const quota = await getUserQuota(admin.id);
+    if (quota.maxCustomTemplates <= 0) {
+      return apiError("普通用户不支持上传自定义模板，仅支持基础内置模板。升级 VIP 可解锁模板上传功能。", "FORBIDDEN", 403);
+    }
+    const currentCount = await prisma.localTemplate.count({ where: { ownerId: admin.id } });
+    if (currentCount >= quota.maxCustomTemplates) {
+      return apiError(`自定义模板数量已达上限（最大 ${quota.maxCustomTemplates} 个）。`, "BAD_REQUEST", 400);
+    }
+
     const parsedBody = await readJsonBody(request, LOCAL_JSON_BODY_LIMITS.template);
     if (!parsedBody.ok) return jsonBodyError(parsedBody);
     if (!parsedBody.value || typeof parsedBody.value !== "object" || Array.isArray(parsedBody.value)) {

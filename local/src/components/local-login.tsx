@@ -202,7 +202,7 @@ export function LocalLogin() {
       return;
     }
 
-    if (isRegister && (providers.emailEnabled || regEmail)) {
+    if (isRegister && providers.emailEnabled) {
       if (!regEmail.trim() || !isValidEmail(regEmail.trim())) {
         setError("请输入有效的注册邮箱");
         return;
@@ -221,7 +221,7 @@ export function LocalLogin() {
         ? "/api/auth/register"
         : "/api/auth/login";
       const payload: Record<string, string> = { username, password, passwordConfirm };
-      if (isRegister && regEmail) {
+      if (isRegister && providers.emailEnabled && regEmail) {
         payload.email = regEmail.trim();
         payload.code = regEmailCode.trim();
       }
@@ -426,8 +426,13 @@ export function LocalLogin() {
                           <Input
                             type="email"
                             autoComplete="email"
-                            placeholder="name@example.com"
+                            placeholder={
+                              providers.loaded && !providers.emailEnabled
+                                ? "未配置 SMTP，留空可直接注册"
+                                : "name@example.com"
+                            }
                             value={regEmail}
+                            disabled={providers.loaded && !providers.emailEnabled}
                             onChange={(e) => setRegEmail(e.target.value)}
                             className="h-12 pl-10"
                           />
@@ -442,8 +447,11 @@ export function LocalLogin() {
                             inputMode="numeric"
                             maxLength={6}
                             aria-label="邮箱验证码"
-                            placeholder="验证码"
+                            placeholder={
+                              providers.loaded && !providers.emailEnabled ? "无需验证码" : "验证码"
+                            }
                             value={regEmailCode}
+                            disabled={providers.loaded && !providers.emailEnabled}
                             onChange={(e) => setRegEmailCode(e.target.value.replace(/\D/g, ""))}
                             className="h-12 pl-10 tracking-widest font-mono"
                           />
@@ -481,8 +489,7 @@ export function LocalLogin() {
                       !username ||
                       !password ||
                       ((setupRequired || isRegister) && !passwordConfirm) ||
-                      (isRegister && providers.emailEnabled && (!regEmail || regEmailCode.length !== 6)) ||
-                      (isRegister && Boolean(regEmail) && regEmailCode.length !== 6)
+                      (isRegister && providers.emailEnabled && (!regEmail || regEmailCode.length !== 6))
                     }
                     className="h-12 w-full mt-1"
                   >

@@ -25,6 +25,7 @@ import { getAppUrl } from "./env";
 import { prisma } from "./prisma";
 import { fetchSourceUserInfoHeadersDirect, importSourceUrlDirect } from "./source-import";
 import { normalizeLocalAutoUpdateIntervalSeconds } from "./auto-update-policy";
+import { getUserQuota } from "./auth";
 
 export const MAX_NODES_PER_SUBSCRIPTION = 10000;
 export const CACHE_TTL_SECONDS = 3600;
@@ -110,10 +111,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function validateLocalSubscriptionNodes(value: unknown): ParsedNode[] {
+function validateLocalSubscriptionNodes(value: unknown, maxNodes: number = MAX_NODES_PER_SUBSCRIPTION): ParsedNode[] {
   if (value === undefined || value === null) return [];
-  if (Array.isArray(value) && value.length > MAX_NODES_PER_SUBSCRIPTION) {
-    throw new Error(`Node count cannot exceed ${MAX_NODES_PER_SUBSCRIPTION}.`);
+  if (Array.isArray(value) && value.length > maxNodes) {
+    throw new Error(
+      maxNodes === MAX_NODES_PER_SUBSCRIPTION
+        ? `Node count cannot exceed ${MAX_NODES_PER_SUBSCRIPTION}.`
+        : `节点数量超过上限（最大 ${maxNodes} 个），请升级 VIP 会员。`
+    );
   }
   return validateSubscriptionNodeList(value);
 }
@@ -204,7 +209,11 @@ export async function listSubscriptions(ownerId: string): Promise<SubscriptionSu
   return rows.map(formatSubscription);
 }
 
-export async function createSubscription(ownerId: string, body: unknown): Promise<SubscriptionSummary> {
+export async function createSubscription(
+  ownerId: string,
+  body: unknown,
+  quota?: { maxNodesPerSubscription?: number; maxImportSourcesPerType?: number }
+): Promise<SubscriptionSummary> {
   if (!isRecord(body)) {
     throw new Error("Invalid request body.");
   }
@@ -212,7 +221,11 @@ export async function createSubscription(ownerId: string, body: unknown): Promis
   if (!name) throw new Error("Subscription name is required.");
 
   const urls = normalizeSubscriptionUrlList(body.urls);
-  const nodes = validateLocalSubscriptionNodes(body.nodes);
+  if (quota?.maxImportSourcesPerType !== undefined && urls.length > quota.maxImportSourcesPerType) {
+    throw new Error(`订阅链接导入源数量超过上限（每种最多 ${quota.maxImportSourcesPerType} 个），请升级 VIP 会员。`);
+  }
+  const maxNodes = quota?.maxNodesPerSubscription ?? MAX_NODES_PER_SUBSCRIPTION;
+  const nodes = validateLocalSubscriptionNodes(body.nodes, maxNodes);
   if (urls.length === 0 && nodes.length === 0) throw new Error("At least one URL or node is required.");
 
   const config = buildLocalSubscriptionConfig(body);
@@ -236,7 +249,12 @@ export async function createSubscription(ownerId: string, body: unknown): Promis
   return formatSubscription(row);
 }
 
-export async function updateSubscription(ownerId: string, id: string, body: unknown): Promise<SubscriptionSummary | null> {
+export async function updateSubscription(
+  ownerId: string,
+  id: string,
+  body: unknown,
+  quota?: { maxNodesPerSubscription?: number; maxImportSourcesPerType?: number }
+): Promise<SubscriptionSummary | null> {
   if (!isRecord(body)) throw new Error("Invalid request body.");
   const current = await prisma.subscription.findFirst({ where: { id, ownerId }, include: { autoUpdateState: true } });
   if (!current) return null;
@@ -247,11 +265,16 @@ export async function updateSubscription(ownerId: string, id: string, body: unkn
   const hasUrls = "urls" in body;
   const hasNodes = "nodes" in body;
   const hasConfig = "config" in body || "smartNodeMatchingEnabled" in body;
-  const nextNodes = hasNodes ? validateLocalSubscriptionNodes(body.nodes) : currentSecrets.nodes;
+  const maxNodes = quota?.maxNodesPerSubscription ?? MAX_NODES_PER_SUBSCRIPTION;
+  const nextNodes = hasNodes ? validateLocalSubscriptionNodes(body.nodes, maxNodes) : currentSecrets.nodes;
   let nextConfig = currentSecrets.config;
 
   if (hasUrls) {
-    data.encryptedUrls = encryptJson(normalizeSubscriptionUrlList(body.urls));
+    const urls = normalizeSubscriptionUrlList(body.urls);
+    if (quota?.maxImportSourcesPerType !== undefined && urls.length > quota.maxImportSourcesPerType) {
+      throw new Error(`订阅链接导入源数量超过上限（每种最多 ${quota.maxImportSourcesPerType} 个），请升级 VIP 会员。`);
+    }
+    data.encryptedUrls = encryptJson(urls);
   }
   if (hasNodes) {
     data.encryptedNodes = encryptJson(nextNodes);
@@ -392,6 +415,8 @@ export async function refreshSubscription(ownerId: string, id: string) {
   const row = await prisma.subscription.findFirst({ where: { id, ownerId }, include: { autoUpdateState: true } });
   if (!row) return null;
 
+  const quota = await getUserQuota(ownerId);
+  const maxNodesPerSubscription = quota.maxNodesPerSubscription;
   const secrets = readSubscriptionSecrets(row);
   const snapshot = await refreshNodeSnapshot({
     config: secrets.config,
@@ -402,7 +427,7 @@ export async function refreshSubscription(ownerId: string, id: string) {
   const refreshResult = prepareRefreshCacheResult({
     config: secrets.config,
     snapshot,
-    maxNodesPerSubscription: MAX_NODES_PER_SUBSCRIPTION,
+    maxNodesPerSubscription,
   });
 
   if (!refreshResult.ok) {
@@ -410,7 +435,7 @@ export async function refreshSubscription(ownerId: string, id: string) {
       ok: false as const,
       response: buildManualRefreshFailureResponse({
         refreshResult,
-        maxNodesPerSubscription: MAX_NODES_PER_SUBSCRIPTION,
+        maxNodesPerSubscription,
       }),
     };
   }

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components
 import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
 import { useUserStore } from "@subfuse/ui/store/user-store";
 import { UserEmailBindCard } from "@local/components/user-email-bind-card";
+import { UserGitHubBindCard } from "@local/components/user-github-bind-card";
 
 export default function SettingsPage() {
   const { user, fetchUser, logout } = useUserStore();
@@ -15,10 +16,29 @@ export default function SettingsPage() {
   const [sourceImportLoading, setSourceImportLoading] = React.useState(true);
   const [sourceImportSaving, setSourceImportSaving] = React.useState(false);
   const [sourceImportError, setSourceImportError] = React.useState<string | null>(null);
+  const [urlMessage, setUrlMessage] = React.useState<{ type: "success" | "error" | "notice"; text: string } | null>(null);
 
   React.useEffect(() => {
     void fetchUser();
   }, [fetchUser]);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    const success = params.get("success");
+    const notice = params.get("notice");
+    if (error) {
+      setUrlMessage({ type: "error", text: decodeURIComponent(error) });
+    } else if (success) {
+      setUrlMessage({ type: "success", text: decodeURIComponent(success) });
+    } else if (notice) {
+      setUrlMessage({ type: "notice", text: decodeURIComponent(notice) });
+    }
+    if (error || success || notice) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -90,9 +110,23 @@ export default function SettingsPage() {
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold mb-1">账户设置</h1>
-          <p className="text-fg-50">账户信息、邮箱绑定及订阅源安全设置</p>
+          <p className="text-fg-50">账户信息、邮箱与 GitHub 绑定及订阅源安全设置</p>
         </div>
       </div>
+
+      {urlMessage && (
+        <div
+          className={`mb-6 rounded-lg border p-4 text-sm ${
+            urlMessage.type === "error"
+              ? "border-red-500/30 bg-red-500/10 text-red-300"
+              : urlMessage.type === "success"
+              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+              : "border-sky-500/30 bg-sky-500/10 text-sky-300"
+          }`}
+        >
+          {urlMessage.text}
+        </div>
+      )}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
@@ -121,8 +155,19 @@ export default function SettingsPage() {
         {/* User Email Bind Card */}
         {user && (
           <UserEmailBindCard
-            currentEmail={(user as any).email}
+            currentEmail={user.email}
             onEmailUpdated={() => {
+              void fetchUser();
+            }}
+          />
+        )}
+
+        {/* User GitHub Bind Card */}
+        {user && (
+          <UserGitHubBindCard
+            currentGithubUsername={user.githubUsername}
+            currentGithubId={user.githubId}
+            onUpdated={() => {
               void fetchUser();
             }}
           />

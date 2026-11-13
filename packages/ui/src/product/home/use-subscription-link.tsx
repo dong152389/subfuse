@@ -290,6 +290,22 @@ export function useSubscriptionLink({
       }
     }
 
+    if (!isEditingExistingSubscription && user && user.subscriptionCount >= (user.quota?.maxSubscriptions ?? 9999)) {
+      toast({
+        title: `订阅配额已用完（当前上限 ${user.quota.maxSubscriptions} 个），升级 VIP 会员可解锁更多订阅配额`,
+        variant: "warning",
+      });
+      return;
+    }
+
+    if (user && nodes.length > (user.quota?.maxNodesPerSubscription ?? 10000)) {
+      toast({
+        title: `节点数量 (${nodes.length}) 超过上限 (${user.quota.maxNodesPerSubscription} 个)，请升级 VIP 会员或删减节点`,
+        variant: "warning",
+      });
+      return;
+    }
+
     const nextAutoUpdateInterval = autoUpdateEnabled ? autoUpdateIntervalHoursToSeconds(hoursValue) : null;
     if (!subscriptionAdapter?.saveSubscription) {
       trackSubscriptionMutation("runtimeError");
@@ -502,6 +518,7 @@ export function useSubscriptionLink({
     sharedHealthChecks,
     testUrl,
     trackSubscriptionMutation,
+    user,
   ]);
 
   // 复制订阅链接

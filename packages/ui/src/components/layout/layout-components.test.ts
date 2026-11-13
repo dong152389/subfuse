@@ -136,8 +136,8 @@ describe("shared layout components", () => {
     expect(html).toContain("开源仓库");
     expect(html).toContain("https://github.com/dong152389/subfuse");
     expect(html).toContain('data-brand-icon="github"');
-    expect(html).toContain("RyanVan&#x27;s Blog");
-    expect(html).toContain("https://linux.do");
+    expect(html).not.toContain("RyanVan&#x27;s Blog");
+    expect(html).not.toContain("https://linux.do");
     expect(html).toContain("https://subfuse.org/terms");
     expect(html).toContain("Mihomo Core");
     expect(html).not.toContain("源代码");

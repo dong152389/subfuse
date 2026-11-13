@@ -31,10 +31,14 @@ vi.mock("bcryptjs", () => ({
   default: { compare: mocks.bcryptCompare },
 }));
 
-vi.mock("@local/lib/auth", () => ({
-  getCurrentAdmin: mocks.getCurrentAdmin,
-  isSetupRequired: mocks.isSetupRequired,
-}));
+vi.mock("@local/lib/auth", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@local/lib/auth")>();
+  return {
+    ...actual,
+    getCurrentAdmin: mocks.getCurrentAdmin,
+    isSetupRequired: mocks.isSetupRequired,
+  };
+});
 
 vi.mock("@local/lib/prisma", () => ({
   prisma: mocks.prisma,
@@ -270,6 +274,113 @@ describe("local auth and health routes", () => {
         username: "vip_member",
         isVip: true,
         quota: { maxSubscriptions: 50, maxCustomTemplates: 50 },
+      },
+    });
+  });
+
+  it("returns githubId and githubUsername in auth me when bound", async () => {
+    const { GET } = await import("./me/route");
+    mocks.isSetupRequired.mockResolvedValueOnce(false);
+    mocks.getCurrentAdmin.mockResolvedValueOnce({
+      id: "gh-user-1",
+      username: "gh_member",
+      email: "gh@example.com",
+      githubId: "123456",
+      githubUsername: "octocat",
+      isVip: false,
+    });
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-root" });
+    mocks.prisma.subscription.count.mockResolvedValueOnce(0);
+    mocks.prisma.localTemplate.count.mockResolvedValueOnce(0);
+
+    const response = await GET();
+    const payload = await response.json();
+    expect(payload).toMatchObject({
+      authenticated: true,
+      user: {
+        id: "gh-user-1",
+        username: "gh_member",
+        email: "gh@example.com",
+        githubId: "123456",
+        githubUsername: "octocat",
+      },
+    });
+  });
+
+  it("unbinds github account successfully", async () => {
+    const { POST } = await import("./me/unbind-github/route");
+    mocks.getCurrentAdmin.mockResolvedValueOnce({
+      id: "gh-user-1",
+      username: "gh_member",
+    });
+    mocks.prisma.localAdmin.findUnique.mockResolvedValueOnce({
+      id: "gh-user-1",
+      githubId: "123456",
+      passwordHash: "some-hash",
+      email: "gh@example.com",
+    });
+    mocks.prisma.localAdmin.update.mockResolvedValueOnce({});
+
+    const response = await POST();
+    const { status, body } = await readJson(response);
+    expect(status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(mocks.prisma.localAdmin.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "gh-user-1" },
+        data: expect.objectContaining({
+          githubId: null,
+          githubUsername: null,
+        }),
+      })
+    );
+  });
+
+  it("prevents unbinding github if user has no password and no email", async () => {
+    const { POST } = await import("./me/unbind-github/route");
+    mocks.getCurrentAdmin.mockResolvedValueOnce({
+      id: "gh-user-1",
+      username: "gh_member",
+    });
+    mocks.prisma.localAdmin.findUnique.mockResolvedValueOnce({
+      id: "gh-user-1",
+      githubId: "123456",
+      passwordHash: null,
+      email: null,
+    });
+
+    const response = await POST();
+    const { status, body } = await readJson(response);
+    expect(status).toBe(400);
+    expect(body.error).toContain("请先设置密码或绑定邮箱");
+  });
+
+  it("returns default user quota for regular member in auth me", async () => {
+    const { GET } = await import("./me/route");
+    mocks.isSetupRequired.mockResolvedValueOnce(false);
+    mocks.getCurrentAdmin.mockResolvedValueOnce({
+      id: "normal-user-1",
+      username: "normal_member",
+      isVip: false,
+    });
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-root" });
+    mocks.prisma.subscription.count.mockResolvedValueOnce(0);
+    mocks.prisma.localTemplate.count.mockResolvedValueOnce(0);
+
+    const response = await GET();
+    const payload = await response.json();
+    expect(payload).toMatchObject({
+      authenticated: true,
+      user: {
+        id: "normal-user-1",
+        username: "normal_member",
+        isVip: false,
+        quota: {
+          maxSubscriptions: 1,
+          maxNodesPerSubscription: 200,
+          maxCustomTemplates: 0,
+          maxImportSourcesPerType: 1,
+        },
       },
     });
   });

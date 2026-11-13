@@ -148,6 +148,12 @@ describe("local lib helpers", () => {
         githubId: true,
         githubUsername: true,
         avatarUrl: true,
+        isBanned: true,
+        banReason: true,
+        isVip: true,
+        vipExpiresAt: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 

@@ -120,7 +120,12 @@ function TemplateLibraryInner({ adapter }: Props) {
     void fetchUser();
   }, [fetchUser]);
 
-  const canUpload = Boolean(user && adapter.allowUpload !== false && adapter.uploadTemplate);
+  const canUpload = Boolean(
+    user &&
+    adapter.allowUpload !== false &&
+    adapter.uploadTemplate &&
+    (user.isAdmin || (user.quota?.maxCustomTemplates ?? 0) > 0)
+  );
   const allowPublicTemplates = adapter.allowPublicTemplates !== false;
 
   const openUploadDialog = React.useCallback((entry?: "templatesPage") => {
@@ -456,16 +461,25 @@ function EmptyTemplates({
   canUpload: boolean;
   onUpload: () => void;
 }) {
-  if (tab === "my" && canUpload) {
+  if (tab === "my") {
+    if (canUpload) {
+      return (
+        <div className="text-center py-12">
+          <Plus className="h-12 w-12 mx-auto text-fg-40 mb-4" />
+          <h3 className="text-lg font-medium mb-2">暂无模板</h3>
+          <p className="text-fg-50 mb-4">创建您的第一个配置模板</p>
+          <Button onClick={onUpload}>
+            <Plus className="mr-2 h-4 w-4" />
+            创建模板
+          </Button>
+        </div>
+      );
+    }
     return (
       <div className="text-center py-12">
-        <Plus className="h-12 w-12 mx-auto text-fg-40 mb-4" />
-        <h3 className="text-lg font-medium mb-2">暂无模板</h3>
-        <p className="text-fg-50 mb-4">创建您的第一个配置模板</p>
-        <Button onClick={onUpload}>
-          <Plus className="mr-2 h-4 w-4" />
-          创建模板
-        </Button>
+        <FileCode className="h-12 w-12 mx-auto text-fg-40 mb-4" />
+        <h3 className="text-lg font-medium mb-2">暂无自定义模板</h3>
+        <p className="text-fg-50">普通用户仅支持基础内置模板，升级 VIP 会员可上传与保存自定义模板</p>
       </div>
     );
   }

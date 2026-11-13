@@ -12,6 +12,15 @@ import * as collectionRoute from "../app/api/templates/route";
 
 vi.mock("@local/lib/auth", () => ({
   getCurrentAdmin: vi.fn(),
+  getUserQuota: vi.fn(async () => ({ maxCustomTemplates: 10 })),
+}));
+
+vi.mock("@local/lib/prisma", () => ({
+  prisma: {
+    localTemplate: {
+      count: vi.fn(async () => 0),
+    },
+  },
 }));
 
 vi.mock("@local/lib/template-service", () => ({

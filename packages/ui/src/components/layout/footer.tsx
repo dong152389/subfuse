@@ -37,20 +37,6 @@ const defaultBrandLinks: FooterLink[] = [
     external: true,
     icon: "github",
   },
-  {
-    href: "https://ryanvan.com/",
-    label: "RyanVan's Blog",
-    title: "RyanVan's Blog",
-    external: true,
-    iconSrc: "/icons/ryanvan-blog.png",
-  },
-  {
-    href: "https://linux.do",
-    label: "Linux DO",
-    title: "Linux DO",
-    external: true,
-    iconSrc: "/icons/linuxdo.png",
-  },
 ];
 
 const defaultResourceLinks: FooterLink[] = [

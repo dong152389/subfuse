@@ -98,6 +98,13 @@ export function resolveGitHubOAuthUrls(
 
 const GITHUB_SETTING_KEY = "github_oauth_config";
 const GITHUB_BIND_TOKEN_ISSUER = "subfuse-github-bind";
+const GITHUB_STATE_ISSUER = "subfuse-github-oauth-state";
+
+export type GitHubOAuthStatePayload = {
+  action?: "login" | "bind";
+  adminId?: string;
+  returnUrl?: string;
+};
 
 export type GitHubUserProfile = {
   id: string;
@@ -304,6 +311,41 @@ export async function verifyGitHubBindTicket(ticket: string): Promise<GitHubBind
       githubUsername,
       avatarUrl,
       suggestedEmail,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Generate a signed OAuth state parameter.
+ * Valid for 15 minutes.
+ */
+export async function signGitHubOAuthState(payload: GitHubOAuthStatePayload): Promise<string> {
+  return await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuer(GITHUB_STATE_ISSUER)
+    .setIssuedAt()
+    .setExpirationTime("15m")
+    .sign(key());
+}
+
+/**
+ * Verify a GitHub OAuth state parameter.
+ */
+export async function verifyGitHubOAuthState(state: string | null | undefined): Promise<GitHubOAuthStatePayload | null> {
+  if (!state) return null;
+  try {
+    const { payload } = await jwtVerify(state, key(), {
+      algorithms: ["HS256"],
+    });
+
+    if (payload.iss !== GITHUB_STATE_ISSUER) return null;
+
+    return {
+      action: payload.action === "bind" ? "bind" : "login",
+      adminId: typeof payload.adminId === "string" ? payload.adminId : undefined,
+      returnUrl: typeof payload.returnUrl === "string" ? payload.returnUrl : undefined,
     };
   } catch {
     return null;

@@ -1,4 +1,4 @@
-import { getCurrentAdmin, isSetupRequired } from "@local/lib/auth";
+import { getCurrentAdmin, isSetupRequired, resolveUserQuota } from "@local/lib/auth";
 import { json } from "@local/lib/http";
 import { prisma } from "@local/lib/prisma";
 
@@ -20,29 +20,7 @@ export async function GET() {
     admin?.isVip && (!admin.vipExpiresAt || new Date(admin.vipExpiresAt).getTime() > Date.now())
   );
   const now = new Date().toISOString();
-  const quota = isAdmin
-    ? {
-        maxSubscriptions: 9999,
-        maxNodesPerSubscription: 10000,
-        maxCustomTemplates: 9999,
-        maxImportSourcesPerType: 9999,
-        canUseSubscriptionLink: true,
-      }
-    : isVipActive
-    ? {
-        maxSubscriptions: 50,
-        maxNodesPerSubscription: 2000,
-        maxCustomTemplates: 50,
-        maxImportSourcesPerType: 50,
-        canUseSubscriptionLink: true,
-      }
-    : {
-        maxSubscriptions: 5,
-        maxNodesPerSubscription: 500,
-        maxCustomTemplates: 5,
-        maxImportSourcesPerType: 10,
-        canUseSubscriptionLink: true,
-      };
+  const quota = resolveUserQuota(admin, isAdmin);
 
   return json({
     setupRequired,
@@ -53,6 +31,8 @@ export async function GET() {
           username: admin.username,
           name: admin.username,
           email: admin.email || null,
+          githubId: admin.githubId || null,
+          githubUsername: admin.githubUsername || null,
           avatarUrl: admin.avatarUrl || null,
           trustLevel: isAdmin ? 4 : isVipActive ? 3 : 1,
           aiAssistantEnabled: false,
