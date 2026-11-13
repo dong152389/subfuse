@@ -70,6 +70,7 @@ vi.mock("lucide-react", () => ({
   LogOut: () => React.createElement("span", null, "LogOut"),
   Settings: () => React.createElement("span", null, "Settings"),
   Shield: () => React.createElement("span", null, "Shield"),
+  Crown: () => React.createElement("span", null, "Crown"),
   User: () => React.createElement("span", null, "User"),
 }));
 

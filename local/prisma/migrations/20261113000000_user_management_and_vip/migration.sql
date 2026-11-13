@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "LocalAdmin" ADD COLUMN "isBanned" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "LocalAdmin" ADD COLUMN "banReason" TEXT;
+ALTER TABLE "LocalAdmin" ADD COLUMN "isVip" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "LocalAdmin" ADD COLUMN "vipExpiresAt" TIMESTAMP(3);

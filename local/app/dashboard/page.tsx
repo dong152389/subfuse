@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Shield } from "lucide-react";
+import { Shield, Users } from "lucide-react";
 import { Card, CardContent } from "@subfuse/ui/components/ui/card";
 import {
   SubscriptionDashboardSurface,
@@ -64,21 +64,38 @@ const localDashboardAdapter: DashboardSurfaceAdapter = {
   renderExtraQuickActions: ({ user }) => {
     if (!user.isAdmin || user.isBanned) return null;
     return (
-      <Link href="/dashboard/admin" className="md:col-span-2">
-        <Card className="cursor-pointer hover:border-ink/20 transition-colors">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-indigo-500/20 text-indigo-400">
-                <Shield className="h-6 w-6" />
+      <>
+        <Link href="/dashboard/admin" className="md:col-span-1">
+          <Card className="cursor-pointer hover:border-ink/20 transition-colors h-full">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-lg bg-indigo-500/20 text-indigo-400">
+                  <Shield className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-medium">管理员配置</h3>
+                  <p className="text-sm text-fg-50">配置 SMTP 邮件服务与 GitHub OAuth 授权登录</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-medium">管理员配置</h3>
-                <p className="text-sm text-fg-50">配置 SMTP 邮件服务与 GitHub OAuth 授权登录</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/admin/users" className="md:col-span-1">
+          <Card className="cursor-pointer hover:border-ink/20 transition-colors h-full">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-lg bg-amber-500/20 text-amber-400">
+                  <Users className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-medium">用户管理</h3>
+                  <p className="text-sm text-fg-50">管理系统所有用户、授权 VIP 会员及状态管控</p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </Link>
+            </CardContent>
+          </Card>
+        </Link>
+      </>
     );
   },
 };

@@ -20,6 +20,10 @@ model LocalAdmin {
   updatedAt    DateTime  @updatedAt
   lastLoginAt  DateTime?
   allowUnsafeSubscriptionSources Boolean @default(false)
+  isBanned     Boolean   @default(false)
+  banReason    String?
+  isVip        Boolean   @default(false)
+  vipExpiresAt DateTime?
 
   subscriptions Subscription[]
   templates      LocalTemplate[]

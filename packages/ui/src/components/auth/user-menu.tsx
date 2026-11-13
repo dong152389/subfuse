@@ -25,6 +25,7 @@ import {
   LayoutDashboard,
   ChevronDown,
   Shield,
+  Crown,
 } from "lucide-react";
 
 export type AccountMenuItem = {
@@ -131,6 +132,12 @@ export function UserMenu({
                   <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-500/20 text-xs text-indigo-400">
                     <Shield className="h-3 w-3" />
                     <span>管理员</span>
+                  </div>
+                )}
+                {user.isVip && !user.isBanned && (
+                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-xs text-amber-300">
+                    <Crown className="h-3 w-3" />
+                    <span>VIP 会员</span>
                   </div>
                 )}
                 <div className="text-xs text-fg-40">

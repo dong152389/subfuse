@@ -21,6 +21,8 @@ export interface User {
   aiAssistantEnabled: boolean;
   isAdmin: boolean;
   isBanned: boolean;
+  isVip?: boolean;
+  vipExpiresAt?: string | null;
   bannedUntil?: string | null;
   banReason?: string | null;
   banSource?: string | null;

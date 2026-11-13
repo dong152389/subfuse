@@ -9,6 +9,12 @@ export type CurrentAdmin = {
   githubId?: string | null;
   githubUsername?: string | null;
   avatarUrl?: string | null;
+  isBanned?: boolean;
+  banReason?: string | null;
+  isVip?: boolean;
+  vipExpiresAt?: Date | null;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export async function getCurrentAdmin(): Promise<CurrentAdmin | null> {
@@ -24,8 +30,15 @@ export async function getCurrentAdmin(): Promise<CurrentAdmin | null> {
       githubId: true,
       githubUsername: true,
       avatarUrl: true,
+      isBanned: true,
+      banReason: true,
+      isVip: true,
+      vipExpiresAt: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
+  if (!admin || admin.isBanned) return null;
   return admin;
 }
 

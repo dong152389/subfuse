@@ -72,18 +72,10 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold mb-1">管理员配置</h1>
-          <p className="text-fg-50">配置系统级 SMTP 邮件发信服务与 GitHub OAuth 授权登录</p>
-        </div>
-        <Button asChild variant="outline" size="sm" className="gap-2 self-start sm:self-auto">
-          <Link href="/dashboard">
-            <ArrowLeft className="h-4 w-4" />
-            返回我的订阅
-          </Link>
-        </Button>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-bold tracking-tight">管理员配置</h2>
+        <p className="text-sm text-fg-50 mt-0.5">配置系统级 SMTP 邮件发信服务与 GitHub OAuth 授权登录</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   if (!usernameLimit.allowed) {
     return localRateLimitResponse("Too many login attempts. Try again later.", usernameLimit.retryAfterSeconds);
   }
-  const selectFields = { id: true, username: true, passwordHash: true } as const;
+  const selectFields = { id: true, username: true, passwordHash: true, isBanned: true, banReason: true } as const;
   let admin = null;
   if (username) {
     if (username.includes("@")) {
@@ -58,6 +58,11 @@ export async function POST(request: Request) {
   const valid = admin && admin.passwordHash ? await bcrypt.compare(password, admin.passwordHash) : false;
   if (!admin || !valid) {
     return apiError("Invalid username or password.", "UNAUTHORIZED", 401);
+  }
+
+  if (admin.isBanned) {
+    const reasonMsg = admin.banReason ? ` 原因：${admin.banReason}` : "";
+    return apiError(`该账号已被管理员封禁，无法登录。${reasonMsg}`, "FORBIDDEN", 403);
   }
 
   resetLocalRateLimit("auth-login-username", usernameLimitKey);

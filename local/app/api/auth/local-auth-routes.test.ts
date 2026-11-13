@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
   prisma: {
     $queryRaw: vi.fn(),
     localAdmin: {
+      findFirst: vi.fn(),
       findUnique: vi.fn(),
       update: vi.fn(),
     },
@@ -57,6 +58,7 @@ describe("local auth and health routes", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     clearLocalRateLimitsForTests();
+    mocks.prisma.localAdmin.findFirst.mockResolvedValue(null);
   });
 
   it("logs in a valid local admin and sets the session cookie", async () => {
@@ -105,7 +107,7 @@ describe("local auth and health routes", () => {
 
     expect(mocks.prisma.localAdmin.findUnique).toHaveBeenCalledWith({
       where: { email: "alice@example.com" },
-      select: { id: true, username: true, passwordHash: true },
+      select: { id: true, username: true, passwordHash: true, isBanned: true, banReason: true },
     });
     expect(await readJson(response)).toEqual({
       status: 200,
@@ -199,6 +201,7 @@ describe("local auth and health routes", () => {
     const { GET } = await import("./me/route");
     mocks.isSetupRequired.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
     mocks.getCurrentAdmin.mockResolvedValueOnce({ id: "admin-1", username: "admin" }).mockResolvedValueOnce(null);
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-1" });
     mocks.prisma.subscription.count.mockResolvedValueOnce(2);
     mocks.prisma.localTemplate.count.mockResolvedValueOnce(3);
 
@@ -219,6 +222,56 @@ describe("local auth and health routes", () => {
     response = await GET();
     payload = await response.json();
     expect(payload).toEqual({ setupRequired: true, authenticated: false, user: null });
+  });
+
+  it("rejects login for banned user and returns ban reason", async () => {
+    const { POST } = await import("./login/route");
+    mocks.prisma.localAdmin.findUnique.mockResolvedValueOnce({
+      id: "banned-user",
+      username: "bad_user",
+      passwordHash: "hash",
+      isBanned: true,
+      banReason: "违反使用政策",
+    });
+    mocks.bcryptCompare.mockResolvedValueOnce(true);
+
+    const response = await POST(
+      new Request("https://local.test/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ username: "bad_user", password: "secret" }),
+      })
+    );
+
+    const { status, body } = await readJson(response);
+    expect(status).toBe(403);
+    expect(body.error).toContain("已被管理员封禁");
+    expect(body.error).toContain("违反使用政策");
+  });
+
+  it("returns VIP status and quota for active VIP member in auth me", async () => {
+    const { GET } = await import("./me/route");
+    mocks.isSetupRequired.mockResolvedValueOnce(false);
+    mocks.getCurrentAdmin.mockResolvedValueOnce({
+      id: "vip-user-1",
+      username: "vip_member",
+      isVip: true,
+      vipExpiresAt: new Date(Date.now() + 15 * 86400000),
+    });
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-root" });
+    mocks.prisma.subscription.count.mockResolvedValueOnce(3);
+    mocks.prisma.localTemplate.count.mockResolvedValueOnce(1);
+
+    const response = await GET();
+    const payload = await response.json();
+    expect(payload).toMatchObject({
+      authenticated: true,
+      user: {
+        id: "vip-user-1",
+        username: "vip_member",
+        isVip: true,
+        quota: { maxSubscriptions: 50, maxCustomTemplates: 50 },
+      },
+    });
   });
 
   it("reports live and ready health states", async () => {

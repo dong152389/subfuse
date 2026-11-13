@@ -73,8 +73,13 @@ export async function POST(request: Request) {
   // Check if user already exists with this email
   let user = await prisma.localAdmin.findFirst({
     where: { email },
-    select: { id: true, username: true, email: true },
+    select: { id: true, username: true, email: true, isBanned: true, banReason: true },
   });
+
+  if (user?.isBanned) {
+    const reasonMsg = user.banReason ? ` 原因：${user.banReason}` : "";
+    return apiError(`该账号已被管理员封禁，无法登录。${reasonMsg}`, "FORBIDDEN", 403);
+  }
 
   if (!user) {
     // Auto-create user for new email
@@ -98,7 +103,7 @@ export async function POST(request: Request) {
         emailVerifiedAt: new Date(),
         lastLoginAt: new Date(),
       },
-      select: { id: true, username: true, email: true },
+      select: { id: true, username: true, email: true, isBanned: true, banReason: true },
     });
   } else {
     await prisma.localAdmin.update({

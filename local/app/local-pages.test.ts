@@ -31,6 +31,13 @@ vi.mock("lucide-react", () => ({
   Shield: () => React.createElement("span", null, "Shield"),
   ShieldAlert: () => React.createElement("span", null, "ShieldAlert"),
   ShieldCheck: () => React.createElement("span", null, "ShieldCheck"),
+  Users: () => React.createElement("span", null, "Users"),
+  Crown: () => React.createElement("span", null, "Crown"),
+  Ban: () => React.createElement("span", null, "Ban"),
+  UserPlus: () => React.createElement("span", null, "UserPlus"),
+  UserCheck: () => React.createElement("span", null, "UserCheck"),
+  RefreshCw: () => React.createElement("span", null, "RefreshCw"),
+  Trash2: () => React.createElement("span", null, "Trash2"),
 }));
 
 vi.mock("@subfuse/ui/components/ui/button", () => ({
@@ -96,6 +103,12 @@ vi.mock("@local/components/github-oauth-settings-card", () => ({
   GitHubOAuthSettingsCard: () => React.createElement("section", null, "GitHubOAuthSettingsCard"),
 }));
 
+vi.mock("@local/components/admin-user-management", () => ({
+  AdminUserManagement: () => React.createElement("section", null, "AdminUserManagement"),
+}));
+
+import AdminConsoleLayout from "./dashboard/admin/layout";
+import AdminUsersPage from "./dashboard/admin/users/page";
 import AdminSettingsPage from "./dashboard/admin/page";
 import DashboardPage from "./dashboard/page";
 import LoginPage from "./login/page";
@@ -323,5 +336,42 @@ describe("local app pages and adapters", () => {
     );
     expect(adminCardHtml).toContain('href="/dashboard/admin"');
     expect(adminCardHtml).toContain("管理员配置");
+    expect(adminCardHtml).toContain('href="/dashboard/admin/users"');
+    expect(adminCardHtml).toContain("用户管理");
+  });
+
+  it("renders admin console layout and users page based on admin privileges", () => {
+    let layoutHtml = renderToStaticMarkup(
+      React.createElement(AdminConsoleLayout, null, React.createElement("div", null, "Child Content"))
+    );
+    expect(layoutHtml).toContain("需要管理员登录");
+
+    mocks.userState = {
+      fetchUser: vi.fn(),
+      logout: vi.fn(),
+      user: { username: "member", isAdmin: false },
+    };
+    layoutHtml = renderToStaticMarkup(
+      React.createElement(AdminConsoleLayout, null, React.createElement("div", null, "Child Content"))
+    );
+    expect(layoutHtml).toContain("无权限访问");
+
+    mocks.userState = {
+      fetchUser: vi.fn(),
+      logout: vi.fn(),
+      user: { username: "admin", isAdmin: true },
+    };
+    layoutHtml = renderToStaticMarkup(
+      React.createElement(AdminConsoleLayout, null, React.createElement("div", null, "Child Content"))
+    );
+    expect(layoutHtml).toContain("管理控制台");
+    expect(layoutHtml).toContain('href="/dashboard/admin"');
+    expect(layoutHtml).toContain('href="/dashboard/admin/users"');
+    expect(layoutHtml).toContain("系统配置");
+    expect(layoutHtml).toContain("用户管理");
+    expect(layoutHtml).toContain("Child Content");
+
+    const usersPageHtml = renderToStaticMarkup(React.createElement(AdminUsersPage));
+    expect(usersPageHtml).toContain("AdminUserManagement");
   });
 });

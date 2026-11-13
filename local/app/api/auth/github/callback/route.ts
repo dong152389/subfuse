@@ -26,10 +26,17 @@ export async function GET(request: Request) {
     // Check if a user with this githubId already exists
     const existingUser = await prisma.localAdmin.findUnique({
       where: { githubId: ghUser.id },
-      select: { id: true, username: true },
+      select: { id: true, username: true, isBanned: true, banReason: true },
     });
 
     if (existingUser) {
+      if (existingUser.isBanned) {
+        const reasonMsg = existingUser.banReason ? ` 原因：${existingUser.banReason}` : "";
+        return NextResponse.redirect(
+          `${baseUrl}/login?error=${encodeURIComponent(`该账号已被管理员封禁，无法登录。${reasonMsg}`)}`
+        );
+      }
+
       // User already bound! Sign in directly
       await prisma.localAdmin.update({
         where: { id: existingUser.id },
