@@ -27,6 +27,7 @@ type AuthState = {
 type ProvidersState = {
   emailEnabled: boolean;
   githubEnabled: boolean;
+  emailWhitelistSuffixes?: string[];
   loaded?: boolean;
 };
 
@@ -107,6 +108,7 @@ export function LocalLogin() {
           setProviders({
             emailEnabled: Boolean(data.emailEnabled),
             githubEnabled: Boolean(data.githubEnabled),
+            emailWhitelistSuffixes: Array.isArray(data.emailWhitelistSuffixes) ? data.emailWhitelistSuffixes : [],
             loaded: true,
           });
         }
@@ -116,6 +118,7 @@ export function LocalLogin() {
           setProviders({
             emailEnabled: false,
             githubEnabled: false,
+            emailWhitelistSuffixes: [],
             loaded: true,
           });
         }
@@ -145,6 +148,14 @@ export function LocalLogin() {
     if (!trimmed || !isValidEmail(trimmed)) {
       setError("请输入有效的注册邮箱");
       return;
+    }
+    if (providers.emailWhitelistSuffixes && providers.emailWhitelistSuffixes.length > 0) {
+      const lower = trimmed.toLowerCase();
+      const matches = providers.emailWhitelistSuffixes.some((s) => lower.endsWith(s.toLowerCase()));
+      if (!matches) {
+        setError(`该邮箱后缀不在允许注册的范围内，仅支持：${providers.emailWhitelistSuffixes.join("、")}`);
+        return;
+      }
     }
     setRegSendingCode(true);
     try {
@@ -202,14 +213,25 @@ export function LocalLogin() {
       return;
     }
 
-    if (isRegister && providers.emailEnabled) {
-      if (!regEmail.trim() || !isValidEmail(regEmail.trim())) {
-        setError("请输入有效的注册邮箱");
-        return;
-      }
-      if (!regEmailCode || regEmailCode.length !== 6) {
-        setError("请输入邮箱验证码");
-        return;
+    if (isRegister) {
+      const hasWhitelist = Boolean(providers.emailWhitelistSuffixes && providers.emailWhitelistSuffixes.length > 0);
+      if (providers.emailEnabled || hasWhitelist) {
+        if (!regEmail.trim() || !isValidEmail(regEmail.trim())) {
+          setError("请输入有效的注册邮箱");
+          return;
+        }
+        if (hasWhitelist) {
+          const lower = regEmail.trim().toLowerCase();
+          const matches = providers.emailWhitelistSuffixes!.some((s) => lower.endsWith(s.toLowerCase()));
+          if (!matches) {
+            setError(`该邮箱后缀不在允许注册的范围内，仅支持：${providers.emailWhitelistSuffixes!.join("、")}`);
+            return;
+          }
+        }
+        if (!regEmailCode || regEmailCode.length !== 6) {
+          setError("请输入邮箱验证码");
+          return;
+        }
       }
     }
 
@@ -221,7 +243,7 @@ export function LocalLogin() {
         ? "/api/auth/register"
         : "/api/auth/login";
       const payload: Record<string, string> = { username, password, passwordConfirm };
-      if (isRegister && providers.emailEnabled && regEmail) {
+      if (isRegister && (providers.emailEnabled || (providers.emailWhitelistSuffixes && providers.emailWhitelistSuffixes.length > 0)) && regEmail) {
         payload.email = regEmail.trim();
         payload.code = regEmailCode.trim();
       }
@@ -304,6 +326,7 @@ export function LocalLogin() {
           {githubBindTicket ? (
             <LocalGitHubBind
               ticket={githubBindTicket}
+              emailWhitelistSuffixes={providers.emailWhitelistSuffixes}
               onSuccess={() => {
                 window.location.href = getPostLoginHref();
               }}
@@ -320,6 +343,7 @@ export function LocalLogin() {
                     key={activeTab}
                     initialMode={activeTab === "reset_password" ? "reset_password" : "code_login"}
                     emailEnabled={providers.emailEnabled}
+                    emailWhitelistSuffixes={providers.emailWhitelistSuffixes}
                     providersLoaded={Boolean(providers.loaded)}
                     isRegister={isRegister}
                     onSuccess={() => {
@@ -412,12 +436,16 @@ export function LocalLogin() {
                     <div className="space-y-3">
                       <FormField
                         label={
-                          providers.loaded && !providers.emailEnabled
+                          providers.emailWhitelistSuffixes && providers.emailWhitelistSuffixes.length > 0
+                            ? `电子邮件（白名单限制，仅限：${providers.emailWhitelistSuffixes.join("、")}）`
+                            : providers.loaded && !providers.emailEnabled
                             ? "电子邮件（未配置 SMTP 时可留空）"
                             : "电子邮件（验证必需）"
                         }
                         description={
-                          providers.loaded && !providers.emailEnabled
+                          providers.emailWhitelistSuffixes && providers.emailWhitelistSuffixes.length > 0
+                            ? `系统已启用邮箱白名单，仅限后缀为 ${providers.emailWhitelistSuffixes.join("、")} 的邮箱注册`
+                            : providers.loaded && !providers.emailEnabled
                             ? "系统尚未配置 SMTP 邮件服务，暂无法发送验证码（可留空直接注册，或由管理员前往「管理员配置」开启）"
                             : undefined
                         }
@@ -489,7 +517,9 @@ export function LocalLogin() {
                       !username ||
                       !password ||
                       ((setupRequired || isRegister) && !passwordConfirm) ||
-                      (isRegister && providers.emailEnabled && (!regEmail || regEmailCode.length !== 6))
+                      (isRegister &&
+                        (providers.emailEnabled || (providers.emailWhitelistSuffixes && providers.emailWhitelistSuffixes.length > 0)) &&
+                        (!regEmail || regEmailCode.length !== 6))
                     }
                     className="h-12 w-full mt-1"
                   >

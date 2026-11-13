@@ -16,6 +16,7 @@ import {
   resetLocalRateLimit,
 } from "@local/lib/rate-limit";
 import { verifyVerificationCode } from "@local/lib/verification-code";
+import { getEmailWhitelistSuffixes, isEmailWhitelisted } from "@local/lib/email-service";
 
 const REGISTER_WINDOW_MS = 15 * 60 * 1000;
 
@@ -47,10 +48,29 @@ export async function POST(request: Request) {
     return apiError(credentialError, "BAD_REQUEST", 400);
   }
 
+  // Check if email whitelist requires email verification for registration
+  const whitelistSuffixes = await getEmailWhitelistSuffixes();
+  if (whitelistSuffixes.length > 0 && !email) {
+    return apiError(
+      `系统已启用邮箱白名单注册限制，请填写符合要求的邮箱完成验证（允许后缀：${whitelistSuffixes.join("、")}）`,
+      "BAD_REQUEST",
+      400
+    );
+  }
+
   // If email is provided, validate email and verification code
   if (email) {
     if (!isValidEmail(email)) {
       return apiError(USER_CREDENTIAL_MESSAGES.emailInvalid, "BAD_REQUEST", 400);
+    }
+    // Check email whitelist
+    const whitelist = await isEmailWhitelisted(email);
+    if (!whitelist.allowed) {
+      return apiError(
+        `该邮箱后缀不在允许注册的范围内，仅允许以下后缀：${whitelist.suffixes.join("、")}`,
+        "BAD_REQUEST",
+        400
+      );
     }
     if (!code || code.length !== 6) {
       return apiError(USER_CREDENTIAL_MESSAGES.codeRequired, "BAD_REQUEST", 400);

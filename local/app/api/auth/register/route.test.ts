@@ -3,6 +3,9 @@ import { clearLocalRateLimitsForTests } from "@local/lib/rate-limit";
 
 const mocks = vi.hoisted(() => ({
   bcryptHash: vi.fn(async () => "hashed-password"),
+  getEmailWhitelistSuffixes: vi.fn(async (): Promise<string[]> => []),
+  isEmailWhitelisted: vi.fn(async (): Promise<{ allowed: boolean; suffixes: string[] }> => ({ allowed: true, suffixes: [] })),
+  verifyVerificationCode: vi.fn(async () => ({ valid: true })),
   prisma: {
     localAdmin: {
       findFirst: vi.fn(),
@@ -19,6 +22,15 @@ vi.mock("bcryptjs", () => ({
 
 vi.mock("@local/lib/prisma", () => ({
   prisma: mocks.prisma,
+}));
+
+vi.mock("@local/lib/email-service", () => ({
+  getEmailWhitelistSuffixes: mocks.getEmailWhitelistSuffixes,
+  isEmailWhitelisted: mocks.isEmailWhitelisted,
+}));
+
+vi.mock("@local/lib/verification-code", () => ({
+  verifyVerificationCode: mocks.verifyVerificationCode,
 }));
 
 vi.mock("@local/lib/session", () => ({
@@ -161,6 +173,99 @@ describe("POST /api/auth/register", () => {
     expect(await readJson(response)).toEqual({
       status: 400,
       body: { error: "请求格式有误，请刷新页面后重试", code: "BAD_REQUEST" },
+    });
+  });
+
+  describe("email whitelist constraints", () => {
+    it("rejects registration when whitelist is enabled but no email is provided", async () => {
+      const { POST } = await import("./route");
+      mocks.getEmailWhitelistSuffixes.mockResolvedValueOnce(["@company.com", "@school.edu"]);
+
+      const response = await POST(
+        new Request("https://local.test/api/auth/register", {
+          method: "POST",
+          body: JSON.stringify({
+            username: "bob_dev",
+            password: "password123",
+            passwordConfirm: "password123",
+          }),
+        })
+      );
+
+      expect(await readJson(response)).toEqual({
+        status: 400,
+        body: {
+          error: "系统已启用邮箱白名单注册限制，请填写符合要求的邮箱完成验证（允许后缀：@company.com、@school.edu）",
+          code: "BAD_REQUEST",
+        },
+      });
+      expect(mocks.prisma.localAdmin.create).not.toHaveBeenCalled();
+    });
+
+    it("rejects registration when email does not match whitelist", async () => {
+      const { POST } = await import("./route");
+      mocks.getEmailWhitelistSuffixes.mockResolvedValueOnce(["@company.com"]);
+      mocks.isEmailWhitelisted.mockResolvedValueOnce({ allowed: false, suffixes: ["@company.com"] });
+
+      const response = await POST(
+        new Request("https://local.test/api/auth/register", {
+          method: "POST",
+          body: JSON.stringify({
+            username: "bob_dev",
+            password: "password123",
+            passwordConfirm: "password123",
+            email: "bob@gmail.com",
+            code: "123456",
+          }),
+        })
+      );
+
+      expect(await readJson(response)).toEqual({
+        status: 400,
+        body: {
+          error: "该邮箱后缀不在允许注册的范围内，仅允许以下后缀：@company.com",
+          code: "BAD_REQUEST",
+        },
+      });
+      expect(mocks.prisma.localAdmin.create).not.toHaveBeenCalled();
+    });
+
+    it("allows registration when email matches whitelist and code is valid", async () => {
+      const { POST } = await import("./route");
+      mocks.getEmailWhitelistSuffixes.mockResolvedValueOnce(["@company.com"]);
+      mocks.isEmailWhitelisted.mockResolvedValueOnce({ allowed: true, suffixes: ["@company.com"] });
+      mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce(null).mockResolvedValueOnce(null);
+      mocks.verifyVerificationCode.mockResolvedValueOnce({ valid: true });
+      mocks.prisma.localAdmin.create.mockResolvedValueOnce({
+        id: "user-456",
+        username: "bob_dev",
+      });
+
+      const response = await POST(
+        new Request("https://local.test/api/auth/register", {
+          method: "POST",
+          body: JSON.stringify({
+            username: "bob_dev",
+            password: "password123",
+            passwordConfirm: "password123",
+            email: "bob@company.com",
+            code: "123456",
+          }),
+        })
+      );
+
+      expect(await readJson(response)).toEqual({
+        status: 200,
+        body: { success: true, user: { id: "user-456", username: "bob_dev" } },
+      });
+      expect(mocks.prisma.localAdmin.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            username: "bob_dev",
+            email: "bob@company.com",
+          }),
+        })
+      );
     });
   });
 });

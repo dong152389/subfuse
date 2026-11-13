@@ -15,10 +15,12 @@ async function readJson<T>(response: Response): Promise<T> {
 
 export function LocalGitHubBind({
   ticket,
+  emailWhitelistSuffixes = [],
   onSuccess,
   onCancel,
 }: {
   ticket: string;
+  emailWhitelistSuffixes?: string[];
   onSuccess: () => void;
   onCancel: () => void;
 }) {
@@ -131,7 +133,14 @@ export function LocalGitHubBind({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        <FormField label="绑定邮箱">
+        <FormField
+          label="绑定邮箱"
+          description={
+            emailWhitelistSuffixes && emailWhitelistSuffixes.length > 0
+              ? `若创建新用户，仅支持后缀：${emailWhitelistSuffixes.join("、")}`
+              : undefined
+          }
+        >
           <div className="relative">
             <Input
               type="email"

@@ -15,6 +15,7 @@ import { isValidEmail, USER_CREDENTIAL_MESSAGES } from "@local/lib/admin-credent
 import { prisma } from "@local/lib/prisma";
 import { verifyGitHubBindTicket } from "@local/lib/github-oauth";
 import { verifyVerificationCode } from "@local/lib/verification-code";
+import { isEmailWhitelisted } from "@local/lib/email-service";
 import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@local/lib/session";
 
 export async function POST(request: Request) {
@@ -91,6 +92,14 @@ export async function POST(request: Request) {
     });
   } else {
     // Create new user
+    const whitelist = await isEmailWhitelisted(email);
+    if (!whitelist.allowed) {
+      return apiError(
+        `该邮箱后缀不在允许注册的范围内，仅允许以下后缀：${whitelist.suffixes.join("、")}`,
+        "BAD_REQUEST",
+        400
+      );
+    }
     let candidateUsername = customUsername || ticketPayload.githubUsername || "user";
     // Sanitize candidate username
     candidateUsername = candidateUsername.replace(/[^a-zA-Z0-9_\-一-龥]/g, "").slice(0, 32);

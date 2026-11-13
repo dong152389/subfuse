@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { withCurrentAdmin } from "@local/lib/api-auth";
 import { isSystemAdmin } from "@local/lib/auth";
-import { apiError, getBooleanField, getNumberField, getStringField, jsonBodyError, LOCAL_JSON_BODY_LIMITS, readJsonBody } from "@local/lib/http";
-import { getSmtpConfig, saveSmtpConfig, testSmtpConnection, type SmtpConfig } from "@local/lib/email-service";
+import { apiError, getBooleanField, getNumberField, getStringArrayField, getStringField, jsonBodyError, LOCAL_JSON_BODY_LIMITS, readJsonBody } from "@local/lib/http";
+import { getSmtpConfig, normalizeWhitelistSuffixes, saveSmtpConfig, testSmtpConnection, type SmtpConfig } from "@local/lib/email-service";
 import { isValidEmail } from "@local/lib/admin-credentials";
 
 export async function GET() {
@@ -23,6 +23,7 @@ export async function GET() {
             user: config.user,
             pass: config.pass ? "••••••••" : "",
             from: config.from,
+            emailWhitelistSuffixes: config.emailWhitelistSuffixes || [],
           }
         : null,
     });
@@ -46,6 +47,8 @@ export async function PATCH(request: Request) {
     const user = getStringField(body, "user").trim();
     const inputPass = getStringField(body, "pass").trim();
     const from = getStringField(body, "from").trim() || user;
+    const rawWhitelist = getStringArrayField(body, "emailWhitelistSuffixes");
+    const emailWhitelistSuffixes = normalizeWhitelistSuffixes(rawWhitelist);
 
     if (!host || !user) {
       return apiError("请填写完整的 SMTP 服务器地址和账号", "BAD_REQUEST", 400);
@@ -65,6 +68,7 @@ export async function PATCH(request: Request) {
       user,
       pass,
       from,
+      emailWhitelistSuffixes,
     };
 
     await saveSmtpConfig(newConfig);

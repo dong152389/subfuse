@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components
 import { FormField } from "@subfuse/ui/components/ui/form-field";
 import { Input } from "@subfuse/ui/components/ui/input";
 import { SwitchField } from "@subfuse/ui/components/ui/switch-field";
+import { Textarea } from "@subfuse/ui/components/ui/textarea";
 
 async function readJson<T>(response: Response): Promise<T> {
   const text = await response.text();
@@ -20,6 +21,7 @@ export function SmtpSettingsCard() {
   const [user, setUser] = React.useState("");
   const [pass, setPass] = React.useState("");
   const [from, setFrom] = React.useState("");
+  const [emailWhitelistText, setEmailWhitelistText] = React.useState("");
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
   const [testing, setTesting] = React.useState(false);
@@ -38,6 +40,8 @@ export function SmtpSettingsCard() {
           setUser(data.config.user || "");
           setPass(data.config.pass || "");
           setFrom(data.config.from || "");
+          const suffixes: string[] = data.config.emailWhitelistSuffixes || [];
+          setEmailWhitelistText(suffixes.join("\n"));
         }
       })
       .catch(() => {})
@@ -57,7 +61,18 @@ export function SmtpSettingsCard() {
       const response = await fetch("/api/settings/smtp", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ host, port, secure, user, pass, from }),
+        body: JSON.stringify({
+          host,
+          port,
+          secure,
+          user,
+          pass,
+          from,
+          emailWhitelistSuffixes: emailWhitelistText
+            .split(/[\n,;]+/)
+            .map((s) => s.trim())
+            .filter(Boolean),
+        }),
       });
       const data = await readJson<{ error?: string; message?: string }>(response);
       if (!response.ok) throw new Error(data.error || "保存失败");
@@ -167,6 +182,19 @@ export function SmtpSettingsCard() {
                 />
               </div>
             </div>
+
+            <FormField
+              label="注册邮箱白名单后缀"
+              description="配置后仅允许匹配后缀的邮箱注册和通过邮箱验证码登录，留空则不做限制"
+            >
+              <Textarea
+                placeholder={"留空则允许所有邮箱注册\n每行一个后缀，例如：\n@company.com\n@school.edu.cn"}
+                value={emailWhitelistText}
+                onChange={(e) => setEmailWhitelistText(e.target.value)}
+                rows={3}
+                className="font-mono text-sm"
+              />
+            </FormField>
 
             <div className="pt-2 border-t border-ink/10 flex flex-col sm:flex-row gap-3 items-end justify-between">
               <div className="w-full sm:max-w-xs flex gap-2">

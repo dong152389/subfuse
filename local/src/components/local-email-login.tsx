@@ -18,6 +18,7 @@ async function readJson<T>(response: Response): Promise<T> {
 export function LocalEmailLogin({
   initialMode = "code_login",
   emailEnabled = true,
+  emailWhitelistSuffixes = [],
   providersLoaded = true,
   isRegister = false,
   onSuccess,
@@ -25,6 +26,7 @@ export function LocalEmailLogin({
 }: {
   initialMode?: EmailAuthMode;
   emailEnabled?: boolean;
+  emailWhitelistSuffixes?: string[];
   providersLoaded?: boolean;
   isRegister?: boolean;
   onSuccess: () => void;
@@ -183,7 +185,14 @@ export function LocalEmailLogin({
         </div>
       ) : null}
 
-      <FormField label="邮箱地址">
+      <FormField
+        label="邮箱地址"
+        description={
+          mode === "code_login" && emailWhitelistSuffixes && emailWhitelistSuffixes.length > 0
+            ? `新用户注册仅支持后缀：${emailWhitelistSuffixes.join("、")}`
+            : undefined
+        }
+      >
         <div className="relative">
           <Input
             type="email"

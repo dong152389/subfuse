@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   createVerificationCode: vi.fn(),
   sendVerificationCodeEmail: vi.fn(),
   isSmtpConfigured: vi.fn(),
+  isEmailWhitelisted: vi.fn(async (): Promise<{ allowed: boolean; suffixes: string[] }> => ({ allowed: true, suffixes: [] })),
   prisma: {
     localAdmin: {
       findFirst: vi.fn(),
@@ -25,6 +26,7 @@ vi.mock("@local/lib/prisma", () => ({
 
 vi.mock("@local/lib/email-service", () => ({
   isSmtpConfigured: mocks.isSmtpConfigured,
+  isEmailWhitelisted: mocks.isEmailWhitelisted,
   sendVerificationCodeEmail: mocks.sendVerificationCodeEmail,
 }));
 
@@ -89,6 +91,73 @@ describe("Email Auth Routes", () => {
       expect(mocks.createVerificationCode).toHaveBeenCalledWith("user@example.com", "login");
       expect(mocks.sendVerificationCodeEmail).toHaveBeenCalledWith("user@example.com", "123456", "login");
     });
+
+    it("rejects send-code for registration if email is not whitelisted", async () => {
+      const { POST } = await import("./send-code/route");
+      mocks.isSmtpConfigured.mockResolvedValueOnce(true);
+      mocks.isEmailWhitelisted.mockResolvedValueOnce({ allowed: false, suffixes: ["@company.com"] });
+
+      const res = await POST(
+        new Request("https://test.local/api/auth/email/send-code", {
+          method: "POST",
+          body: JSON.stringify({ email: "user@gmail.com", purpose: "register" }),
+        })
+      );
+
+      expect(await readJson(res)).toEqual({
+        status: 400,
+        body: {
+          error: "该邮箱后缀不在允许注册的范围内，仅允许以下后缀：@company.com",
+          code: "BAD_REQUEST",
+        },
+      });
+      expect(mocks.sendVerificationCodeEmail).not.toHaveBeenCalled();
+    });
+
+    it("rejects send-code for login if user does not exist and email is not whitelisted", async () => {
+      const { POST } = await import("./send-code/route");
+      mocks.isSmtpConfigured.mockResolvedValueOnce(true);
+      mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce(null);
+      mocks.isEmailWhitelisted.mockResolvedValueOnce({ allowed: false, suffixes: ["@company.com"] });
+
+      const res = await POST(
+        new Request("https://test.local/api/auth/email/send-code", {
+          method: "POST",
+          body: JSON.stringify({ email: "stranger@gmail.com", purpose: "login" }),
+        })
+      );
+
+      expect(await readJson(res)).toEqual({
+        status: 400,
+        body: {
+          error: "该邮箱后缀不在允许注册的范围内，仅允许以下后缀：@company.com",
+          code: "BAD_REQUEST",
+        },
+      });
+      expect(mocks.sendVerificationCodeEmail).not.toHaveBeenCalled();
+    });
+
+    it("allows send-code for login if user already exists even when not in whitelist", async () => {
+      const { POST } = await import("./send-code/route");
+      mocks.isSmtpConfigured.mockResolvedValueOnce(true);
+      mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "existing-user-1" });
+      mocks.canSendVerificationCode.mockResolvedValueOnce({ allowed: true });
+      mocks.createVerificationCode.mockResolvedValueOnce("654321");
+      mocks.sendVerificationCodeEmail.mockResolvedValueOnce({ success: true });
+
+      const res = await POST(
+        new Request("https://test.local/api/auth/email/send-code", {
+          method: "POST",
+          body: JSON.stringify({ email: "olduser@gmail.com", purpose: "login" }),
+        })
+      );
+
+      expect(await readJson(res)).toEqual({
+        status: 200,
+        body: { success: true, message: "验证码已发送至您的邮箱，请查收" },
+      });
+      expect(mocks.sendVerificationCodeEmail).toHaveBeenCalledWith("olduser@gmail.com", "654321", "login");
+    });
   });
 
   describe("POST /api/auth/email/login", () => {
@@ -140,6 +209,29 @@ describe("Email Auth Routes", () => {
         body: { success: true, user: { id: "new-user-1", username: "user_1234" } },
       });
       expect(mocks.prisma.localAdmin.create).toHaveBeenCalled();
+    });
+
+    it("rejects auto-registration on email login if email is not whitelisted", async () => {
+      const { POST } = await import("./login/route");
+      mocks.verifyVerificationCode.mockResolvedValueOnce({ valid: true });
+      mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce(null);
+      mocks.isEmailWhitelisted.mockResolvedValueOnce({ allowed: false, suffixes: ["@company.com"] });
+
+      const res = await POST(
+        new Request("https://test.local/api/auth/email/login", {
+          method: "POST",
+          body: JSON.stringify({ email: "intruder@gmail.com", code: "123456" }),
+        })
+      );
+
+      expect(await readJson(res)).toEqual({
+        status: 400,
+        body: {
+          error: "该邮箱后缀不在允许注册的范围内，仅允许以下后缀：@company.com",
+          code: "BAD_REQUEST",
+        },
+      });
+      expect(mocks.prisma.localAdmin.create).not.toHaveBeenCalled();
     });
   });
 });

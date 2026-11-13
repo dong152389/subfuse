@@ -10,6 +10,7 @@ export type SmtpConfig = {
   user: string;
   pass: string;
   from: string;
+  emailWhitelistSuffixes?: string[];
 };
 
 const SMTP_SETTING_KEY = "smtp_config";
@@ -40,9 +41,13 @@ export async function getSmtpConfig(): Promise<SmtpConfig | null> {
   const pass = process.env.SMTP_PASS?.trim();
   const from = process.env.SMTP_FROM?.trim() || user;
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
+  const envWhitelistRaw = process.env.EMAIL_WHITELIST_SUFFIXES || process.env.SMTP_EMAIL_WHITELIST || "";
+  const envWhitelist = envWhitelistRaw
+    ? normalizeWhitelistSuffixes(envWhitelistRaw.split(/[,\s;|]+/))
+    : [];
 
   if (host && port && user && pass && from) {
-    return { host, port, secure, user, pass, from };
+    return { host, port, secure, user, pass, from, emailWhitelistSuffixes: envWhitelist };
   }
 
   return null;
@@ -187,4 +192,49 @@ export async function sendVerificationCodeEmail(
     const message = error instanceof Error ? error.message : "邮件发送失败";
     return { success: false, error: message };
   }
+}
+
+
+/**
+ * Normalize whitelist suffixes: lowercase, trim, ensure single leading `@`.
+ */
+export function normalizeWhitelistSuffixes(raw: string[]): string[] {
+  return raw
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean)
+    .map((s) => s.replace(/^@+/, ""))
+    .filter(Boolean)
+    .map((s) => `@${s}`)
+    .filter((s, i, arr) => arr.indexOf(s) === i);
+}
+
+/**
+ * Get email whitelist suffixes from the stored SMTP config or environment variables.
+ * Returns an empty array when no whitelist is configured (all emails allowed).
+ */
+export async function getEmailWhitelistSuffixes(): Promise<string[]> {
+  const config = await getSmtpConfig();
+  if (config?.emailWhitelistSuffixes && Array.isArray(config.emailWhitelistSuffixes)) {
+    return normalizeWhitelistSuffixes(config.emailWhitelistSuffixes);
+  }
+  const envWhitelistRaw = process.env.EMAIL_WHITELIST_SUFFIXES || process.env.SMTP_EMAIL_WHITELIST || "";
+  if (envWhitelistRaw) {
+    return normalizeWhitelistSuffixes(envWhitelistRaw.split(/[,\s;|]+/));
+  }
+  return [];
+}
+
+/**
+ * Check whether an email address passes the whitelist.
+ * When the whitelist is empty every email is allowed.
+ */
+export async function isEmailWhitelisted(email: string): Promise<{
+  allowed: boolean;
+  suffixes: string[];
+}> {
+  const suffixes = await getEmailWhitelistSuffixes();
+  if (suffixes.length === 0) return { allowed: true, suffixes };
+  const lower = email.trim().toLowerCase();
+  const allowed = suffixes.some((suffix) => lower.endsWith(suffix));
+  return { allowed, suffixes };
 }

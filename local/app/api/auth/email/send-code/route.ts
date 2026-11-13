@@ -19,7 +19,7 @@ import {
   createVerificationCode,
   type VerificationPurpose,
 } from "@local/lib/verification-code";
-import { isSmtpConfigured, sendVerificationCodeEmail } from "@local/lib/email-service";
+import { isEmailWhitelisted, isSmtpConfigured, sendVerificationCodeEmail } from "@local/lib/email-service";
 
 const VALID_PURPOSES: VerificationPurpose[] = [
   "login",
@@ -66,12 +66,37 @@ export async function POST(request: Request) {
 
   // Specific validations per purpose
   if (purpose === "register") {
+    // Check email whitelist for registration
+    const whitelist = await isEmailWhitelisted(email);
+    if (!whitelist.allowed) {
+      return apiError(
+        `该邮箱后缀不在允许注册的范围内，仅允许以下后缀：${whitelist.suffixes.join("、")}`,
+        "BAD_REQUEST",
+        400
+      );
+    }
     const existing = await prisma.localAdmin.findFirst({
       where: { email },
       select: { id: true },
     });
     if (existing) {
       return apiError(USER_CREDENTIAL_MESSAGES.emailExists, "CONFLICT", 409);
+    }
+  } else if (purpose === "login" || purpose === "github_bind") {
+    // When logging in or binding with an uncreated account, it acts as registration
+    const existing = await prisma.localAdmin.findFirst({
+      where: { email },
+      select: { id: true },
+    });
+    if (!existing) {
+      const whitelist = await isEmailWhitelisted(email);
+      if (!whitelist.allowed) {
+        return apiError(
+          `该邮箱后缀不在允许注册的范围内，仅允许以下后缀：${whitelist.suffixes.join("、")}`,
+          "BAD_REQUEST",
+          400
+        );
+      }
     }
   } else if (purpose === "reset_password") {
     const existing = await prisma.localAdmin.findFirst({

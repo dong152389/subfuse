@@ -60,3 +60,10 @@ export function getNumberField(body: unknown, key: string): number | null {
   }
   return null;
 }
+
+export function getStringArrayField(body: unknown, key: string): string[] {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return [];
+  const value = (body as Record<string, unknown>)[key];
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string");
+}

@@ -14,6 +14,7 @@ import {
   resetLocalRateLimit,
 } from "@local/lib/rate-limit";
 import { isValidEmail, USER_CREDENTIAL_MESSAGES } from "@local/lib/admin-credentials";
+import { isEmailWhitelisted } from "@local/lib/email-service";
 import { prisma } from "@local/lib/prisma";
 import { verifyVerificationCode } from "@local/lib/verification-code";
 import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@local/lib/session";
@@ -82,6 +83,15 @@ export async function POST(request: Request) {
   }
 
   if (!user) {
+    // Check email whitelist before auto-creating new user
+    const whitelist = await isEmailWhitelisted(email);
+    if (!whitelist.allowed) {
+      return apiError(
+        `该邮箱后缀不在允许注册的范围内，仅允许以下后缀：${whitelist.suffixes.join("、")}`,
+        "BAD_REQUEST",
+        400
+      );
+    }
     // Auto-create user for new email
     let candidateUsername = generateUsernameFromEmail(email);
     // Ensure uniqueness
