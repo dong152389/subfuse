@@ -111,12 +111,15 @@ describe("shared layout components", () => {
   it("renders footer links according to mode and auth state", () => {
     let html = renderToStaticMarkup(React.createElement(Footer, { mode: "local", buildVersion: "2.3.17" }));
     expect(html).toContain("开源仓库");
-    expect(html).toContain("https://github.com/dong152389/subfuse");
+    expect(html).toContain("https://github.com/SubBoost/subboost");
     expect(html).toContain("配置教程");
     expect(html).toContain("https://subfuse.org/faq");
     expect(html).not.toContain("本地管理员入口");
     expect(html).not.toContain("我的订阅");
-    expect(html).toContain("Powered by SubFuse | v 2.3.17");
+    expect(html).toContain("EasT ୧(๑•̀⌄•́๑)૭");
+    expect(html).toContain("Powered by");
+    expect(html).toContain("SubBoost");
+    expect(html).toContain("v 2.3.17");
 
     mocks.userState = { user: { id: "user-1" } };
     html = renderToStaticMarkup(
@@ -134,14 +137,17 @@ describe("shared layout components", () => {
     mocks.userState = { user: { id: "admin-1", isAdmin: true, isBanned: false } };
     html = renderToStaticMarkup(React.createElement(Footer, { buildVersion: "2.3.17" }));
     expect(html).toContain("开源仓库");
-    expect(html).toContain("https://github.com/dong152389/subfuse");
+    expect(html).toContain("https://github.com/SubBoost/subboost");
     expect(html).toContain('data-brand-icon="github"');
     expect(html).not.toContain("RyanVan&#x27;s Blog");
     expect(html).not.toContain("https://linux.do");
     expect(html).toContain("https://subfuse.org/terms");
     expect(html).toContain("Mihomo Core");
     expect(html).not.toContain("源代码");
-    expect(html).toContain("Powered by SubFuse | v 2.3.17");
+    expect(html).toContain("EasT ୧(๑•̀⌄•́๑)૭");
+    expect(html).toContain("Powered by");
+    expect(html).toContain("SubBoost");
+    expect(html).toContain("v 2.3.17");
   });
 
   it("renders mobile nav items for anonymous and authenticated users", () => {

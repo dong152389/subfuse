@@ -27,7 +27,7 @@ type FooterProps = {
   resourceLinks?: FooterLink[];
 };
 
-const sourceRepositoryUrl = "https://github.com/dong152389/subfuse";
+const sourceRepositoryUrl = "https://github.com/SubBoost/subboost";
 
 const defaultBrandLinks: FooterLink[] = [
   {
@@ -74,12 +74,12 @@ function FooterTextLink({ link }: { link: FooterLink }) {
   );
 }
 
-function FooterBrandIcon({ link }: { link: FooterLink }) {
+function FooterBrandIcon({ link, className = "h-6 w-6" }: { link: FooterLink; className?: string }) {
   if (link.icon === "github") {
     return (
       <svg
         aria-hidden="true"
-        className="h-6 w-6 fill-current text-fg-65 transition-colors group-hover:text-fg"
+        className={`${className} fill-current text-fg-65 transition-colors group-hover:text-fg`}
         data-brand-icon="github"
         focusable="false"
         viewBox="0 0 24 24"
@@ -208,10 +208,28 @@ export function Footer({
           </div>
         </div>
 
-        <div className="mt-8 border-t border-ink/5 pt-6">
-          <p className="text-center text-xs text-fg-40">
-            Powered by SubFuse{buildVersion ? ` | v ${buildVersion}` : ""}
+        <div className="mt-8 border-t border-ink/5 pt-6 text-center space-y-2">
+          <p className="text-xs text-fg-50">
+            Copyright ©{new Date().getFullYear()} 版权所有 EasT ୧(๑•̀⌄•́๑)૭
           </p>
+          <div className="flex items-center justify-center gap-2 text-xs text-fg-40">
+            <span>Powered by</span>
+            <a
+              href={sourceRepositoryUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-ink/5 hover:bg-ink/10 text-fg font-semibold transition-all group"
+            >
+              <FooterBrandIcon link={{ href: sourceRepositoryUrl, label: "SubBoost", icon: "github" }} className="h-3.5 w-3.5" />
+              <span>SubBoost</span>
+            </a>
+            {buildVersion ? (
+              <>
+                <span className="text-fg-20">|</span>
+                <span>v {buildVersion}</span>
+              </>
+            ) : null}
+          </div>
         </div>
       </div>
     </footer>
