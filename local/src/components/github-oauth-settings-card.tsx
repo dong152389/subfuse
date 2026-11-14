@@ -133,7 +133,7 @@ export function GitHubOAuthSettingsCard() {
           <CardTitle className="text-base">GitHub OAuth 登录配置</CardTitle>
           <p className="text-xs text-fg-50 mt-0.5">
             在 GitHub Developer settings 中创建 OAuth App，并将下方完整授权回调 URL 原样填入{" "}
-            <code className="text-indigo-400 font-mono">Authorization callback URL</code>
+            <code className="text-indigo-400 font-mono">/api/auth/github/callback</code>
           </p>
         </div>
       </CardHeader>
