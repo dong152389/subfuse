@@ -44,12 +44,12 @@ describe("GitHubOAuthSettingsCard", () => {
     stateMock.enabled = true;
     stateMock.callIndex = 0;
     // 0: clientId, 1: clientSecret, 2: callbackUrl, 3: defaultCallbackUrl, 4: browserCallbackUrl
-    // 5: copiedCallback, 6: configured, 7: loading, 8: saving, 9: notice
+    // 5: copiedCallback, 6: copiedHomepage, 7: configured, 8: loading, 9: saving, 10: notice
     stateMock.overrides = {
       0: "Ov23test",
       1: "••••••••",
-      6: true, // configured
-      7: false, // loading
+      7: true, // configured
+      8: false, // loading
     };
 
     const html = renderToStaticMarkup(React.createElement(GitHubOAuthSettingsCard));
@@ -57,6 +57,9 @@ describe("GitHubOAuthSettingsCard", () => {
     expect(html).toContain("bg-purple-500/15");
     expect(html).toContain("text-purple-600");
     expect(html).toContain("已配置");
+    expect(html).toContain("设置引导");
+    expect(html).toContain("主页 URL");
+    expect(html).toContain("授权回调 URL");
   });
 
   it("renders gray icon and 未配置 badge when not configured and loaded", () => {
@@ -65,8 +68,8 @@ describe("GitHubOAuthSettingsCard", () => {
     stateMock.overrides = {
       0: "",
       1: "",
-      6: false, // configured
-      7: false, // loading
+      7: false, // configured
+      8: false, // loading
     };
 
     const html = renderToStaticMarkup(React.createElement(GitHubOAuthSettingsCard));
@@ -74,5 +77,6 @@ describe("GitHubOAuthSettingsCard", () => {
     expect(html).toContain("bg-zinc-500/10");
     expect(html).toContain("text-zinc-400");
     expect(html).toContain("未配置");
+    expect(html).toContain("设置引导");
   });
 });

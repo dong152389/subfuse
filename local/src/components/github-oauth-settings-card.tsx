@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, CheckCircle2, Copy, Loader2 } from "lucide-react";
+import { Check, CheckCircle2, Copy, ExternalLink, Loader2 } from "lucide-react";
 import { cn } from "@subfuse/ui/lib/utils";
 import { Button } from "@subfuse/ui/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
@@ -33,6 +33,7 @@ export function GitHubOAuthSettingsCard() {
   const [defaultCallbackUrl, setDefaultCallbackUrl] = React.useState("");
   const [browserCallbackUrl, setBrowserCallbackUrl] = React.useState("");
   const [copiedCallback, setCopiedCallback] = React.useState(false);
+  const [copiedHomepage, setCopiedHomepage] = React.useState(false);
   const [configured, setConfigured] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
@@ -80,15 +81,20 @@ export function GitHubOAuthSettingsCard() {
     };
   }, []);
 
+  const browserHomepageUrl = React.useMemo(() => {
+    if (typeof window === "undefined") return "";
+    return window.location.origin;
+  }, []);
+
   const resolvedPreviewCallback = callbackUrl.trim() || defaultCallbackUrl || browserCallbackUrl;
-  const hasOriginMismatch = React.useMemo(() => {
-    if (!browserCallbackUrl || !resolvedPreviewCallback) return false;
-    try {
-      return new URL(resolvedPreviewCallback).origin !== new URL(browserCallbackUrl).origin;
-    } catch {
-      return false;
-    }
-  }, [browserCallbackUrl, resolvedPreviewCallback]);
+
+  const handleCopyHomepage = async () => {
+    if (!browserHomepageUrl) return;
+    const copied = await copyTextToClipboard(browserHomepageUrl);
+    if (!copied) return;
+    setCopiedHomepage(true);
+    setTimeout(() => setCopiedHomepage(false), 2000);
+  };
 
   const handleCopyCallback = async () => {
     if (!resolvedPreviewCallback) return;
@@ -164,8 +170,7 @@ export function GitHubOAuthSettingsCard() {
             )}
           </div>
           <p className="text-xs text-fg-50 mt-0.5">
-            在 GitHub Developer settings 中创建 OAuth App，并将下方完整授权回调 URL 原样填入{" "}
-            <code className="text-indigo-400 font-mono">/api/auth/github/callback</code>
+            配置系统级 GitHub OAuth 授权登录，允许用户使用 GitHub 账号一键快捷登录与绑定
           </p>
         </div>
       </CardHeader>
@@ -174,43 +179,72 @@ export function GitHubOAuthSettingsCard() {
           <div className="h-24 animate-pulse rounded-lg bg-ink/5" />
         ) : (
           <form onSubmit={handleSave} className="space-y-4">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <FormField label="Client ID" required>
-                <Input
-                  placeholder="Ov23li..."
-                  value={clientId}
-                  onChange={(e) => setClientId(e.target.value)}
-                />
-              </FormField>
-              <FormField label="Client Secret" required>
-                <Input
-                  type="password"
-                  placeholder="••••••••"
-                  value={clientSecret}
-                  onChange={(e) => setClientSecret(e.target.value)}
-                />
-              </FormField>
-            </div>
+            {/* 设置引导 */}
+            <div className="rounded-xl border border-ink/10 bg-ink/5 p-4 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
+                <div>
+                  <h4 className="text-xs font-semibold text-fg">设置引导</h4>
+                  <p className="text-xs text-fg-50 mt-0.5">
+                    启用登录前，请先在提供商应用中设置这些值。
+                  </p>
+                </div>
+                <a
+                  href="https://github.com/settings/developers"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs text-indigo-400 hover:text-indigo-300 inline-flex items-center gap-1 shrink-0"
+                >
+                  前往 GitHub Developer settings
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
 
-            <div className="space-y-1.5">
-              <FormField
-                label="授权回调 URL（Authorization callback URL）"
-                description="需与 GitHub OAuth App 中填写的回调地址完全一致（协议、域名、端口均须匹配，localhost 与 127.0.0.1 不可混用）；留空则回退至环境变量 APP_URL。"
-              >
-                <div className="flex gap-2">
-                  <Input
-                    placeholder={browserCallbackUrl || "https://your-domain.com/api/auth/github/callback"}
-                    value={callbackUrl}
-                    onChange={(e) => setCallbackUrl(e.target.value)}
-                    className="font-mono text-xs"
-                  />
+              <div className="space-y-2 pt-1 text-xs">
+                {/* 主页 URL */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-lg bg-surface p-3 border border-ink/5">
+                  <div className="space-y-0.5 min-w-0">
+                    <span className="font-medium text-fg">主页 URL</span>
+                    <p className="text-[11px] text-fg-50 font-mono select-all break-all">
+                      {browserHomepageUrl || "https://your-domain.com"}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => void handleCopyHomepage()}
+                    disabled={!browserHomepageUrl}
+                    className="shrink-0 h-8 gap-1.5 self-end sm:self-center"
+                  >
+                    {copiedHomepage ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-emerald-400" />
+                        已复制
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        复制
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* 授权回调 URL */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-lg bg-surface p-3 border border-ink/5">
+                  <div className="space-y-0.5 flex-1 min-w-0">
+                    <span className="font-medium text-fg">授权回调 URL</span>
+                    <p className="text-[11px] text-fg-50 font-mono select-all break-all">
+                      {resolvedPreviewCallback}
+                    </p>
+                  </div>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => void handleCopyCallback()}
                     disabled={!resolvedPreviewCallback}
-                    className="shrink-0 gap-1.5"
+                    className="shrink-0 h-8 gap-1.5 self-end sm:self-center"
                   >
                     {copiedCallback ? (
                       <>
@@ -224,24 +258,30 @@ export function GitHubOAuthSettingsCard() {
                       </>
                     )}
                   </Button>
-                  {browserCallbackUrl && callbackUrl.trim() !== browserCallbackUrl && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCallbackUrl(browserCallbackUrl)}
-                      className="shrink-0"
-                    >
-                      使用当前地址
-                    </Button>
-                  )}
                 </div>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <FormField label="Client ID" required description="GitHub OAuth App 详情页中的 Client ID">
+                <Input
+                  placeholder="Ov23li..."
+                  value={clientId}
+                  onChange={(e) => setClientId(e.target.value)}
+                />
               </FormField>
-              {hasOriginMismatch && (
-                <p className="text-xs text-amber-300">
-                  当前设置的回调域名与您正在访问的地址（{browserCallbackUrl}）不一致，保存后请确保 GitHub 中填写的地址与上方一致，或点击「使用当前地址」并保存。
-                </p>
-              )}
+              <FormField
+                label="Client Secret"
+                required
+                description={clientSecret ? "已加密保存，如需更换可直接输入新密钥" : undefined}
+              >
+                <Input
+                  type="password"
+                  placeholder="您的 GitHub OAuth 客户端密钥"
+                  value={clientSecret}
+                  onChange={(e) => setClientSecret(e.target.value)}
+                />
+              </FormField>
             </div>
 
             <div className="flex justify-between items-center pt-2 border-t border-ink/10">

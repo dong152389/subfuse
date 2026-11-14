@@ -129,7 +129,7 @@ export function LocalGitHubBind({
       </div>
 
       <div className="rounded-xl bg-indigo-500/10 border border-indigo-500/20 p-3.5 text-xs text-fg-70 leading-relaxed">
-        首次使用 GitHub 授权登录，请验证并绑定您的邮箱。如果该邮箱已有 SubFuse 账号，将直接与您的 GitHub 关联。
+        首次使用 GitHub 授权登录，请验证并绑定您的邮箱。如果该邮箱已有账号，将直接与您的 GitHub 账号绑定并保留原有用户名。
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -186,7 +186,10 @@ export function LocalGitHubBind({
           </div>
         </FormField>
 
-        <FormField label="自定义用户名（可选）" description="未填写时默认使用 GitHub 昵称">
+        <FormField
+          label="自定义用户名（可选）"
+          description="仅新注册账号生效；若该邮箱已存在账号，将保留原邮箱注册的用户名"
+        >
           <div className="relative">
             <Input
               type="text"

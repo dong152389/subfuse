@@ -73,23 +73,45 @@ export async function POST(request: Request) {
   }
 
   // Check if a user with this email already exists
-  let user = await prisma.localAdmin.findFirst({
+  const existingUser = await prisma.localAdmin.findFirst({
     where: { email },
-    select: { id: true, username: true, avatarUrl: true },
+    select: {
+      id: true,
+      username: true,
+      avatarUrl: true,
+      isBanned: true,
+      banReason: true,
+      githubId: true,
+      emailVerifiedAt: true,
+    },
   });
 
-  if (user) {
-    // Bind GitHub to existing user
+  let authUser: { id: string; username: string };
+
+  if (existingUser) {
+    if (existingUser.isBanned) {
+      const reasonMsg = existingUser.banReason ? ` 原因：${existingUser.banReason}` : "";
+      return apiError(`该账号已被管理员封禁，无法登录。${reasonMsg}`, "FORBIDDEN", 403);
+    }
+
+    if (existingUser.githubId && existingUser.githubId !== ticketPayload.githubId) {
+      return apiError("该邮箱对应的账号已绑定其他 GitHub 账号，如需更换请先在个人设置中解绑", "CONFLICT", 409);
+    }
+
+    // 绑定 GitHub 至已有邮箱账号：
+    // 用户名严格以邮箱注册时填写的用户名为准（existingUser.username），不采用自定义用户名，也不采用 GitHub 昵称
     await prisma.localAdmin.update({
-      where: { id: user.id },
+      where: { id: existingUser.id },
       data: {
         githubId: ticketPayload.githubId,
         githubUsername: ticketPayload.githubUsername,
-        avatarUrl: user.avatarUrl || ticketPayload.avatarUrl,
-        emailVerifiedAt: new Date(),
+        avatarUrl: existingUser.avatarUrl || ticketPayload.avatarUrl,
+        emailVerifiedAt: existingUser.emailVerifiedAt || new Date(),
         lastLoginAt: new Date(),
       },
     });
+
+    authUser = { id: existingUser.id, username: existingUser.username };
   } else {
     // Create new user
     const whitelist = await isEmailWhitelisted(email);
@@ -119,7 +141,7 @@ export async function POST(request: Request) {
       attempts++;
     }
 
-    user = await prisma.localAdmin.create({
+    const createdUser = await prisma.localAdmin.create({
       data: {
         username: candidateUsername,
         email,
@@ -129,18 +151,20 @@ export async function POST(request: Request) {
         avatarUrl: ticketPayload.avatarUrl,
         lastLoginAt: new Date(),
       },
-      select: { id: true, username: true, avatarUrl: true },
+      select: { id: true, username: true },
     });
+
+    authUser = createdUser;
   }
 
   const response = NextResponse.json({
     success: true,
-    user: { id: user.id, username: user.username },
+    user: { id: authUser.id, username: authUser.username },
   });
 
   response.cookies.set(
     SESSION_COOKIE,
-    await signSession({ adminId: user.id, username: user.username }),
+    await signSession({ adminId: authUser.id, username: authUser.username }),
     sessionCookieOptions()
   );
 
