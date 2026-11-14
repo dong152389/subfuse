@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Check, Copy, Loader2 } from "lucide-react";
+import { Check, CheckCircle2, Copy, Loader2 } from "lucide-react";
+import { cn } from "@subfuse/ui/lib/utils";
 import { Button } from "@subfuse/ui/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
 import { FormField } from "@subfuse/ui/components/ui/form-field";
@@ -32,6 +33,7 @@ export function GitHubOAuthSettingsCard() {
   const [defaultCallbackUrl, setDefaultCallbackUrl] = React.useState("");
   const [browserCallbackUrl, setBrowserCallbackUrl] = React.useState("");
   const [copiedCallback, setCopiedCallback] = React.useState(false);
+  const [configured, setConfigured] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
   const [notice, setNotice] = React.useState<{ text: string; error?: boolean } | null>(null);
@@ -52,6 +54,7 @@ export function GitHubOAuthSettingsCard() {
       )
       .then((data) => {
         if (cancelled) return;
+        setConfigured(Boolean(data.configured));
         const fallbackUrl = data.defaultCallbackUrl || currentOriginCallback;
         setDefaultCallbackUrl(fallbackUrl);
         if (data.config) {
@@ -115,6 +118,7 @@ export function GitHubOAuthSettingsCard() {
       if (typeof data.callbackUrl === "string" && data.callbackUrl) {
         setCallbackUrl(data.callbackUrl);
       }
+      setConfigured(true);
       setNotice({ text: data.message || "GitHub OAuth 配置已保存" });
     } catch (err) {
       setNotice({ text: err instanceof Error ? err.message : "保存失败", error: true });
@@ -126,11 +130,39 @@ export function GitHubOAuthSettingsCard() {
   return (
     <Card className="lg:col-span-2">
       <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-        <div className="rounded-lg bg-zinc-500/20 p-2 text-zinc-300">
+        <div
+          className={cn(
+            "rounded-lg p-2 transition-colors",
+            configured
+              ? "bg-purple-500/15 text-purple-600 dark:bg-purple-500/25 dark:text-purple-300 ring-1 ring-purple-500/30 shadow-sm shadow-purple-500/10"
+              : "bg-zinc-500/10 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 ring-1 ring-zinc-500/10"
+          )}
+        >
           <GitHubIcon className="h-5 w-5" />
         </div>
         <div>
-          <CardTitle className="text-base">GitHub OAuth 登录配置</CardTitle>
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-base">GitHub OAuth 登录配置</CardTitle>
+            {!loading && (
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium border",
+                  configured
+                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                    : "bg-zinc-500/10 text-zinc-500 dark:text-zinc-400 border-zinc-500/20"
+                )}
+              >
+                {configured ? (
+                  <>
+                    <CheckCircle2 className="h-3 w-3" />
+                    已配置
+                  </>
+                ) : (
+                  "未配置"
+                )}
+              </span>
+            )}
+          </div>
           <p className="text-xs text-fg-50 mt-0.5">
             在 GitHub Developer settings 中创建 OAuth App，并将下方完整授权回调 URL 原样填入{" "}
             <code className="text-indigo-400 font-mono">/api/auth/github/callback</code>

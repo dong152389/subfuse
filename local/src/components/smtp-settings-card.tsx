@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Mail, CheckCircle2, Loader2, Send } from "lucide-react";
+import { cn } from "@subfuse/ui/lib/utils";
 import { Button } from "@subfuse/ui/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
 import { FormField } from "@subfuse/ui/components/ui/form-field";
@@ -22,6 +23,7 @@ export function SmtpSettingsCard() {
   const [pass, setPass] = React.useState("");
   const [from, setFrom] = React.useState("");
   const [emailWhitelistText, setEmailWhitelistText] = React.useState("");
+  const [configured, setConfigured] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
   const [testing, setTesting] = React.useState(false);
@@ -33,15 +35,18 @@ export function SmtpSettingsCard() {
     void fetch("/api/settings/smtp", { cache: "no-store" })
       .then((res) => readJson<{ configured: boolean; config?: any }>(res))
       .then((data) => {
-        if (!cancelled && data.config) {
-          setHost(data.config.host || "");
-          setPort(data.config.port || 465);
-          setSecure(Boolean(data.config.secure));
-          setUser(data.config.user || "");
-          setPass(data.config.pass || "");
-          setFrom(data.config.from || "");
-          const suffixes: string[] = data.config.emailWhitelistSuffixes || [];
-          setEmailWhitelistText(suffixes.join("\n"));
+        if (!cancelled) {
+          setConfigured(Boolean(data.configured));
+          if (data.config) {
+            setHost(data.config.host || "");
+            setPort(data.config.port || 465);
+            setSecure(Boolean(data.config.secure));
+            setUser(data.config.user || "");
+            setPass(data.config.pass || "");
+            setFrom(data.config.from || "");
+            const suffixes: string[] = data.config.emailWhitelistSuffixes || [];
+            setEmailWhitelistText(suffixes.join("\n"));
+          }
         }
       })
       .catch(() => {})
@@ -76,6 +81,7 @@ export function SmtpSettingsCard() {
       });
       const data = await readJson<{ error?: string; message?: string }>(response);
       if (!response.ok) throw new Error(data.error || "保存失败");
+      setConfigured(true);
       setNotice({ text: data.message || "SMTP 设置保存成功" });
     } catch (err) {
       setNotice({ text: err instanceof Error ? err.message : "保存失败", error: true });
@@ -114,11 +120,39 @@ export function SmtpSettingsCard() {
   return (
     <Card className="lg:col-span-2">
       <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-        <div className="rounded-lg bg-blue-500/20 p-2 text-blue-300">
+        <div
+          className={cn(
+            "rounded-lg p-2 transition-colors",
+            configured
+              ? "bg-blue-500/15 text-blue-600 dark:bg-blue-500/25 dark:text-blue-300 ring-1 ring-blue-500/30 shadow-sm shadow-blue-500/10"
+              : "bg-zinc-500/10 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 ring-1 ring-zinc-500/10"
+          )}
+        >
           <Mail className="h-5 w-5" />
         </div>
         <div>
-          <CardTitle className="text-base">SMTP 邮件服务配置</CardTitle>
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-base">SMTP 邮件服务配置</CardTitle>
+            {!loading && (
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium border",
+                  configured
+                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                    : "bg-zinc-500/10 text-zinc-500 dark:text-zinc-400 border-zinc-500/20"
+                )}
+              >
+                {configured ? (
+                  <>
+                    <CheckCircle2 className="h-3 w-3" />
+                    已配置
+                  </>
+                ) : (
+                  "未配置"
+                )}
+              </span>
+            )}
+          </div>
           <p className="text-xs text-fg-50 mt-0.5">
             配置发信服务器以启用验证码登录、用户注册邮箱校验和密码找回
           </p>

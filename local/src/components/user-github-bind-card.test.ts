@@ -14,6 +14,7 @@ describe("UserGitHubBindCard", () => {
     expect(html).toContain("GitHub 账号绑定");
     expect(html).toContain("未绑定 GitHub 账号");
     expect(html).toContain("绑定 GitHub 账号");
+    expect(html).toContain("bg-zinc-500/10");
   });
 
   it("renders bound state when github is bound", () => {
@@ -27,5 +28,6 @@ describe("UserGitHubBindCard", () => {
     expect(html).toContain("@octocat");
     expect(html).toContain("已绑定");
     expect(html).toContain("解除 GitHub 绑定");
+    expect(html).toContain("bg-purple-500/15");
   });
 });

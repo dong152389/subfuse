@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Mail, CheckCircle2, Loader2, KeyRound } from "lucide-react";
+import { cn } from "@subfuse/ui/lib/utils";
 import { Button } from "@subfuse/ui/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
 import { FormField } from "@subfuse/ui/components/ui/form-field";
@@ -102,7 +103,14 @@ export function UserEmailBindCard({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-        <div className="rounded-lg bg-teal-500/20 p-2 text-teal-300">
+        <div
+          className={cn(
+            "rounded-lg p-2 transition-colors",
+            currentEmail
+              ? "bg-teal-500/15 text-teal-600 dark:bg-teal-500/20 dark:text-teal-300 ring-1 ring-teal-500/30 shadow-sm shadow-teal-500/10"
+              : "bg-zinc-500/10 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 ring-1 ring-zinc-500/10"
+          )}
+        >
           <Mail className="h-5 w-5" />
         </div>
         <CardTitle className="text-base">绑定邮箱</CardTitle>

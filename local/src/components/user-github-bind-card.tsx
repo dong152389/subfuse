@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CheckCircle2, Loader2, Unlink } from "lucide-react";
+import { cn } from "@subfuse/ui/lib/utils";
 import { Button } from "@subfuse/ui/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@subfuse/ui/components/ui/card";
 
@@ -98,7 +99,14 @@ export function UserGitHubBindCard({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-        <div className="rounded-lg bg-purple-500/20 p-2 text-purple-300">
+        <div
+          className={cn(
+            "rounded-lg p-2 transition-colors",
+            isBound
+              ? "bg-purple-500/15 text-purple-600 dark:bg-purple-500/25 dark:text-purple-300 ring-1 ring-purple-500/30 shadow-sm shadow-purple-500/10"
+              : "bg-zinc-500/10 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 ring-1 ring-zinc-500/10"
+          )}
+        >
           <GitHubIcon className="h-5 w-5" />
         </div>
         <CardTitle className="text-base">GitHub 账号绑定</CardTitle>
