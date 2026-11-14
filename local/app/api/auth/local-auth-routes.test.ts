@@ -278,6 +278,37 @@ describe("local auth and health routes", () => {
     });
   });
 
+  it("returns custom quota overrides when set by admin in auth me", async () => {
+    const { GET } = await import("./me/route");
+    mocks.isSetupRequired.mockResolvedValueOnce(false);
+    mocks.getCurrentAdmin.mockResolvedValueOnce({
+      id: "custom-user-1",
+      username: "custom_member",
+      isVip: false,
+      maxSubscriptions: 8,
+      maxCustomTemplates: 4,
+      maxNodesPerSubscription: 600,
+    });
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-root" });
+    mocks.prisma.subscription.count.mockResolvedValueOnce(1);
+    mocks.prisma.localTemplate.count.mockResolvedValueOnce(2);
+
+    const response = await GET();
+    const payload = await response.json();
+    expect(payload).toMatchObject({
+      authenticated: true,
+      user: {
+        id: "custom-user-1",
+        username: "custom_member",
+        quota: {
+          maxSubscriptions: 8,
+          maxCustomTemplates: 4,
+          maxNodesPerSubscription: 600,
+        },
+      },
+    });
+  });
+
   it("returns githubId and githubUsername in auth me when bound", async () => {
     const { GET } = await import("./me/route");
     mocks.isSetupRequired.mockResolvedValueOnce(false);

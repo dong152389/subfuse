@@ -13,6 +13,7 @@ import {
   Search,
   Shield,
   ShieldAlert,
+  SlidersHorizontal,
   Trash2,
   UserCheck,
   UserPlus,
@@ -63,6 +64,16 @@ export type ManagedUser = {
   vipExpiresAt: string | null;
   subscriptionCount: number;
   templateCount: number;
+  maxSubscriptions: number | null;
+  maxCustomTemplates: number | null;
+  maxNodesPerSubscription: number | null;
+  effectiveQuota?: {
+    maxSubscriptions: number;
+    maxNodesPerSubscription: number;
+    maxCustomTemplates: number;
+    maxImportSourcesPerType: number;
+    canUseSubscriptionLink: boolean;
+  };
   createdAt: string;
   lastLoginAt: string | null;
 };
@@ -149,6 +160,7 @@ export function AdminUserManagement() {
   const [resetPwdUser, setResetPwdUser] = React.useState<ManagedUser | null>(null);
   const [vipUser, setVipUser] = React.useState<ManagedUser | null>(null);
   const [banUser, setBanUser] = React.useState<ManagedUser | null>(null);
+  const [quotaUser, setQuotaUser] = React.useState<ManagedUser | null>(null);
 
   // Form states for Add User
   const [newUsername, setNewUsername] = React.useState("");
@@ -156,7 +168,16 @@ export function AdminUserManagement() {
   const [newEmail, setNewEmail] = React.useState("");
   const [newIsVip, setNewIsVip] = React.useState(false);
   const [newVipDays, setNewVipDays] = React.useState("30");
+  const [newMaxSubscriptions, setNewMaxSubscriptions] = React.useState("");
+  const [newMaxTemplates, setNewMaxTemplates] = React.useState("");
+  const [newMaxNodes, setNewMaxNodes] = React.useState("");
   const [submittingAdd, setSubmittingAdd] = React.useState(false);
+
+  // Form states for Quota
+  const [editMaxSubscriptions, setEditMaxSubscriptions] = React.useState("");
+  const [editMaxTemplates, setEditMaxTemplates] = React.useState("");
+  const [editMaxNodes, setEditMaxNodes] = React.useState("");
+  const [submittingQuota, setSubmittingQuota] = React.useState(false);
 
   // Form states for Reset Password
   const [resetPasswordValue, setResetPasswordValue] = React.useState("");
@@ -218,6 +239,10 @@ export function AdminUserManagement() {
     setSubmittingAdd(true);
     try {
       const vipDaysNum = newIsVip ? parseInt(newVipDays, 10) || 0 : undefined;
+      const maxSubs = newMaxSubscriptions.trim() === "" ? null : parseInt(newMaxSubscriptions.trim(), 10);
+      const maxTpls = newMaxTemplates.trim() === "" ? null : parseInt(newMaxTemplates.trim(), 10);
+      const maxNds = newMaxNodes.trim() === "" ? null : parseInt(newMaxNodes.trim(), 10);
+
       const res = await fetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -227,6 +252,9 @@ export function AdminUserManagement() {
           email: newEmail.trim() || undefined,
           isVip: newIsVip,
           vipDays: vipDaysNum,
+          maxSubscriptions: maxSubs,
+          maxCustomTemplates: maxTpls,
+          maxNodesPerSubscription: maxNds,
         }),
       });
       const data = await res.json();
@@ -239,6 +267,9 @@ export function AdminUserManagement() {
       setNewEmail("");
       setNewIsVip(false);
       setNewVipDays("30");
+      setNewMaxSubscriptions("");
+      setNewMaxTemplates("");
+      setNewMaxNodes("");
       void loadUsers();
     } catch (err) {
       toast({
@@ -277,6 +308,56 @@ export function AdminUserManagement() {
       });
     } finally {
       setSubmittingReset(false);
+    }
+  };
+
+  // Handle Quota Setting
+  const handleQuotaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quotaUser) return;
+
+    setSubmittingQuota(true);
+    try {
+      const maxSubs = editMaxSubscriptions.trim() === "" ? null : parseInt(editMaxSubscriptions.trim(), 10);
+      const maxTpls = editMaxTemplates.trim() === "" ? null : parseInt(editMaxTemplates.trim(), 10);
+      const maxNds = editMaxNodes.trim() === "" ? null : parseInt(editMaxNodes.trim(), 10);
+
+      if (maxSubs !== null && (isNaN(maxSubs) || maxSubs < 0)) {
+        throw new Error("订阅数量上限必须为大于等于 0 的整数");
+      }
+      if (maxTpls !== null && (isNaN(maxTpls) || maxTpls < 0)) {
+        throw new Error("模板数量上限必须为大于等于 0 的整数");
+      }
+      if (maxNds !== null && (isNaN(maxNds) || maxNds < 0)) {
+        throw new Error("节点数量上限必须为大于等于 0 的整数");
+      }
+
+      const res = await fetch(`/api/admin/users/${quotaUser.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          maxSubscriptions: maxSubs,
+          maxCustomTemplates: maxTpls,
+          maxNodesPerSubscription: maxNds,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "更新配额失败");
+
+      toast({
+        title: "配额更新成功",
+        description: `已成功更新用户 ${quotaUser.username} 的订阅、模板及节点配额`,
+      });
+      setQuotaUser(null);
+      void loadUsers();
+    } catch (err) {
+      toast({
+        title: "设置失败",
+        description: err instanceof Error ? err.message : "更新配额失败",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmittingQuota(false);
     }
   };
 
@@ -644,11 +725,25 @@ export function AdminUserManagement() {
                         {/* Resource counts */}
                         <TableCell>
                           <div className="text-sm">
-                            <span className="font-medium text-fg">{u.subscriptionCount}</span>
-                            <span className="text-xs text-fg-40"> 订阅</span>
-                            <span className="text-fg-30 mx-1">/</span>
-                            <span className="font-medium text-fg">{u.templateCount}</span>
-                            <span className="text-xs text-fg-40"> 模板</span>
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <span>
+                                <span className="font-medium text-fg">{u.subscriptionCount}</span>
+                                <span className="text-xs text-fg-40">/{u.effectiveQuota?.maxSubscriptions ?? u.maxSubscriptions ?? "-"} 订阅</span>
+                              </span>
+                              <span className="text-fg-30 mx-1">·</span>
+                              <span>
+                                <span className="font-medium text-fg">{u.templateCount}</span>
+                                <span className="text-xs text-fg-40">/{u.effectiveQuota?.maxCustomTemplates ?? u.maxCustomTemplates ?? "-"} 模板</span>
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-fg-40 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                              <span>节点上限: <span className="font-medium text-fg-60">{u.effectiveQuota?.maxNodesPerSubscription ?? u.maxNodesPerSubscription ?? "-"}</span></span>
+                              {(u.maxSubscriptions != null || u.maxCustomTemplates != null || u.maxNodesPerSubscription != null) && (
+                                <span className="rounded bg-sky-500/10 px-1.5 py-0.2 text-[10px] text-sky-400 font-medium border border-sky-500/20">
+                                  自定义配额
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </TableCell>
 
@@ -684,6 +779,25 @@ export function AdminUserManagement() {
                         {/* Actions */}
                         <TableCell className="text-right">
                           <div className="inline-flex items-center justify-end gap-1">
+                            {/* Quota setting button */}
+                            {!u.isAdmin && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2 text-xs text-sky-400 hover:text-sky-300 hover:bg-sky-500/10"
+                                title="编辑用户配额数量（订阅/模板/节点）"
+                                onClick={() => {
+                                  setQuotaUser(u);
+                                  setEditMaxSubscriptions(u.maxSubscriptions != null ? String(u.maxSubscriptions) : "");
+                                  setEditMaxTemplates(u.maxCustomTemplates != null ? String(u.maxCustomTemplates) : "");
+                                  setEditMaxNodes(u.maxNodesPerSubscription != null ? String(u.maxNodesPerSubscription) : "");
+                                }}
+                              >
+                                <SlidersHorizontal className="h-3.5 w-3.5 mr-1" />
+                                配额
+                              </Button>
+                            )}
+
                             {/* VIP setting button */}
                             <Button
                               variant="ghost"
@@ -848,6 +962,39 @@ export function AdminUserManagement() {
               )}
             </div>
 
+            <div className="rounded-lg border border-ink/10 bg-ink/5 p-3 space-y-2">
+              <div className="text-xs font-medium text-fg-60">自定义初始配额 (可选，留空使用身份默认)</div>
+              <div className="grid grid-cols-3 gap-2">
+                <FormField label="订阅数">
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder={newIsVip ? "50" : "1"}
+                    value={newMaxSubscriptions}
+                    onChange={(e) => setNewMaxSubscriptions(e.target.value)}
+                  />
+                </FormField>
+                <FormField label="模板数">
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder={newIsVip ? "50" : "0"}
+                    value={newMaxTemplates}
+                    onChange={(e) => setNewMaxTemplates(e.target.value)}
+                  />
+                </FormField>
+                <FormField label="节点数">
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder={newIsVip ? "2000" : "200"}
+                    value={newMaxNodes}
+                    onChange={(e) => setNewMaxNodes(e.target.value)}
+                  />
+                </FormField>
+              </div>
+            </div>
+
             <DialogFooter className="pt-2">
               <Button
                 type="button"
@@ -954,6 +1101,112 @@ export function AdminUserManagement() {
               <Button type="submit" disabled={submittingVip}>
                 {submittingVip && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 保存会员设置
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Quota Settings Dialog */}
+      <Dialog open={Boolean(quotaUser)} onOpenChange={(open) => !open && setQuotaUser(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <SlidersHorizontal className="h-5 w-5 text-sky-400" />
+              编辑用户配额数量
+            </DialogTitle>
+            <DialogDescription>
+              设置用户 <strong className="text-fg">{quotaUser?.username}</strong> 的订阅、模板与节点上限。留空表示跟随身份默认设置。
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleQuotaSubmit} className="space-y-4 py-2">
+            <div className="rounded-lg border border-ink/10 bg-ink/5 p-3 text-xs text-fg-50 space-y-1">
+              <div className="flex items-center justify-between">
+                <span>当前身份：</span>
+                <span className="font-medium text-fg">
+                  {quotaUser?.isAdmin ? "管理员" : quotaUser?.isVip ? "VIP 会员" : "普通用户"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>身份默认配额：</span>
+                <span className="text-fg-60">
+                  {quotaUser?.isVip
+                    ? "订阅: 50 · 模板: 50 · 节点: 2000"
+                    : "订阅: 1 · 模板: 0 · 节点: 200"}
+                </span>
+              </div>
+            </div>
+
+            <FormField
+              label="订阅数量上限"
+              description="允许该用户创建的最大订阅总数（留空使用身份默认）"
+            >
+              <Input
+                type="number"
+                min="0"
+                step="1"
+                placeholder={quotaUser?.isVip ? "默认 50" : "默认 1"}
+                value={editMaxSubscriptions}
+                onChange={(e) => setEditMaxSubscriptions(e.target.value)}
+              />
+            </FormField>
+
+            <FormField
+              label="自定义模板数量上限"
+              description="允许该用户保存的最大自定义配置模板数（留空使用身份默认）"
+            >
+              <Input
+                type="number"
+                min="0"
+                step="1"
+                placeholder={quotaUser?.isVip ? "默认 50" : "默认 0"}
+                value={editMaxTemplates}
+                onChange={(e) => setEditMaxTemplates(e.target.value)}
+              />
+            </FormField>
+
+            <FormField
+              label="单订阅节点数量上限"
+              description="单个订阅配置中允许容纳的最大节点数（留空使用身份默认）"
+            >
+              <Input
+                type="number"
+                min="0"
+                step="1"
+                placeholder={quotaUser?.isVip ? "默认 2000" : "默认 200"}
+                value={editMaxNodes}
+                onChange={(e) => setEditMaxNodes(e.target.value)}
+              />
+            </FormField>
+
+            <div className="flex items-center justify-between pt-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="text-xs text-fg-40 hover:text-fg"
+                onClick={() => {
+                  setEditMaxSubscriptions("");
+                  setEditMaxTemplates("");
+                  setEditMaxNodes("");
+                }}
+              >
+                恢复为默认配额
+              </Button>
+            </div>
+
+            <DialogFooter className="pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setQuotaUser(null)}
+                disabled={submittingQuota}
+              >
+                取消
+              </Button>
+              <Button type="submit" disabled={submittingQuota}>
+                {submittingQuota && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                保存配额设置
               </Button>
             </DialogFooter>
           </form>

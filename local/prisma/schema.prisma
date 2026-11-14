@@ -24,6 +24,9 @@ model LocalAdmin {
   banReason    String?
   isVip        Boolean   @default(false)
   vipExpiresAt DateTime?
+  maxSubscriptions        Int?
+  maxCustomTemplates      Int?
+  maxNodesPerSubscription Int?
 
   subscriptions Subscription[]
   templates      LocalTemplate[]

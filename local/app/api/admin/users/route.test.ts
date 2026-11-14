@@ -23,10 +23,14 @@ vi.mock("bcryptjs", () => ({
   },
 }));
 
-vi.mock("@local/lib/auth", () => ({
-  getCurrentAdmin: mocks.getCurrentAdmin,
-  isSystemAdmin: mocks.isSystemAdmin,
-}));
+vi.mock("@local/lib/auth", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@local/lib/auth")>();
+  return {
+    ...actual,
+    getCurrentAdmin: mocks.getCurrentAdmin,
+    isSystemAdmin: mocks.isSystemAdmin,
+  };
+});
 
 vi.mock("@local/lib/prisma", () => ({
   prisma: mocks.prisma,
@@ -305,5 +309,177 @@ describe("admin user management routes", () => {
     );
     expect(res.status).toBe(200);
     expect(mocks.prisma.localAdmin.delete).toHaveBeenCalledWith({ where: { id: "user-3" } });
+  });
+
+  it("updates user resource quotas for subscriptions, templates and nodes", async () => {
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-1" });
+    mocks.prisma.localAdmin.findUnique.mockResolvedValueOnce({ id: "user-4", username: "quota_user" });
+    mocks.prisma.localAdmin.update.mockResolvedValueOnce({
+      id: "user-4",
+      username: "quota_user",
+      email: null,
+      isBanned: false,
+      banReason: null,
+      isVip: false,
+      vipExpiresAt: null,
+      maxSubscriptions: 10,
+      maxCustomTemplates: 5,
+      maxNodesPerSubscription: 800,
+      updatedAt: new Date(),
+    });
+
+    const res = await updateUser(
+      new Request("https://local.test/api/admin/users/user-4", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          maxSubscriptions: 10,
+          maxCustomTemplates: 5,
+          maxNodesPerSubscription: 800,
+        }),
+      }),
+      { params: Promise.resolve({ id: "user-4" }) }
+    );
+
+    const { status, body } = await readJson(res);
+    expect(status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.user).toMatchObject({
+      id: "user-4",
+      maxSubscriptions: 10,
+      maxCustomTemplates: 5,
+      maxNodesPerSubscription: 800,
+      effectiveQuota: {
+        maxSubscriptions: 10,
+        maxCustomTemplates: 5,
+        maxNodesPerSubscription: 800,
+      },
+    });
+    expect(mocks.prisma.localAdmin.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "user-4" },
+        data: expect.objectContaining({
+          maxSubscriptions: 10,
+          maxCustomTemplates: 5,
+          maxNodesPerSubscription: 800,
+        }),
+      })
+    );
+  });
+
+  it("resets user resource quotas to null", async () => {
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-1" });
+    mocks.prisma.localAdmin.findUnique.mockResolvedValueOnce({ id: "user-4", username: "quota_user" });
+    mocks.prisma.localAdmin.update.mockResolvedValueOnce({
+      id: "user-4",
+      username: "quota_user",
+      email: null,
+      isBanned: false,
+      banReason: null,
+      isVip: false,
+      vipExpiresAt: null,
+      maxSubscriptions: null,
+      maxCustomTemplates: null,
+      maxNodesPerSubscription: null,
+      updatedAt: new Date(),
+    });
+
+    const res = await updateUser(
+      new Request("https://local.test/api/admin/users/user-4", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          maxSubscriptions: null,
+          maxCustomTemplates: "",
+          maxNodesPerSubscription: null,
+        }),
+      }),
+      { params: Promise.resolve({ id: "user-4" }) }
+    );
+
+    const { status, body } = await readJson(res);
+    expect(status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.user.maxSubscriptions).toBeNull();
+    expect(body.user.maxCustomTemplates).toBeNull();
+    expect(body.user.maxNodesPerSubscription).toBeNull();
+    expect(body.user.effectiveQuota.maxSubscriptions).toBe(1); // falls back to default 1
+    expect(mocks.prisma.localAdmin.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "user-4" },
+        data: expect.objectContaining({
+          maxSubscriptions: null,
+          maxCustomTemplates: null,
+          maxNodesPerSubscription: null,
+        }),
+      })
+    );
+  });
+
+  it("rejects invalid quota values", async () => {
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce({ id: "admin-1" });
+    mocks.prisma.localAdmin.findUnique.mockResolvedValueOnce({ id: "user-4", username: "quota_user" });
+
+    const res = await updateUser(
+      new Request("https://local.test/api/admin/users/user-4", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          maxSubscriptions: -5,
+        }),
+      }),
+      { params: Promise.resolve({ id: "user-4" }) }
+    );
+
+    const { status, body } = await readJson(res);
+    expect(status).toBe(400);
+    expect(body.error).toContain("订阅数量必须为大于等于 0 的整数");
+  });
+
+  it("creates a user with custom resource quotas", async () => {
+    mocks.prisma.localAdmin.findFirst.mockResolvedValueOnce(null); // username check
+    mocks.prisma.localAdmin.create.mockResolvedValueOnce({
+      id: "new-user-2",
+      username: "quota_new",
+      email: null,
+      isVip: false,
+      vipExpiresAt: null,
+      maxSubscriptions: 20,
+      maxCustomTemplates: 10,
+      maxNodesPerSubscription: 1500,
+      createdAt: new Date("2026-11-14T00:00:00Z"),
+    });
+
+    const res = await createUser(
+      new Request("https://local.test/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: "quota_new",
+          password: "password123",
+          maxSubscriptions: 20,
+          maxCustomTemplates: 10,
+          maxNodesPerSubscription: 1500,
+        }),
+      })
+    );
+
+    const { status, body } = await readJson(res);
+    expect(status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.user.maxSubscriptions).toBe(20);
+    expect(body.user.maxCustomTemplates).toBe(10);
+    expect(body.user.maxNodesPerSubscription).toBe(1500);
+    expect(body.user.effectiveQuota.maxSubscriptions).toBe(20);
+    expect(mocks.prisma.localAdmin.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          username: "quota_new",
+          maxSubscriptions: 20,
+          maxCustomTemplates: 10,
+          maxNodesPerSubscription: 1500,
+        }),
+      })
+    );
   });
 });

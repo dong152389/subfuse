@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { withCurrentAdmin } from "@local/lib/api-auth";
-import { isSystemAdmin } from "@local/lib/auth";
+import { isSystemAdmin, resolveUserQuota } from "@local/lib/auth";
 import { isValidEmail, USER_PASSWORD_MIN_LENGTH } from "@local/lib/admin-credentials";
 import {
   apiError,
@@ -13,6 +13,17 @@ import {
   readJsonBody,
 } from "@local/lib/http";
 import { prisma } from "@local/lib/prisma";
+
+function parseOptionalQuota(value: unknown): { ok: true; value: number | null } | { ok: false; error: string } {
+  if (value === null || value === undefined || value === "") {
+    return { ok: true, value: null };
+  }
+  const num = typeof value === "number" ? value : Number(value);
+  if (!Number.isInteger(num) || num < 0) {
+    return { ok: false, error: "配额数量必须为大于等于 0 的整数" };
+  }
+  return { ok: true, value: num };
+}
 
 export async function GET(request: Request) {
   return withCurrentAdmin(async (admin) => {
@@ -73,6 +84,9 @@ export async function GET(request: Request) {
           banReason: true,
           isVip: true,
           vipExpiresAt: true,
+          maxSubscriptions: true,
+          maxCustomTemplates: true,
+          maxNodesPerSubscription: true,
           _count: {
             select: {
               subscriptions: true,
@@ -97,6 +111,8 @@ export async function GET(request: Request) {
       const isVipActive = Boolean(
         u.isVip && (!u.vipExpiresAt || u.vipExpiresAt.getTime() > Date.now())
       );
+      const isSysAdmin = Boolean(firstAdmin && u.id === firstAdmin.id);
+      const effectiveQuota = resolveUserQuota(u, isSysAdmin);
       return {
         id: u.id,
         username: u.username,
@@ -105,7 +121,7 @@ export async function GET(request: Request) {
         githubId: u.githubId,
         githubUsername: u.githubUsername,
         avatarUrl: u.avatarUrl,
-        isAdmin: Boolean(firstAdmin && u.id === firstAdmin.id),
+        isAdmin: isSysAdmin,
         isBanned: Boolean(u.isBanned),
         banReason: u.banReason,
         isVip: isVipActive,
@@ -113,6 +129,10 @@ export async function GET(request: Request) {
         vipExpiresAt: u.vipExpiresAt ? u.vipExpiresAt.toISOString() : null,
         subscriptionCount: u._count.subscriptions,
         templateCount: u._count.templates,
+        maxSubscriptions: u.maxSubscriptions ?? null,
+        maxCustomTemplates: u.maxCustomTemplates ?? null,
+        maxNodesPerSubscription: u.maxNodesPerSubscription ?? null,
+        effectiveQuota,
         createdAt: u.createdAt.toISOString(),
         lastLoginAt: u.lastLoginAt ? u.lastLoginAt.toISOString() : null,
       };
@@ -191,6 +211,27 @@ export async function POST(request: Request) {
       vipExpiresAt = new Date(Date.now() + vipDays * 86400000);
     }
 
+    let maxSubscriptions: number | null = null;
+    let maxCustomTemplates: number | null = null;
+    let maxNodesPerSubscription: number | null = null;
+
+    const rawBody = body as Record<string, unknown>;
+    if ("maxSubscriptions" in rawBody) {
+      const parsed = parseOptionalQuota(rawBody.maxSubscriptions);
+      if (!parsed.ok) return apiError("订阅数量必须为大于等于 0 的整数", "BAD_REQUEST", 400);
+      maxSubscriptions = parsed.value;
+    }
+    if ("maxCustomTemplates" in rawBody) {
+      const parsed = parseOptionalQuota(rawBody.maxCustomTemplates);
+      if (!parsed.ok) return apiError("模板数量必须为大于等于 0 的整数", "BAD_REQUEST", 400);
+      maxCustomTemplates = parsed.value;
+    }
+    if ("maxNodesPerSubscription" in rawBody) {
+      const parsed = parseOptionalQuota(rawBody.maxNodesPerSubscription);
+      if (!parsed.ok) return apiError("节点数量必须为大于等于 0 的整数", "BAD_REQUEST", 400);
+      maxNodesPerSubscription = parsed.value;
+    }
+
     const passwordHash = await bcrypt.hash(password, 12);
     const newUser = await prisma.localAdmin.create({
       data: {
@@ -200,6 +241,9 @@ export async function POST(request: Request) {
         emailVerifiedAt: email ? new Date() : null,
         isVip,
         vipExpiresAt,
+        maxSubscriptions,
+        maxCustomTemplates,
+        maxNodesPerSubscription,
       },
       select: {
         id: true,
@@ -207,9 +251,14 @@ export async function POST(request: Request) {
         email: true,
         isVip: true,
         vipExpiresAt: true,
+        maxSubscriptions: true,
+        maxCustomTemplates: true,
+        maxNodesPerSubscription: true,
         createdAt: true,
       },
     });
+
+    const effectiveQuota = resolveUserQuota(newUser, false);
 
     return NextResponse.json({
       success: true,
@@ -219,6 +268,10 @@ export async function POST(request: Request) {
         email: newUser.email,
         isVip: newUser.isVip,
         vipExpiresAt: newUser.vipExpiresAt ? newUser.vipExpiresAt.toISOString() : null,
+        maxSubscriptions: newUser.maxSubscriptions,
+        maxCustomTemplates: newUser.maxCustomTemplates,
+        maxNodesPerSubscription: newUser.maxNodesPerSubscription,
+        effectiveQuota,
         createdAt: newUser.createdAt.toISOString(),
       },
       message: "用户创建成功",

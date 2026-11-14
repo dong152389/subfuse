@@ -13,6 +13,9 @@ export type CurrentAdmin = {
   banReason?: string | null;
   isVip?: boolean;
   vipExpiresAt?: Date | null;
+  maxSubscriptions?: number | null;
+  maxCustomTemplates?: number | null;
+  maxNodesPerSubscription?: number | null;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -34,6 +37,9 @@ export async function getCurrentAdmin(): Promise<CurrentAdmin | null> {
       banReason: true,
       isVip: true,
       vipExpiresAt: true,
+      maxSubscriptions: true,
+      maxCustomTemplates: true,
+      maxNodesPerSubscription: true,
       createdAt: true,
       updatedAt: true,
     },
@@ -93,15 +99,32 @@ export const ADMIN_USER_QUOTA: UserQuota = {
 };
 
 export function resolveUserQuota(
-  admin: { isVip?: boolean; vipExpiresAt?: Date | null } | null,
+  admin: {
+    isVip?: boolean;
+    vipExpiresAt?: Date | null;
+    maxSubscriptions?: number | null;
+    maxCustomTemplates?: number | null;
+    maxNodesPerSubscription?: number | null;
+  } | null,
   isSysAdmin: boolean
 ): UserQuota {
-  if (isSysAdmin) return ADMIN_USER_QUOTA;
   const isVipActive = Boolean(
     admin?.isVip && (!admin.vipExpiresAt || new Date(admin.vipExpiresAt).getTime() > Date.now())
   );
-  if (isVipActive) return VIP_USER_QUOTA;
-  return DEFAULT_USER_QUOTA;
+  const baseQuota = isSysAdmin ? ADMIN_USER_QUOTA : isVipActive ? VIP_USER_QUOTA : DEFAULT_USER_QUOTA;
+
+  return {
+    ...baseQuota,
+    ...(admin?.maxSubscriptions != null && admin.maxSubscriptions >= 0
+      ? { maxSubscriptions: admin.maxSubscriptions }
+      : {}),
+    ...(admin?.maxCustomTemplates != null && admin.maxCustomTemplates >= 0
+      ? { maxCustomTemplates: admin.maxCustomTemplates }
+      : {}),
+    ...(admin?.maxNodesPerSubscription != null && admin.maxNodesPerSubscription >= 0
+      ? { maxNodesPerSubscription: admin.maxNodesPerSubscription }
+      : {}),
+  };
 }
 
 export async function getUserQuota(adminId: string): Promise<UserQuota> {
@@ -110,7 +133,13 @@ export async function getUserQuota(adminId: string): Promise<UserQuota> {
     const [admin, isSysAdmin] = await Promise.all([
       prisma.localAdmin.findUnique({
         where: { id: adminId },
-        select: { isVip: true, vipExpiresAt: true },
+        select: {
+          isVip: true,
+          vipExpiresAt: true,
+          maxSubscriptions: true,
+          maxCustomTemplates: true,
+          maxNodesPerSubscription: true,
+        },
       }).catch(() => null),
       isSystemAdmin(adminId).catch(() => false),
     ]);

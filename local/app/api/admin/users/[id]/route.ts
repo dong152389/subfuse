@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { withCurrentAdmin } from "@local/lib/api-auth";
-import { isSystemAdmin } from "@local/lib/auth";
+import { isSystemAdmin, resolveUserQuota } from "@local/lib/auth";
 import { isValidEmail, USER_PASSWORD_MIN_LENGTH } from "@local/lib/admin-credentials";
 import {
   apiError,
@@ -13,6 +13,17 @@ import {
   readJsonBody,
 } from "@local/lib/http";
 import { prisma } from "@local/lib/prisma";
+
+function parseOptionalQuota(value: unknown): { ok: true; value: number | null } | { ok: false; error: string } {
+  if (value === null || value === undefined || value === "") {
+    return { ok: true, value: null };
+  }
+  const num = typeof value === "number" ? value : Number(value);
+  if (!Number.isInteger(num) || num < 0) {
+    return { ok: false, error: "配额数量必须为大于等于 0 的整数" };
+  }
+  return { ok: true, value: num };
+}
 
 export async function PATCH(
   request: Request,
@@ -116,6 +127,31 @@ export async function PATCH(
       }
     }
 
+    // Quota settings
+    if ("maxSubscriptions" in body) {
+      const parsed = parseOptionalQuota(body.maxSubscriptions);
+      if (!parsed.ok) {
+        return apiError("订阅数量必须为大于等于 0 的整数", "BAD_REQUEST", 400);
+      }
+      data.maxSubscriptions = parsed.value;
+    }
+
+    if ("maxCustomTemplates" in body) {
+      const parsed = parseOptionalQuota(body.maxCustomTemplates);
+      if (!parsed.ok) {
+        return apiError("模板数量必须为大于等于 0 的整数", "BAD_REQUEST", 400);
+      }
+      data.maxCustomTemplates = parsed.value;
+    }
+
+    if ("maxNodesPerSubscription" in body) {
+      const parsed = parseOptionalQuota(body.maxNodesPerSubscription);
+      if (!parsed.ok) {
+        return apiError("节点数量必须为大于等于 0 的整数", "BAD_REQUEST", 400);
+      }
+      data.maxNodesPerSubscription = parsed.value;
+    }
+
     const updated = await prisma.localAdmin.update({
       where: { id: targetId },
       data,
@@ -127,9 +163,15 @@ export async function PATCH(
         banReason: true,
         isVip: true,
         vipExpiresAt: true,
+        maxSubscriptions: true,
+        maxCustomTemplates: true,
+        maxNodesPerSubscription: true,
         updatedAt: true,
       },
     });
+
+    const isSysAdminUser = Boolean(firstAdmin && updated.id === firstAdmin.id);
+    const effectiveQuota = resolveUserQuota(updated, isSysAdminUser);
 
     return NextResponse.json({
       success: true,
@@ -141,6 +183,10 @@ export async function PATCH(
         banReason: updated.banReason,
         isVip: updated.isVip,
         vipExpiresAt: updated.vipExpiresAt ? updated.vipExpiresAt.toISOString() : null,
+        maxSubscriptions: updated.maxSubscriptions,
+        maxCustomTemplates: updated.maxCustomTemplates,
+        maxNodesPerSubscription: updated.maxNodesPerSubscription,
+        effectiveQuota,
       },
       message: "用户信息更新成功",
     });
