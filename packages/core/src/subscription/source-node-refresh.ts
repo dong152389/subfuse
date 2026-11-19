@@ -17,6 +17,26 @@ import {
 } from "./info-node-name";
 import type { ParsedNode } from "../types/node";
 
+export type DeletedNodeItem = {
+  originName: string;
+  name: string;
+  node?: ParsedNode;
+  listenerPort?: number;
+  dialerRelayGroupIds?: string[];
+  dialerTargetGroupIds?: string[];
+  sourceIds?: string[];
+};
+
+export type DeletedNodeDescriptor = {
+  originName?: unknown;
+  name?: unknown;
+  node?: ParsedNode;
+  listenerPort?: number;
+  dialerRelayGroupIds?: string[];
+  dialerTargetGroupIds?: string[];
+  sourceIds?: string[];
+};
+
 export type SourceRefreshDescriptor = {
   sourceId: string;
   currentTag?: string;
@@ -31,15 +51,8 @@ export type SourceRefreshDescriptor = {
 export type MergeSourceNodesResult = {
   nodes: ParsedNode[];
   renameMap: Map<string, string>;
-  deletedNodes?: DeletedNodeDescriptor[];
+  deletedNodes?: DeletedNodeItem[];
   deletedNodeNames?: string[];
-};
-
-export type DeletedNodeDescriptor = {
-  originName?: unknown;
-  name?: unknown;
-  node?: ParsedNode;
-  sourceIds?: string[];
 };
 
 function normalizeOptionalString(value: unknown): string | undefined {
@@ -579,11 +592,11 @@ export function mergeParsedSourceNodes(
     if (oldName && finalName !== oldName) renameMap.set(oldName, finalName);
   }
 
-  let updatedDeletedNodes: DeletedNodeDescriptor[] | undefined;
+  let updatedDeletedNodes: DeletedNodeItem[] | undefined;
   let updatedDeletedNodeNames: string[] | undefined;
 
   if (matchedDeletedInfoNodes.size > 0 && Array.isArray(descriptor.deletedNodes)) {
-    const nextDeletedNodes: DeletedNodeDescriptor[] = [];
+    const nextDeletedNodes: DeletedNodeItem[] = [];
     const handledCategories = new Set<string>();
 
     for (const item of descriptor.deletedNodes) {
@@ -619,11 +632,24 @@ export function mergeParsedSourceNodes(
             originName: freshOrigin,
             name: freshNode.name || freshOrigin,
             node: freshNode,
+            listenerPort: typeof item.listenerPort === "number" ? item.listenerPort : undefined,
+            dialerRelayGroupIds: Array.isArray(item.dialerRelayGroupIds) ? item.dialerRelayGroupIds : undefined,
+            dialerTargetGroupIds: Array.isArray(item.dialerTargetGroupIds) ? item.dialerTargetGroupIds : undefined,
             sourceIds: [sourceId],
           });
         }
       } else {
-        nextDeletedNodes.push(item);
+        const itemOrigin = rawOrigin || (itemNode ? (getNodeOriginName(itemNode).trim() || itemNode.name) : "");
+        const itemName = rawName || itemOrigin;
+        nextDeletedNodes.push({
+          originName: itemOrigin,
+          name: itemName,
+          node: item.node,
+          listenerPort: typeof item.listenerPort === "number" ? item.listenerPort : undefined,
+          dialerRelayGroupIds: Array.isArray(item.dialerRelayGroupIds) ? item.dialerRelayGroupIds : undefined,
+          dialerTargetGroupIds: Array.isArray(item.dialerTargetGroupIds) ? item.dialerTargetGroupIds : undefined,
+          sourceIds: Array.isArray(item.sourceIds) ? item.sourceIds : undefined,
+        });
       }
     }
 

@@ -177,6 +177,7 @@ export interface ConfigState {
     listenerPort?: number;
     dialerRelayGroupIds?: string[];
     dialerTargetGroupIds?: string[];
+    sourceIds?: string[];
   }>;
   parseErrors: string[];
   isLoading: boolean;
