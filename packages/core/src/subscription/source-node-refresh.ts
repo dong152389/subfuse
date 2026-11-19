@@ -10,6 +10,11 @@ import {
   SOURCE_IDS_KEY,
   withoutNodeSourceIds,
 } from "./node-source-state";
+import {
+  buildDynamicNodeFingerprint,
+  getSubscriptionInfoNodeCategory,
+  isDynamicFingerprintEligible,
+} from "./info-node-name";
 import type { ParsedNode } from "../types/node";
 
 export type SourceRefreshDescriptor = {
@@ -26,12 +31,15 @@ export type SourceRefreshDescriptor = {
 export type MergeSourceNodesResult = {
   nodes: ParsedNode[];
   renameMap: Map<string, string>;
+  deletedNodes?: DeletedNodeDescriptor[];
+  deletedNodeNames?: string[];
 };
 
 export type DeletedNodeDescriptor = {
   originName?: unknown;
   name?: unknown;
   node?: ParsedNode;
+  sourceIds?: string[];
 };
 
 function normalizeOptionalString(value: unknown): string | undefined {
@@ -114,12 +122,81 @@ export function mergeParsedSourceNodes(
       .filter(Boolean)
   );
   const deletedNodeKeys = new Set<string>();
+  const deletedInfoCategories = new Set<string>();
+  const deletedInfoCategoriesBySourceId = new Map<string, Set<string>>();
+  const deletedDynamicFingerprints = new Set<string>();
+  const deletedDynamicFingerprintsBySourceId = new Map<string, Set<string>>();
+
+  const registerDeletedInfoCategory = (cat: string | null, sourceIds?: string[]) => {
+    if (!cat) return;
+    deletedInfoCategories.add(cat);
+    if (Array.isArray(sourceIds) && sourceIds.length > 0) {
+      for (const sid of sourceIds) {
+        if (!sid) continue;
+        let set = deletedInfoCategoriesBySourceId.get(sid);
+        if (!set) {
+          set = new Set();
+          deletedInfoCategoriesBySourceId.set(sid, set);
+        }
+        set.add(cat);
+      }
+    }
+  };
+
+  const registerDeletedDynamicFingerprint = (fp: string | null, sourceIds?: string[]) => {
+    if (!fp || (!fp.includes("<num>") && !fp.includes("<date>"))) return;
+    deletedDynamicFingerprints.add(fp);
+    if (Array.isArray(sourceIds) && sourceIds.length > 0) {
+      for (const sid of sourceIds) {
+        if (!sid) continue;
+        let set = deletedDynamicFingerprintsBySourceId.get(sid);
+        if (!set) {
+          set = new Set();
+          deletedDynamicFingerprintsBySourceId.set(sid, set);
+        }
+        set.add(fp);
+      }
+    }
+  };
+
   for (const item of Array.isArray(descriptor.deletedNodes) ? descriptor.deletedNodes : []) {
-    if (!item?.node) continue;
-    const node = normalizeNodeOriginName(item.node);
-    const origin = normalizeOptionalString(item.originName) ?? (getNodeOriginName(node).trim() || node.name);
-    if (!origin) continue;
-    deletedNodeKeys.add(buildScopedNodeIdentityKey(origin, node));
+    const rawOrigin = normalizeOptionalString(item?.originName);
+    const rawName = normalizeOptionalString(item?.name);
+    const itemNode = item?.node ? normalizeNodeOriginName(item.node) : undefined;
+    if (itemNode) {
+      const origin = rawOrigin ?? (getNodeOriginName(itemNode).trim() || itemNode.name);
+      if (origin) {
+        deletedNodeKeys.add(buildScopedNodeIdentityKey(origin, itemNode));
+      }
+    }
+    const cat =
+      getSubscriptionInfoNodeCategory(rawOrigin ?? "") ??
+      getSubscriptionInfoNodeCategory(rawName ?? "") ??
+      (itemNode ? getSubscriptionInfoNodeCategory(itemNode.name) : null);
+    const sourceIds = Array.isArray((item as any)?.sourceIds)
+      ? (item as any).sourceIds
+      : itemNode
+        ? getNodeSourceIds(itemNode)
+        : undefined;
+    registerDeletedInfoCategory(cat, sourceIds);
+
+    const eligible = isDynamicFingerprintEligible(itemNode ?? { name: rawName || rawOrigin });
+    if (eligible) {
+      const fp =
+        buildDynamicNodeFingerprint(rawOrigin ?? "") ??
+        buildDynamicNodeFingerprint(rawName ?? "") ??
+        (itemNode ? buildDynamicNodeFingerprint(itemNode.name) : null);
+      registerDeletedDynamicFingerprint(fp, sourceIds);
+    }
+  }
+
+  for (const rawName of deleted) {
+    const cat = getSubscriptionInfoNodeCategory(rawName);
+    registerDeletedInfoCategory(cat);
+    if (cat) {
+      const fp = buildDynamicNodeFingerprint(rawName);
+      registerDeletedDynamicFingerprint(fp);
+    }
   }
 
   const freshOriginCounts = new Map<string, number>();
@@ -130,10 +207,45 @@ export function mergeParsedSourceNodes(
     freshOriginCounts.set(origin, (freshOriginCounts.get(origin) ?? 0) + 1);
   }
 
+  const matchedDeletedInfoNodes = new Map<string, ParsedNode>();
+
   const isDeleted = (node: ParsedNode, originNameRaw: string, displayNameRaw?: string): boolean => {
     const originName = (originNameRaw || "").trim();
     if (!originName) return false;
     if (deletedNodeKeys.has(buildScopedNodeIdentityKey(originName, node))) return true;
+
+    const nodeCategory =
+      getSubscriptionInfoNodeCategory(originName) ??
+      getSubscriptionInfoNodeCategory(node.name) ??
+      (displayNameRaw ? getSubscriptionInfoNodeCategory(displayNameRaw) : null);
+
+    if (nodeCategory) {
+      const sourceSpecific = deletedInfoCategoriesBySourceId.get(sourceId);
+      const isCategoryDeleted =
+        (sourceSpecific && sourceSpecific.has(nodeCategory)) ||
+        deletedInfoCategories.has(nodeCategory);
+      if (isCategoryDeleted) {
+        matchedDeletedInfoNodes.set(nodeCategory, node);
+        return true;
+      }
+    }
+
+    if (isDynamicFingerprintEligible(node)) {
+      const nodeFp =
+        buildDynamicNodeFingerprint(originName) ??
+        buildDynamicNodeFingerprint(node.name) ??
+        (displayNameRaw ? buildDynamicNodeFingerprint(displayNameRaw) : null);
+      if (nodeFp && (nodeFp.includes("<num>") || nodeFp.includes("<date>"))) {
+        const sourceSpecificFp = deletedDynamicFingerprintsBySourceId.get(sourceId);
+        const isFpDeleted =
+          (sourceSpecificFp && sourceSpecificFp.has(nodeFp)) ||
+          deletedDynamicFingerprints.has(nodeFp);
+        if (isFpDeleted) {
+          matchedDeletedInfoNodes.set(`fp:${nodeFp}`, node);
+          return true;
+        }
+      }
+    }
 
     // Legacy deletedNodeNames are only origin/display-name markers. When a source
     // emits many distinct nodes with the same default origin name, a single
@@ -467,5 +579,78 @@ export function mergeParsedSourceNodes(
     if (oldName && finalName !== oldName) renameMap.set(oldName, finalName);
   }
 
-  return { nodes: nextNodes, renameMap };
+  let updatedDeletedNodes: DeletedNodeDescriptor[] | undefined;
+  let updatedDeletedNodeNames: string[] | undefined;
+
+  if (matchedDeletedInfoNodes.size > 0 && Array.isArray(descriptor.deletedNodes)) {
+    const nextDeletedNodes: DeletedNodeDescriptor[] = [];
+    const handledCategories = new Set<string>();
+
+    for (const item of descriptor.deletedNodes) {
+      if (!item) continue;
+      const rawOrigin = normalizeOptionalString(item.originName) ?? "";
+      const rawName = normalizeOptionalString(item.name) ?? "";
+      const itemNode = item.node ? normalizeNodeOriginName(item.node) : undefined;
+      const cat =
+        getSubscriptionInfoNodeCategory(rawOrigin) ??
+        getSubscriptionInfoNodeCategory(rawName) ??
+        (itemNode ? getSubscriptionInfoNodeCategory(itemNode.name) : null);
+      const eligible = isDynamicFingerprintEligible(itemNode ?? { name: rawName || rawOrigin });
+      const fp = eligible
+        ? buildDynamicNodeFingerprint(rawOrigin) ??
+          buildDynamicNodeFingerprint(rawName) ??
+          (itemNode ? buildDynamicNodeFingerprint(itemNode.name) : null)
+        : null;
+      const fpKey = fp && (fp.includes("<num>") || fp.includes("<date>")) ? `fp:${fp}` : null;
+
+      const matchKey =
+        cat && matchedDeletedInfoNodes.has(cat)
+          ? cat
+          : fpKey && matchedDeletedInfoNodes.has(fpKey)
+            ? fpKey
+            : null;
+
+      if (matchKey) {
+        if (!handledCategories.has(matchKey)) {
+          handledCategories.add(matchKey);
+          const freshNode = matchedDeletedInfoNodes.get(matchKey)!;
+          const freshOrigin = originOf(freshNode);
+          nextDeletedNodes.push({
+            originName: freshOrigin,
+            name: freshNode.name || freshOrigin,
+            node: freshNode,
+            sourceIds: [sourceId],
+          });
+        }
+      } else {
+        nextDeletedNodes.push(item);
+      }
+    }
+
+    updatedDeletedNodes = nextDeletedNodes;
+
+    const nextNames = new Set(deletedNodeNames);
+    for (const [key, freshNode] of matchedDeletedInfoNodes.entries()) {
+      for (const name of Array.from(nextNames)) {
+        if (key.startsWith("fp:")) {
+          const targetFp = key.slice(3);
+          const nameFp = buildDynamicNodeFingerprint(name);
+          if (nameFp === targetFp) {
+            nextNames.delete(name);
+          }
+        } else if (getSubscriptionInfoNodeCategory(name) === key) {
+          nextNames.delete(name);
+        }
+      }
+      nextNames.add(originOf(freshNode));
+    }
+    updatedDeletedNodeNames = Array.from(nextNames);
+  }
+
+  return {
+    nodes: nextNodes,
+    renameMap,
+    ...(updatedDeletedNodes ? { deletedNodes: updatedDeletedNodes } : {}),
+    ...(updatedDeletedNodeNames ? { deletedNodeNames: updatedDeletedNodeNames } : {}),
+  };
 }

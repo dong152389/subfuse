@@ -24,6 +24,7 @@ import { stripImportedNodeControlFieldsFromList } from "@subfuse/core/subscripti
 import { getValidDialerRelayGroupNames } from "@subfuse/core/subscription/dialer-relay-group-names";
 import { reconcileNodeNameReferences } from "@subfuse/core/subscription/node-name-references";
 import { tryNormalizeSubscriptionUrlInput } from "@subfuse/core/subscription/url-input";
+import { getSubscriptionInfoNodeCategory } from "@subfuse/core/subscription/info-node-name";
 import type { ConfigActions, SubscriptionSource } from "./definitions";
 import {
   fetchUrlContentInBrowser,
@@ -170,6 +171,19 @@ export function createSourceActions(set: SetState, get: GetState, setAndGenerate
           };
 
           const deleted = new Set(state.deletedNodeNames);
+          const deletedInfoCategories = new Set<string>();
+          for (const item of state.deletedNodes) {
+            const rawOrigin = typeof item?.originName === "string" ? item.originName.trim() : "";
+            const cat =
+              getSubscriptionInfoNodeCategory(rawOrigin) ??
+              (typeof item?.name === "string" ? getSubscriptionInfoNodeCategory(item.name.trim()) : null);
+            if (cat) deletedInfoCategories.add(cat);
+          }
+          for (const raw of state.deletedNodeNames) {
+            const cat = getSubscriptionInfoNodeCategory(raw);
+            if (cat) deletedInfoCategories.add(cat);
+          }
+
           const existingNormalized = state.nodes.map(normalizeOriginName);
           const existingKeys = new Set(state.nodes.map((n) => buildNodeContentKey(n)));
           const deduped = sanitizedNodes.filter((n) => !existingKeys.has(buildNodeContentKey(n)));
@@ -178,6 +192,8 @@ export function createSourceActions(set: SetState, get: GetState, setAndGenerate
             .map(normalizeOriginName)
             .filter((n) => {
               const origin = String((n as unknown as Record<string, unknown>)["_originName"] ?? n.name);
+              const cat = getSubscriptionInfoNodeCategory(origin) ?? getSubscriptionInfoNodeCategory(n.name);
+              if (cat && deletedInfoCategories.has(cat)) return false;
               return !deleted.has(origin);
             });
 
@@ -350,6 +366,8 @@ export function createSourceActions(set: SetState, get: GetState, setAndGenerate
 
           return {
             nodes: nextNodes,
+            ...(merged.deletedNodes ? { deletedNodes: merged.deletedNodes } : {}),
+            ...(merged.deletedNodeNames ? { deletedNodeNames: merged.deletedNodeNames } : {}),
             ...reconciledReferences,
             sources: state.sources.map((s) =>
               s.id === sourceId
@@ -611,6 +629,44 @@ export function createSourceActions(set: SetState, get: GetState, setAndGenerate
 
       setAndGenerateConfig((state) => {
         const deleted = new Set(state.deletedNodeNames);
+        const deletedInfoCategories = new Set<string>();
+        const deletedInfoCategoriesBySourceId = new Map<string, Set<string>>();
+
+        const registerDeletedCategory = (cat: string | null, sourceIds?: string[]) => {
+          if (!cat) return;
+          deletedInfoCategories.add(cat);
+          if (Array.isArray(sourceIds) && sourceIds.length > 0) {
+            for (const sid of sourceIds) {
+              if (!sid) continue;
+              let set = deletedInfoCategoriesBySourceId.get(sid);
+              if (!set) {
+                set = new Set();
+                deletedInfoCategoriesBySourceId.set(sid, set);
+              }
+              set.add(cat);
+            }
+          }
+        };
+
+        for (const item of state.deletedNodes) {
+          const rawOrigin = typeof item?.originName === "string" ? item.originName.trim() : "";
+          const rawName = typeof item?.name === "string" ? item.name.trim() : "";
+          const cat =
+            getSubscriptionInfoNodeCategory(rawOrigin) ??
+            getSubscriptionInfoNodeCategory(rawName) ??
+            (item?.node ? getSubscriptionInfoNodeCategory(item.node.name) : null);
+          const sids = Array.isArray((item as any)?.sourceIds)
+            ? (item as any).sourceIds
+            : item?.node
+              ? getNodeSourceIds(item.node)
+              : undefined;
+          registerDeletedCategory(cat, sids);
+        }
+        for (const raw of state.deletedNodeNames) {
+          const cat = getSubscriptionInfoNodeCategory(raw);
+          registerDeletedCategory(cat);
+        }
+
         const normalizedCandidates = uniqueNamedNodes.map((node) => {
           const record = node as unknown as Record<string, unknown>;
           const origin =
@@ -638,6 +694,8 @@ export function createSourceActions(set: SetState, get: GetState, setAndGenerate
           deletedNodeKeys.add(buildScopedNodeIdentityKey(origin, deletedNode));
         }
 
+        const matchedDeletedInfoInBatch = new Map<string, ParsedNode>();
+
         const normalized = normalizedCandidates
           .filter((node) => {
             const record = node as unknown as Record<string, unknown>;
@@ -646,9 +704,75 @@ export function createSourceActions(set: SetState, get: GetState, setAndGenerate
                 ? String(record["_originName"])
                 : node.name;
             if (deletedNodeKeys.has(buildScopedNodeIdentityKey(origin, node))) return false;
+
+            const nodeCat =
+              getSubscriptionInfoNodeCategory(origin) ?? getSubscriptionInfoNodeCategory(node.name);
+            if (nodeCat) {
+              const nodeSids = getNodeSourceIds(node);
+              let matched = false;
+              if (nodeSids.length > 0) {
+                for (const sid of nodeSids) {
+                  const set = deletedInfoCategoriesBySourceId.get(sid);
+                  if (set && set.has(nodeCat)) {
+                    matched = true;
+                    break;
+                  }
+                }
+              }
+              if (!matched && deletedInfoCategories.has(nodeCat)) {
+                matched = true;
+              }
+              if (matched) {
+                matchedDeletedInfoInBatch.set(nodeCat, node);
+                return false;
+              }
+            }
+
             if ((originCounts.get(origin) ?? 0) > 1) return true;
             return !deleted.has(origin);
           });
+
+        let nextDeletedNodes = state.deletedNodes;
+        let nextDeletedNodeNames = state.deletedNodeNames;
+        if (matchedDeletedInfoInBatch.size > 0) {
+          const updated: typeof state.deletedNodes = [];
+          const handledCats = new Set<string>();
+          for (const item of state.deletedNodes) {
+            if (!item) continue;
+            const cat =
+              getSubscriptionInfoNodeCategory(item.originName) ??
+              getSubscriptionInfoNodeCategory(item.name) ??
+              (item.node ? getSubscriptionInfoNodeCategory(item.node.name) : null);
+            if (cat && matchedDeletedInfoInBatch.has(cat)) {
+              if (!handledCats.has(cat)) {
+                handledCats.add(cat);
+                const fresh = matchedDeletedInfoInBatch.get(cat)!;
+                const freshOrigin = String((fresh as unknown as Record<string, unknown>)["_originName"] ?? fresh.name).trim();
+                updated.push({
+                  originName: freshOrigin,
+                  name: fresh.name || freshOrigin,
+                  node: fresh,
+                  sourceIds: getNodeSourceIds(fresh),
+                });
+              }
+            } else {
+              updated.push(item);
+            }
+          }
+          nextDeletedNodes = updated;
+
+          const namesSet = new Set(state.deletedNodeNames);
+          for (const [cat, fresh] of matchedDeletedInfoInBatch.entries()) {
+            for (const name of Array.from(namesSet)) {
+              if (getSubscriptionInfoNodeCategory(name) === cat) {
+                namesSet.delete(name);
+              }
+            }
+            const freshOrigin = String((fresh as unknown as Record<string, unknown>)["_originName"] ?? fresh.name).trim();
+            if (freshOrigin) namesSet.add(freshOrigin);
+          }
+          nextDeletedNodeNames = Array.from(namesSet);
+        }
 
         const availableNames = new Set(normalized.map((n) => n.name));
         const nextListenerPorts: Record<string, number> = {};
@@ -663,6 +787,8 @@ export function createSourceActions(set: SetState, get: GetState, setAndGenerate
           nodes: normalized,
           parseErrors: allErrors,
           isLoading: false,
+          deletedNodes: nextDeletedNodes,
+          deletedNodeNames: nextDeletedNodeNames,
           listenerPorts: nextListenerPorts,
           dialerProxyGroups: nextDialerProxyGroups,
           sources: state.sources.map((s) => {

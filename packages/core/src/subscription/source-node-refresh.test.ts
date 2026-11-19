@@ -402,6 +402,79 @@ describe("source node refresh helpers", () => {
     expect(result.nodes.map((node) => node.name)).toEqual(["New-Origin C"]);
   });
 
+  it("does not resurrect deleted info nodes when their dynamic numbers change on refresh", () => {
+    const oldDeletedTrafficNode = ssNode("剩余流量: 8270.54 GB", {
+      server: "127.0.0.1",
+      port: 10000,
+      [ORIGIN_NAME_KEY]: "剩余流量: 8270.54 GB",
+    });
+    const parsed = prepareSourceParsedNodes(
+      [
+        ssNode("剩余流量: 8273.38 GB", { server: "127.0.0.1", port: 10000 }),
+        ssNode("us-Standard|美国|01", { server: "us01.example.com" }),
+      ],
+      {}
+    );
+
+    const result = mergeParsedSourceNodes([], parsed, ["剩余流量: 8270.54 GB"], {
+      sourceId: "source-a",
+      deletedNodes: [
+        {
+          originName: "剩余流量: 8270.54 GB",
+          name: "剩余流量: 8270.54 GB",
+          node: oldDeletedTrafficNode,
+          sourceIds: ["source-a"],
+        },
+      ],
+    });
+
+    expect(result.nodes.map((node) => node.name)).toEqual(["us-Standard|美国|01"]);
+    expect(result.deletedNodes).toEqual([
+      expect.objectContaining({
+        originName: "剩余流量: 8273.38 GB",
+        name: "剩余流量: 8273.38 GB",
+        sourceIds: ["source-a"],
+      }),
+    ]);
+    expect(result.deletedNodeNames).toEqual(["剩余流量: 8273.38 GB"]);
+  });
+
+  it("suppresses custom dynamic dummy info nodes via fingerprint matching without affecting regular nodes", () => {
+    const oldCustomDummyNode = ssNode("🐶 狗狗积分: 1500 点", {
+      server: "127.0.0.1",
+      port: 10000,
+      [ORIGIN_NAME_KEY]: "🐶 狗狗积分: 1500 点",
+    });
+    const parsed = prepareSourceParsedNodes(
+      [
+        ssNode("🐶 狗狗积分: 1420 点", { server: "127.0.0.1", port: 10000 }),
+        ssNode("us-Standard|美国|02", { server: "us02.example.com", port: 443 }),
+      ],
+      {}
+    );
+
+    const result = mergeParsedSourceNodes([], parsed, ["🐶 狗狗积分: 1500 点"], {
+      sourceId: "source-custom",
+      deletedNodes: [
+        {
+          originName: "🐶 狗狗积分: 1500 点",
+          name: "🐶 狗狗积分: 1500 点",
+          node: oldCustomDummyNode,
+          sourceIds: ["source-custom"],
+        },
+      ],
+    });
+
+    expect(result.nodes.map((node) => node.name)).toEqual(["us-Standard|美国|02"]);
+    expect(result.deletedNodes).toEqual([
+      expect.objectContaining({
+        originName: "🐶 狗狗积分: 1420 点",
+        name: "🐶 狗狗积分: 1420 点",
+        sourceIds: ["source-custom"],
+      }),
+    ]);
+  });
+
   it("uses deleted-node fallback origin metadata and ignores blank fresh origins", () => {
     const deletedByNodeOrigin = ssNode("Deleted By Node", {
       server: "deleted-by-node.example.com",

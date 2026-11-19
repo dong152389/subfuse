@@ -226,6 +226,21 @@ describe("NodeManagementSection", () => {
     );
   });
 
+  it("deduplicates multiple deleted info nodes belonging to the same category", () => {
+    mocks.store.deletedNodes = [
+      { originName: "剩余流量: 8273.38 GB", name: "剩余流量: 8273.38 GB" },
+      { originName: "剩余流量: 8270.54 GB", name: "剩余流量: 8270.54 GB" },
+      { originName: "套餐到期: 长期有效", name: "套餐到期: 长期有效" },
+    ];
+    mocks.store.deletedNodeNames = ["剩余流量: 8273.38 GB", "剩余流量: 8270.54 GB", "套餐到期: 长期有效"];
+    renderSection();
+
+    expect(mocks.captures.nodeList.deletedMarkedNodes).toEqual([
+      { originName: "剩余流量: 8273.38 GB", name: "剩余流量: 8273.38 GB" },
+      { originName: "套餐到期: 长期有效", name: "套餐到期: 长期有效" },
+    ]);
+  });
+
   it("protects listener-port enabling and validates listener-port commits", async () => {
     const { setters } = renderSection();
 

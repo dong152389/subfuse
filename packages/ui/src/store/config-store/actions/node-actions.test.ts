@@ -119,6 +119,34 @@ describe("createNodeActions", () => {
     ]);
   });
 
+  it("cleans up older dynamic info node entries when removing or restoring info nodes", () => {
+    const { actions, getState } = createHarness({
+      nodes: [
+        node("剩余流量: 8273.38 GB", { _originName: "剩余流量: 8273.38 GB" }),
+      ],
+      deletedNodeNames: ["剩余流量: 8270.54 GB"],
+      deletedNodes: [
+        { originName: "剩余流量: 8270.54 GB", name: "剩余流量: 8270.54 GB" },
+      ],
+    });
+
+    actions.removeNode("剩余流量: 8273.38 GB");
+
+    expect(getState().nodes).toHaveLength(0);
+    expect(getState().deletedNodeNames).toEqual(["剩余流量: 8273.38 GB"]);
+    expect(getState().deletedNodes).toEqual([
+      expect.objectContaining({
+        originName: "剩余流量: 8273.38 GB",
+        name: "剩余流量: 8273.38 GB",
+      }),
+    ]);
+
+    actions.restoreDeletedNode("剩余流量: 8273.38 GB");
+    expect(getState().nodes.map((n: ParsedNode) => n.name)).toEqual(["剩余流量: 8273.38 GB"]);
+    expect(getState().deletedNodeNames).toEqual([]);
+    expect(getState().deletedNodes).toEqual([]);
+  });
+
   it("handles missing remove targets and restore metadata without cached nodes", () => {
     const { actions, getState } = createHarness({
       nodes: [node("Existing")],

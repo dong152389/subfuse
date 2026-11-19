@@ -297,6 +297,48 @@ describe("createSourceActions", () => {
     });
   });
 
+  it("does not resurrect deleted info nodes when their dynamic value changes upon refresh", async () => {
+    mocks.fetchUrlContentInBrowser.mockResolvedValueOnce({
+      content: "raw",
+      headers: {},
+    });
+    mocks.parseSubscription.mockReturnValueOnce(
+      parseResult([
+        node("剩余流量: 8273.38 GB", { server: "127.0.0.1", port: 10000 }),
+        node("US 01", { server: "us.example.com" }),
+      ])
+    );
+    const { actions, getState } = createHarness({
+      sources: [
+        source({
+          id: "s1",
+          type: "url",
+          content: "https://example.com/sub",
+        }),
+      ],
+      nodes: [],
+      deletedNodeNames: ["剩余流量: 8270.54 GB"],
+      deletedNodes: [
+        {
+          originName: "剩余流量: 8270.54 GB",
+          name: "剩余流量: 8270.54 GB",
+          sourceIds: ["s1"],
+        },
+      ],
+    });
+
+    await actions.parseSingleSource("s1");
+
+    expect(getState().nodes.map((n: ParsedNode) => n.name)).toEqual(["US 01"]);
+    expect(getState().deletedNodes).toEqual([
+      expect.objectContaining({
+        originName: "剩余流量: 8273.38 GB",
+        name: "剩余流量: 8273.38 GB",
+      }),
+    ]);
+    expect(getState().deletedNodeNames).toEqual(["剩余流量: 8273.38 GB"]);
+  });
+
   it("reimports duplicate-origin node sources even when a legacy deleted name exists", async () => {
     mocks.parseSubscription.mockReturnValueOnce(
       parseResult([

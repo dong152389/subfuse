@@ -13,6 +13,7 @@ import {
   DEFAULT_NODE_NAME_FILTER_CONFIG,
   resolveNodeNameFilter,
 } from "@subfuse/core/subscription/node-name-filter";
+import { getSubscriptionInfoNodeCategory } from "@subfuse/core/subscription/info-node-name";
 import { useConfigStore, type SubscriptionSource } from "@subfuse/ui/store/config-store";
 import { useProductInteractionAdapter } from "@subfuse/ui/product/interactions";
 import { SectionHeader } from "../section-header";
@@ -105,12 +106,20 @@ export function NodeManagementSection({
     }
 
     const byOrigin = new Map<string, { originName: string; name: string }>();
+    const seenInfoCategories = new Set<string>();
     const add = (originNameRaw: unknown, nameRaw: unknown) => {
       const originName = typeof originNameRaw === "string" ? originNameRaw.trim() : "";
       const name = typeof nameRaw === "string" ? nameRaw.trim() : "";
       if (!originName) return;
       if (activeOrigins.has(originName)) return;
       if (byOrigin.has(originName)) return;
+
+      const cat = getSubscriptionInfoNodeCategory(originName) ?? getSubscriptionInfoNodeCategory(name);
+      if (cat) {
+        if (seenInfoCategories.has(cat)) return;
+        seenInfoCategories.add(cat);
+      }
+
       byOrigin.set(originName, { originName, name: name || originName });
     };
 

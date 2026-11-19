@@ -19,6 +19,7 @@ import {
   normalizeNodeNameFilterConfig,
   type NodeNameFilterConfig,
 } from "@subfuse/core/subscription/node-name-filter";
+import { getSubscriptionInfoNodeCategory } from "@subfuse/core/subscription/info-node-name";
 import { useConfigStore } from "@subfuse/ui/store/config-store";
 import { initialState } from "@subfuse/ui/store/config-store/definitions";
 import { captureAuthConfigHandoff } from "@subfuse/ui/store/config-store/auth-handoff";
@@ -143,11 +144,20 @@ export function useEditingSubscriptionLoader({
         })();
 
         const deletedOriginNameSet = new Set<string>(deletedNodeNamesMerged);
+        const deletedInfoCategories = new Set<string>();
+        for (const name of deletedNodeNamesMerged) {
+          const cat = getSubscriptionInfoNodeCategory(name);
+          if (cat) deletedInfoCategories.add(cat);
+        }
+
         const filteredLoadedNodes =
-          deletedOriginNameSet.size > 0
+          deletedOriginNameSet.size > 0 || deletedInfoCategories.size > 0
             ? loadedNodes.filter((node) => {
               const origin = getNodeOriginName(node);
-              return !deletedOriginNameSet.has(origin);
+              if (deletedOriginNameSet.has(origin)) return false;
+              const cat = getSubscriptionInfoNodeCategory(origin) ?? getSubscriptionInfoNodeCategory(node.name);
+              if (cat && deletedInfoCategories.has(cat)) return false;
+              return true;
             })
             : loadedNodes;
 

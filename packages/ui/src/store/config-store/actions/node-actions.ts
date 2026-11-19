@@ -1,5 +1,7 @@
 import type { ParsedNode } from "@subfuse/core/types/node";
 import { formatNodeNameFromTemplate } from "@subfuse/core/node-name-template";
+import { getSubscriptionInfoNodeCategory } from "@subfuse/core/subscription/info-node-name";
+import { getNodeSourceIds } from "@subfuse/core/subscription/node-source-state";
 import type { ConfigActions } from "../definitions";
 import { makeUniqueName } from "../definitions";
 import type { GetState, SetAndGenerateConfig, SetState } from "../store-types";
@@ -46,9 +48,6 @@ export function createNodeActions(
             ? String((target as unknown as Record<string, unknown>)["_originName"]).trim()
             : name.trim();
 
-        const deleted = new Set(state.deletedNodeNames);
-        if (originName) deleted.add(originName);
-
         const displayName = target?.name || name;
         const nodeForRestore = target ? (target as unknown as ParsedNode) : undefined;
         const savedListenerPort =
@@ -62,17 +61,50 @@ export function createNodeActions(
           if (g.relayNodes.includes(name)) relayGroupIds.push(g.id);
           if (g.targetNodes.includes(name)) targetGroupIds.push(g.id);
         }
+
+        const sourceIds = target ? getNodeSourceIds(target) : [];
+        const targetCat =
+          getSubscriptionInfoNodeCategory(originName) ?? getSubscriptionInfoNodeCategory(displayName);
+
+        const filteredDeletedNodes = state.deletedNodes.filter((n) => {
+          if (!n || typeof n.originName !== "string") return false;
+          if (n.originName === originName && n.name === displayName) return false;
+          if (targetCat) {
+            const cat =
+              getSubscriptionInfoNodeCategory(n.originName) ?? getSubscriptionInfoNodeCategory(n.name);
+            if (cat === targetCat) {
+              const nSourceIds = Array.isArray((n as any).sourceIds)
+                ? (n as any).sourceIds
+                : n.node
+                  ? getNodeSourceIds(n.node)
+                  : [];
+              if (sourceIds.length > 0 && nSourceIds.length > 0) {
+                if (sourceIds.some((id: string) => nSourceIds.includes(id))) return false;
+              } else {
+                return false;
+              }
+            }
+          }
+          return true;
+        });
+
+        const deleted = new Set(state.deletedNodeNames);
+        if (targetCat) {
+          for (const item of Array.from(deleted)) {
+            if (item !== originName && getSubscriptionInfoNodeCategory(item) === targetCat) {
+              deleted.delete(item);
+            }
+          }
+        }
+        if (originName) deleted.add(originName);
+
         const deletedNodes = [
-          ...state.deletedNodes.filter(
-            (n) =>
-              n &&
-              typeof n.originName === "string" &&
-              (n.originName !== originName || n.name !== displayName)
-          ),
+          ...filteredDeletedNodes,
           {
             originName,
             name: displayName,
             node: nodeForRestore,
+            sourceIds,
             listenerPort: savedListenerPort,
             dialerRelayGroupIds: relayGroupIds,
             dialerTargetGroupIds: targetGroupIds,
@@ -99,9 +131,26 @@ export function createNodeActions(
       if (!target) return;
 
       setAndGenerateConfig((state) => {
-        const nextDeletedNodeNames = state.deletedNodeNames.filter((n) => n !== target);
-        const restoring = state.deletedNodes.find((n) => n && n.originName === target);
-        const remainingDeletedNodes = state.deletedNodes.filter((n) => n && n.originName !== target);
+        const targetCat = getSubscriptionInfoNodeCategory(target);
+        const nextDeletedNodeNames = state.deletedNodeNames.filter(
+          (n) => n !== target && (!targetCat || getSubscriptionInfoNodeCategory(n) !== targetCat)
+        );
+        const restoring = state.deletedNodes.find(
+          (n) =>
+            n &&
+            (n.originName === target ||
+              (targetCat &&
+                (getSubscriptionInfoNodeCategory(n.originName) === targetCat ||
+                  getSubscriptionInfoNodeCategory(n.name) === targetCat)))
+        );
+        const remainingDeletedNodes = state.deletedNodes.filter(
+          (n) =>
+            n &&
+            n.originName !== target &&
+            (!targetCat ||
+              (getSubscriptionInfoNodeCategory(n.originName) !== targetCat &&
+                getSubscriptionInfoNodeCategory(n.name) !== targetCat))
+        );
 
         // 如果没有缓存节点对象：仅取消删除标记（下次重新导入时恢复）
         if (!restoring?.node) {
